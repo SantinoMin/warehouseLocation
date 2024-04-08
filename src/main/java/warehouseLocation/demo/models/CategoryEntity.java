@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,25 +21,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Table(name = "product")
-public class ProductEntity {
+@Table(name = "category")
+public class CategoryEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "product_id", nullable = false, unique = true)
-  private int product_id;
+  @Column(name = "category_id", nullable = false, unique = true)
+  private int category_id;
 
-  @Column(name = "product_name", nullable = false)
-  private String product_name;
-
-  @Column(name = "expired_date", nullable = false)
-  private LocalDateTime expired_date;
-
-  @Column(name = "image_url", nullable = false)
-  private String image_url;
-
-  @Column(name = "price", nullable = false)
-  private int price;
+  @Column(name = "category_name", nullable = false)
+  private String category_name;
 
   @Column(name = "created_at", nullable = false)
   private LocalDateTime created_at;
@@ -51,4 +43,7 @@ public class ProductEntity {
 
   @Column(name = "status", nullable = false)
   private String status;
+
+  @Column(name = "sort", nullable = false)
+  private String sort;
   };

@@ -20,25 +20,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Table(name = "product")
-public class ProductEntity {
+@Table(name = "rack")
+public class RackEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "product_id", nullable = false, unique = true)
-  private int product_id;
+  @Column(name = "rack_id", nullable = false, unique = true)
+  private int rack_id;
 
-  @Column(name = "product_name", nullable = false)
-  private String product_name;
-
-  @Column(name = "expired_date", nullable = false)
-  private LocalDateTime expired_date;
-
-  @Column(name = "image_url", nullable = false)
-  private String image_url;
-
-  @Column(name = "price", nullable = false)
-  private int price;
+  @Column(name = "rack_number", nullable = false)
+  private int rack_number;
 
   @Column(name = "created_at", nullable = false)
   private LocalDateTime created_at;

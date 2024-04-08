@@ -7,12 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression.DateTime;
 
 @Entity
 @AllArgsConstructor
@@ -20,25 +22,25 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Table(name = "product")
-public class ProductEntity {
+@Table(name = "user")
+public class UserEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "product_id", nullable = false, unique = true)
-  private int product_id;
+  @Column(name = "user_id", nullable = false, unique = true)
+  private int user_id;
 
-  @Column(name = "product_name", nullable = false)
-  private String product_name;
+  @Column(name = "user_name", nullable = false)
+  private String user_name;
 
-  @Column(name = "expired_date", nullable = false)
-  private LocalDateTime expired_date;
+  @Column(name = "email", nullable = false)
+  private String email;
 
-  @Column(name = "image_url", nullable = false)
-  private String image_url;
+  @Column(name = "password", nullable = false)
+  private String password;
 
-  @Column(name = "price", nullable = false)
-  private int price;
+  @Column(name = "birthday", nullable = false)
+  private LocalDate birthday;
 
   @Column(name = "created_at", nullable = false)
   private LocalDateTime created_at;
