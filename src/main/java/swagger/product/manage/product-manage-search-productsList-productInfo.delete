@@ -1,0 +1,76 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: http://localhost:8080/app/main
+#      //    서비스명(context) 까지 넣어 주면 된다.
+info:
+  description: This is a Test API
+  version: "v1"
+  title: Warehouse Location API
+  contact:
+    email: santinomin0381@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+tags:
+  - name: Santino Project
+    description: 산티노의 API 입니다.
+
+paths:
+  /app/main:
+    get:
+      tags:
+        - Warehouse location & products
+      summary: 메인 페이지
+      operationId: cryptoTest
+      description:
+        By passing in the appropriate options, you can search for
+        available inventory in the system
+      requestBody:
+        description: search requestBody
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/JwtRequest'
+      #                //-->request시보낼 파라메터
+      #                        //또는 오브젝트이며 아래 schemas 항목에 정의 하고 사용해야 한다.
+
+      responses:
+        '200':
+          description: Return response Body
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/JwtResponse'
+        #                  //-->response시 Data 아래 schemas 항목에 정의 하고 사용해야 한다.
+        '400':
+          description: bad input parameter
+components:
+  #  //--> 요부분 부터가 위에 $ref 로 링크 된 오브젝트 명세 작성 부분이다.
+  #  //    참고로 나의 경우 request와 response 200ok에 대한 오브젝트만 설정 했다.
+  schemas:
+    JwtRequest:
+      required:
+        - userid
+        - password
+      properties:
+        userid:
+          type: string
+        password:
+          type: string
+    JwtResponse:
+      required:
+        - userid
+        - password
+      properties:
+        userid:
+          type: string
+        password:
+          type: string
+
+
