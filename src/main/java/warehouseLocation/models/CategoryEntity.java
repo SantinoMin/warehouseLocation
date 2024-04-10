@@ -1,4 +1,4 @@
-package warehouseLocation.demo.models;
+package warehouseLocation.models;
 
 
 import jakarta.persistence.Column;
@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,16 +21,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Table(name = "area")
-public class AreaEntity {
+@Table(name = "category")
+public class CategoryEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "area_id", nullable = false, unique = true)
-  private int area_id;
+  @Column(name = "category_id", nullable = false, unique = true)
+  private int category_id;
 
-  @Column(name = "area_name", nullable = false)
-  private String area_name;
+  @Column(name = "category_name", nullable = false)
+  private String category_name;
 
   @Column(name = "created_at", nullable = false)
   private LocalDateTime created_at;
@@ -42,4 +43,7 @@ public class AreaEntity {
 
   @Column(name = "status", nullable = false)
   private String status;
+
+  @Column(name = "sort", nullable = false)
+  private String sort;
   };

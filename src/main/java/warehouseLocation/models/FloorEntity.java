@@ -1,4 +1,4 @@
-package warehouseLocation.demo.models;
+package warehouseLocation.models;
 
 
 import jakarta.persistence.Column;
