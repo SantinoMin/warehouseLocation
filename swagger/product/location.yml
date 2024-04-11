@@ -1,0 +1,499 @@
+openapi: 3.0.3
+info:
+  title: Product And Location - OpenAPI 3.0
+  description: |-
+    정책 : 
+    
+         1) 창고는 하나로 설정 
+         2) 한가지 상품이라도 여러 랙에 지정 가능, 같은 상품 여러 위치에 배치 가능.
+         3) 배포 우선으로 진행, 세부적인 부분들은 차후에 추가하여 진행하도록 하고,
+            고객(또는 실무자)들이 바로 사용할 수 있는 단계까지 세팅 진행.
+         4) 랙의 수량은 필요할 때, “4.위치 관리" 페이지에서 추가하여 진행하고,
+            “2.2 상품 관리 - 상품 조회/수정”에서 상품 등록 시, 옵션에서 선택하여 위치 지정.
+            (사용자가 위치를 수기로 작성하는 일은 없도록 설정)
+         # 프로젝트 마감 기간 : 4/20일(토요일)까지 배포까지 완료하기.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: santinomin0381@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://localhost:8080
+tags:
+#  - name: product
+#    description: Product management
+#    externalDocs:
+#      description: Find out more about our api (visit to the tistory)
+#      url: https://santino.tistory.com/
+
+  - name: location
+    description: Location management
+    externalDocs:
+      description: Find out more about our api (visit to the tistory)
+      url: https://santino.tistory.com/
+
+    # - name: user
+    # description: Operations about user
+paths:
+#  /product/manage/search:
+#    get:
+#      tags:
+#        - product
+#      summary: 상품 관리 페이지
+#      description: 상품 관리 페이지를 보여줍니다.
+#      operationId: search
+#        # requestBody:
+#        #   description: Update an existent pet in the store
+#        #   content:
+#        #     application/json:
+#        #       schema:
+#        #         $ref: '#/components/schemas/Pet'
+#        #     application/xml:
+#        #       schema:
+#        #         $ref: '#/components/schemas/Pet'
+#        #     application/x-www-form-urlencoded:
+#        #       schema:
+#        #         $ref: '#/components/schemas/Pet'
+#      # required: true
+#      responses:
+#        '200':
+#          description: 정상적인 접근입니다.
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Pet'
+#            application/xml:
+#              schema:
+#                $ref: '#/components/schemas/Pet'
+#        '400':
+#          description: Invalid ID supplied
+#        '404':
+#          description: Pet not found
+#        '422':
+#          description: Validation exception
+#      security:
+#        - petstore_auth:
+#            - write:pets
+#            - read:pets
+  /product/manage/search/productsList:
+    get:
+      tags:
+        - product
+      summary: 상품 검색
+      description: 상품 검색 시, 상품 리스트를 보여줍니다.
+      operationId: productsList
+        # requestBody:
+        # description: Create a new pet in the store
+        # content:
+        #   application/json:
+        #     schema:
+        #       $ref: '#/components/schemas/Pet'
+        #   application/xml:
+        #     schema:
+        #       $ref: '#/components/schemas/Pet'
+        #   application/x-www-form-urlencoded:
+        #     schema:
+        #       $ref: '#/components/schemas/Pet'
+      # required: true
+      responses:
+        '200':
+          description: 정상적인 상수입니다.(정상수))
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /product/manage/search/productsList/productInfo:
+    get:
+      tags:
+        - product
+      summary: 상품 정보
+      description: 상품의 세부 정보를 보여줍니다.(이미지,상품명,위치)
+      operationId: productInfo
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: available
+            enum:
+              - available
+              - pending
+              - sold
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid status value
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+
+  /product/manage/search/productsList/productInfo/edit:
+    put:
+      tags:
+        - product
+      summary: 상품 정보 변경
+      description: 해당 상품의 정보를 변경 합니다.
+      operationId: edit
+      parameters:
+        - name: tags
+          in: query
+          description: Tags to filter by
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid tag value
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /product/manage/search/productsList/productInfo/delete:
+    put:
+      tags:
+        - product
+      summary: 해당 상품 삭제(update로 진행)
+      description: 해당 상품 삭제 -> 완전 삭제 보다는, update로 진행해서 valid=false로 설정.
+      operationId: delete
+      parameters:
+        - name: tags
+          in: query
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+      security:
+        - api_key: []
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /product/manage/register/post:
+    post:
+      tags:
+        - location
+      summary: 상품 등록
+      description: 상품을 등록합니다. 기입 사항을 확인 해주세요.
+      operationId: post
+      parameters:
+        - name: post
+          in: query
+          description: ID of pet that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: name
+          in: query
+          description: Name of pet that needs to be updated
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Status of pet that needs to be updated
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid input
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /product/location/add:
+    post:
+      tags:
+        - location
+      summary: 위치 설정
+      description: 상품의 위치를 지정합니다.
+      operationId: location_add
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: petId
+          in: query
+          description: Pet id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid pet value
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+
+components:
+  schemas:
+    Search:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        productId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: order
+
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        username:
+          type: string
+          example: fehguy
+        address:
+          type: array
+          xml:
+            name: addresses
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Address'
+      xml:
+        name: customer
+
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 437 Lytton
+        city:
+          type: string
+          example: Palo Alto
+        state:
+          type: string
+          example: CA
+        zip:
+          type: string
+          example: '94301'
+      xml:
+        name: address
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dogs
+      xml:
+        name: category
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '12345'
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+          example: 1
+      xml:
+        name: user
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: tag
+    Pet:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: doggie
+        category:
+          $ref: '#/components/schemas/Category'
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+        tags:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Tag'
+        status:
+          type: string
+          description: pet status in the store
+          enum:
+            - available
+            - pending
+            - sold
+      xml:
+        name: pet
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Pet:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pet'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Pet'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
