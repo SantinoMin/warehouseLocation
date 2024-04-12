@@ -25,61 +25,60 @@ externalDocs:
 servers:
   - url: https://localhost:8080
 tags:
-#  - name: product
-#    description: Product management
-#    externalDocs:
-#      description: Find out more about our api (visit to the tistory)
-#      url: https://santino.tistory.com/
+  - name: product
+    description: Product management
+    externalDocs:
+      description: Find out more about our api (visit Tistory)
+      url: https://santino.tistory.com/
 
   - name: location
     description: Location management
     externalDocs:
-      description: Find out more about our api (visit to the tistory)
+      description: Find out more about our api (visit Tistory)
       url: https://santino.tistory.com/
 
     # - name: user
     # description: Operations about user
 paths:
-#  /product/manage/search:
-#    get:
-#      tags:
-#        - product
-#      summary: 상품 관리 페이지
-#      description: 상품 관리 페이지를 보여줍니다.
-#      operationId: search
-#        # requestBody:
-#        #   description: Update an existent pet in the store
-#        #   content:
-#        #     application/json:
-#        #       schema:
-#        #         $ref: '#/components/schemas/Pet'
-#        #     application/xml:
-#        #       schema:
-#        #         $ref: '#/components/schemas/Pet'
-#        #     application/x-www-form-urlencoded:
-#        #       schema:
-#        #         $ref: '#/components/schemas/Pet'
-#      # required: true
-#      responses:
-#        '200':
-#          description: 정상적인 접근입니다.
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/Pet'
-#            application/xml:
-#              schema:
-#                $ref: '#/components/schemas/Pet'
-#        '400':
-#          description: Invalid ID supplied
-#        '404':
-#          description: Pet not found
-#        '422':
-#          description: Validation exception
-#      security:
-#        - petstore_auth:
-#            - write:pets
-#            - read:pets
+  /product/manage/search:
+    get:
+      tags:
+        - product
+      summary: 상품 관리 페이지
+      description: 상품 관리 페이지를 보여줍니다.
+      operationId: search
+#      requestBody:
+#        description: 상품 관리 페이지로 이동.
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/Product'
+#          application/xml:
+#            schema:
+#              $ref: '#/components/schemas/Product'
+#          application/x-www-form-urlencoded:
+#            schema:
+#              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+        '422':
+          description: Validation exception
+      security:
+        - petstore_auth:
+            - write:products
+            - read:products
   /product/manage/search/productsList:
     get:
       tags:
@@ -98,7 +97,7 @@ paths:
         #       $ref: '#/components/schemas/Pet'
         #   application/x-www-form-urlencoded:
         #     schema:
-        #       $ref: '#/components/schemas/Pet'
+      #       $ref: '#/components/schemas/Pet'
       # required: true
       responses:
         '200':
@@ -226,7 +225,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
         - petstore_auth:
             - write:pets
             - read:pets
@@ -365,15 +364,16 @@ components:
     Category:
       type: object
       properties:
-        id:
+        category_id:
           type: integer
           format: int64
-          example: 1
-        name:
+          example: 35
+        category_name:
           type: string
-          example: Dogs
+          example: 유아 용품
       xml:
         name: category
+
     User:
       type: object
       properties:
@@ -406,54 +406,80 @@ components:
           example: 1
       xml:
         name: user
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-      xml:
-        name: tag
-    Pet:
+    #    Tag:
+    #      type: object
+    #      properties:
+    #        id:
+    #          type: integer
+    #          format: int64
+    #        name:
+    #          type: string
+    #      xml:
+    #        name: tag
+
+    Product:
       required:
-        - name
-        - photoUrls
+        - product_name
+        - expired_date
+        - image_url
+        - price
+#        - created_at
+#        - updated_at
+#        - deleted_at
+        - status
+#        - category_id
+#        - user_id
       type: object
       properties:
-        id:
+        product_id:
           type: integer
           format: int64
-          example: 10
-        name:
+          example: 7
+        product_name:
           type: string
-          example: doggie
-        category:
-          $ref: '#/components/schemas/Category'
-        photoUrls:
+          example: 분유
+        expired_date:
+          type: string
+          format: date
+          example: "2035-01-30"
+        image_url:
           type: array
-          xml:
-            wrapped: true
           items:
             type: string
-            xml:
-              name: photoUrl
-        tags:
-          type: array
+          example:
+            - "https://www.google.com/babyProducts/image1.jpg"
+            - "https://www.google.com/babyProducts/image2.jpg"
           xml:
             wrapped: true
-          items:
-            $ref: '#/components/schemas/Tag'
+        price:
+          type: string
+          example: 15,000원
+          xml:
+            name: image_url
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-04-30T00:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-04-30T00:00:00Z"
+        deleted_at:
+          type: string
+          format: date-time
+          example: "2024-04-30T00:00:00Z"
+        category:
+          $ref: '#/components/schemas/Category'
         status:
           type: string
-          description: pet status in the store
+          description: product status in the warehouse
           enum:
             - available
             - pending
-            - sold
+            - sold out(out of stock)
       xml:
-        name: pet
+        name: products
+
     ApiResponse:
       type: object
       properties:
