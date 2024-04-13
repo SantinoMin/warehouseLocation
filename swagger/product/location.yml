@@ -131,21 +131,17 @@ paths:
       description: 상품의 정보를 보여줍니다.(이미지,상품명,위치)
       operationId: productInfo
       parameters:
-        - name: status
+        - name: product_id
           in: query
-          description: status값은 아래와 같이 3가지로 진행됩니다.
-          required: false
+          description: 상품 정보
+          required: true
           explode: true
           schema:
-            type: string
-            default: available
-            enum:
-              - available
-              - pending
-              - sold out(out of stock)
+            type: integer
+            format: int64
       responses:
         '200':
-          description: successful operation
+          description: 성공적인 접근입니다.
           content:
             application/json:
               schema:
@@ -281,6 +277,7 @@ paths:
         - name: 상품명
           in: query
           description: 등록하실 상품명을 입력 해주세요.
+          example: 예시) 오이 비누
           required: true
           schema:
             type: integer
@@ -288,6 +285,7 @@ paths:
         - name: 유효기간
           in: query
           description: 상품의 유효기간을 작성 해주세요.
+          example: 예시) 2052년 1월 20일
           schema:
             type: string
         - name: 사진
@@ -299,6 +297,7 @@ paths:
         - name: 가격
           in: query
           description: 가격을 설정 해주세요.
+          example: 예시) 500원
           schema:
             type: string
         - name: 카테고리
@@ -338,6 +337,7 @@ paths:
         - name: 랙
           in: query
           description: 랙 위치를 지정합니다.
+          example: 예시) 08번
           required: true
           schema:
             type: integer
@@ -345,6 +345,7 @@ paths:
         - name: 층
           in: query
           description: 층을 지정합니다.
+          example: 예시) 2층
           required: true
           schema:
             type: integer
