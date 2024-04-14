@@ -1,8 +1,6 @@
 package warehouseLocation.domain.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +18,7 @@ import warehouseLocation.domain.dto.ProductReqDto;
 //@Tag(name = "Product Controller", description = "상품 관리 controller")
 public class ProductController {
 
-  //1.1 (GET) /product/manage/search : 상품 관리 페이지로 이동
+  //1.1 (GET) /product/manage/search : 상품 관리 페이지로 이동.
   @GetMapping("/manage/search")
 //  @Operation(summary = "상품 관리", description = "상품 관리 페이지로 이동")
 //  @Hidden
