@@ -40,54 +40,54 @@ tags:
 # 1.1 (GET) /product/manage/search : 상품 관리 페이지로 이동
 #!! 수정 필요 상품 페이지로 이동하는 것까지만 하고 싶은데? - 검색 시 보여주는 거랑 다르게 출력해야 함.
 paths:
-  /product/manage/search:
-    get:
-      tags:
-        - product
-      summary: 상품 관리 페이지
-      description: 상품 관리 페이지를 보여줍니다.
-      operationId: search
-      #      requestBody:
-      #        description: 상품 관리 페이지로 이동.
-      #        content:
-      #          application/json:
-      #            schema:
-      #              $ref: '#/components/schemas/Product'
-      #          application/xml:
-      #            schema:
-      #              $ref: '#/components/schemas/Product'
-      #          application/x-www-form-urlencoded:
-      #            schema:
-      #              $ref: '#/components/schemas/Product'
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Product'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-        '422':
-          description: Validation exception
-      security:
-        - product_auth:
-            - write:product
-            - read:product
+  #  /product/manage/search:
+  #    get:
+  #      tags:
+  #        - product
+  #      summary: 상품 관리 페이지
+  #      description: 상품 관리 페이지를 보여줍니다.
+  #      operationId: search
+  #      #      requestBody:
+  #      #        description: 상품 관리 페이지로 이동.
+  #      #        content:
+  #      #          application/json:
+  #      #            schema:
+  #      #              $ref: '#/components/schemas/Product'
+  #      #          application/xml:
+  #      #            schema:
+  #      #              $ref: '#/components/schemas/Product'
+  #      #          application/x-www-form-urlencoded:
+  #      #            schema:
+  #      #              $ref: '#/components/schemas/Product'
+  #      responses:
+  #        '200':
+  #          description: 정상적인 접근입니다.
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: '#/components/schemas/Product'
+  #            application/xml:
+  #              schema:
+  #                $ref: '#/components/schemas/Product'
+  #        '400':
+  #          description: Invalid ID supplied
+  #        '404':
+  #          description: Pet not found
+  #        '422':
+  #          description: Validation exception
+  #      security:
+  #        - product_auth:
+  #            - write:product
+  #            - read:product
 
-  # 2.1(Get) /product/manage/search/productsList : 상품 검색
-  /product/manage/search/productsList:
+  # 2.1(Get) /product/manage/search : 상품 검색
+  /product/manage/search:
     get:
       tags:
         - product
       summary: 상품 검색
       description: 상품 검색 시, 상품 리스트를 보여줍니다.
-      operationId: productsList
+      #      operationId: productsList
       # requestBody:
       # description: Create a new pet in the store
       # content:
@@ -107,10 +107,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/searchProduct'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/searchProduct'
         '400':
           description: Invalid input
         '404':
@@ -122,8 +122,8 @@ paths:
             - write:product
             - read:product
 
-  #  2.2 (GET) product/manage/search/productsList/productInfo 상품 정보 보여주기
-  /product/manage/search/productsList/{product_id}/productInfo:
+  #  2.2 (GET) product/manage/search/{product_id} 상품 정보 보여주기
+  /product/manage/search/{productId}:
     get:
       tags:
         - product
@@ -131,14 +131,14 @@ paths:
       description: 상품의 정보를 보여줍니다.(이미지,상품명,위치)
       operationId: productInfo
       parameters:
-        - name: product_id
+        - name: product_name
           in: query
-          description: 상품 정보
+          description: 상품명
           required: true
           explode: true
           schema:
-            type: integer
-            format: int64
+            type: string
+#            format: int64
       responses:
         '200':
           description: 성공적인 접근입니다.
@@ -147,12 +147,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
+                  $ref: '#/components/schemas/productId'
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
+                  $ref: '#/components/schemas/productId'
         '400':
           description: Invalid status value
         '404':
@@ -164,8 +164,8 @@ paths:
             - write:product
             - read:product
 
-  #2.2(PUT) /product/manage/search/productsList/productInfo/{productId}/edit : 상품 정보 변경
-  /product/manage/search/productsList/productInfo/{product_id}/edit:
+  #2.2(PUT) /product/manage/search/{productId}/edit : 상품 정보 변경
+  /product/manage/search/{product_id}/edit:
     put:
       tags:
         - product
@@ -173,7 +173,7 @@ paths:
       description: 해당 상품의 정보를 변경 합니다.
       operationId: edit
       requestBody:
-        description: Create a new pet in the store
+        description: 세부 내용을 변경합니다.
         content:
           application/json:
             schema:
@@ -186,28 +186,27 @@ paths:
               $ref: '#/components/schemas/productInfo'
         required: true
       parameters:
-        - name: product_id
+        - name: productName
           in: query
           description: 상품 정보 수정
           required: false
           explode: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
-          description: 정상적인 접근입니다.
+          description: 수정 완료 되었습니다.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/edit'
+                  $ref: '#/components/schemas/edited'
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/edit'
+                  $ref: '#/components/schemas/edited'
         '400':
           description: Invalid tag value
         '404':
@@ -218,7 +217,7 @@ paths:
         - petstore_auth:
             - write:pets
             - read:pets
-  /product/manage/search/productsList/productInfo/{product_id}/delete:
+  /product/manage/search/{product_id}/delete:
     put:
       tags:
         - product
@@ -239,32 +238,32 @@ paths:
               $ref: '#/components/schemas/productInfo'
         required: true
       parameters:
-        - name: product_id
+        - name: productName
           in: query
           description: 해당 상품을 삭제합니다.
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
-          description: 정상적인 접근입니다.
+          description: 삭제 완료 되었습니다.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/edit'
+                type: array
+                items:
+                  $ref: '#/components/schemas/delete'
             application/xml:
               schema:
-                $ref: '#/components/schemas/edit'
+                type: array
+                items:
+                  $ref: '#/components/schemas/delete'
         '400':
-          description: Invalid ID supplied
+          description: Invalid tag value
         '404':
-          description: Pet not found
-      security:
-        - api_key: [ ]
-        - product_auth:
-            - write:product
-            - read:product
+          description: Product not found
+        '422':
+          description: Validation exception
 
   /product/manage/register/post:
     post:
@@ -304,20 +303,34 @@ paths:
           in: query
           description: 카테고리를 설정 해주세요.
           schema:
-            $ref: '#/components/schemas/Category'
+            $ref: '#/components/schemas/CategoryList'
         #            type: string
-        - name: status
+        - name: 상태
           in: query
           description: 상태를 보여줍니다.
+          example: 예시) 판매 중
           schema:
             type: string
       responses:
+        '200':
+          description: 등록 완료 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/post'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/post'
         '400':
-          description: Invalid input
-      security:
-        - product_auth:
-            - write:product
-            - read:product
+          description: Invalid tag value
+        '404':
+          description: Product not found
+        '422':
+          description: Validation exception
 
   /product/location/add:
     post:
@@ -370,138 +383,274 @@ paths:
             - write:product
             - read:product
 
+  /product/locationManagement/locationList:
+    get:
+      tags:
+        - location
+      summary: 위치 설정
+      description: 상품의 위치를 지정합니다.
+      #      parameters:
+      #        - name: 구역
+      #          in: header
+      #          description: 구역을 지정합니다.
+      #          example: 예시) B구역
+      #          required: true
+      #          schema:
+      #            type: string
+      #        - name: 랙
+      #          in: query
+      #          description: 랙 위치를 지정합니다.
+      #          example: 예시) 08번
+      #          required: true
+      #          schema:
+      #            type: integer
+      #            format: int64
+      #        - name: 층
+      #          in: query
+      #          description: 층을 지정합니다.
+      #          example: 예시) 2층
+      #          required: true
+      #          schema:
+      #            type: integer
+      #            format: int64
+
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/location'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Location not found
+      security:
+        - product_auth:
+            - write:product
+            - read:product
+
 components:
   schemas:
-    edit:
+    edited:
       type: object
       properties:
-        product_id:
-          type: integer
-          format: int64
-          example: 198772
         product_name:
-          type: integer
-          format: int64
-          example: 압타밀
-        expired_date:
           type: string
-          format: date-time
+          example: 압타밀
+        #        expired_date:
+        #          type: string
+        #          format: date-time
         image_url:
           type: array
           items:
             type: string
           example:
             - "https://www.google.com/babyProducts/image3.jpg"
-            - "https://www.google.com/babyProducts/image4.jpg"
         price:
           type: string
           example: 18,000원
           xml:
             name: image_url
-        created_at:
-          type: string
-          format: date-time
-          example: "2024-04-31T00:00:00Z"
-        updated_at:
-          type: string
-          format: date-time
-          example: "2024-04-31T00:00:00Z"
-        deleted_at:
-          type: string
-          format: date-time
-          example: "2024-04-31T00:00:00Z"
+        #        created_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
+        #        updated_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
+        #        deleted_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
         category:
-          $ref: '#/components/schemas/Category'
+          $ref: '#/components/schemas/CategoryKindermilch'
         status:
           type: string
           description: 주문 상황
-          example: 승인
-          enum:
-            - 확인 중
-            - 승인 완료
-            - 배송 중
-        complete:
-          type: boolean
-      xml:
-        name: order
+          example: 판매 중지
+    #          enum:
+    #            - 판매 중지
+    #            - 승인 완료
+    #            - 배송 중
+    #        complete:
+    #          type: boolean
+    #      xml:
+    #        name: order
+
+    delete:
+      type: object
+      properties:
+        productName:
+          type: string
+          example: 힙 분유
+        #        expired_date:
+        #          type: string
+        #          format: date-time
+        #        image_url:
+        #          type: array
+        #          items:
+        #            type: string
+        #          example:
+        #            - "https://www.google.com/babyProducts/image3.jpg"
+        #            - "https://www.google.com/babyProducts/image4.jpg"
+        #        price:
+        #          type: string
+        #          example: 18,000원
+        #          xml:
+        #            name: image_url
+        #        created_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
+        #        updated_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
+        #        deleted_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
+        #        category:
+        #          $ref: '#/components/schemas/CategoryKindermilch'
+        status:
+          type: string
+          description: 해당 상품 비활성화로 전환
+          example: 상품 삭제(=상품 비활성화로 전환)
+
 
     location:
-      type: object
+      type: array
+      items:
+        type: object
       properties:
         구역:
           type: string
-          example: C구역
+        #          example: C구역
         랙 위치:
-          type: string
-          example: 4번 랙
+          type: integer
+        #          example: 4번 랙
         층 높이:
-          type: string
-          example: 4번 랙
+          type: integer
+        #          example: 2층
         status:
           type: string
           description: 주문 상황
-          example: 등록 완료
+          example: 등록 가능
           enum:
-            - 등록 완료
+            - 등록 가능
             - 해당 위치에 등록이 불가합니다.
-            - 중복되는 값입니다.
-        complete:
-          type: boolean
+      example:
+        - 구역: A
+        - 구역: B
+        - 구역: C
+        - 구역: D
+        - 구역: E
+
+        - 랙 위치: 1
+        - 랙 위치: 2
+        - 랙 위치: 3
+        - 랙 위치: 4
+        - 랙 위치: 5
+
+        - 층 높이: 1
+        - 층 높이: 2
+        - 층 높이: 3
+
+
+    #        complete:
+    #          type: boolean
+
+    searchProduct:
+      type: array
+      items:
+        type: object
+        properties:
+          product_name:
+            type: string
+          image_url:
+            type: string
+            items:
+              type: string
+          price:
+            type: string
+          category:
+            type: string
+          status:
+            type: string
+      example:
+        - product_name: 분유
+          image_url:
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
+          price: 40,000원
+          category: 유아 식품
+          status: available
+        - product_name: 젤리
+          image_url:
+            - "https://m.media-amazon.com/images/I/416vlt3Mo5L.__AC_SX300_SY300_QL70_FMwebp_.jpg"
+          price: 15,000원
+          category: 유아 식품
+          status: available
+        - product_name: 신발
+          image_url:
+            - "https://m.media-amazon.com/images/I/61WYjGhP5CL._AC_SX695_.jpg"
+          price: 25,000원
+          category: 유아 용품
+          status: available
 
     productInfo:
       type: object
       properties:
-        product_id:
-          type: integer
-          format: int64
-          example: 198772
-        product_name:
-          type: integer
-          format: int64
-          example: 힙 분유
-        expired_date:
+        productName:
           type: string
-          format: date-time
+          #          format: int64
+          example: 힙 분유
+        #        expired_date:
+        #          type: string
+        #          format: date-time
         image_url:
           type: array
           items:
             type: string
           example:
             - "https://www.google.com/babyProducts/image1.jpg"
-            - "https://www.google.com/babyProducts/image2.jpg"
         price:
           type: string
           example: 15,000원
           xml:
             name: image_url
-        created_at:
-          type: string
-          format: date-time
-          example: "2024-04-30T00:00:00Z"
-        updated_at:
-          type: string
-          format: date-time
-          example: "2024-04-30T00:00:00Z"
-        deleted_at:
-          type: string
-          format: date-time
-          example: "2024-04-30T00:00:00Z"
+        #        created_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-30T00:00:00Z"
+        #        updated_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-30T00:00:00Z"
+        #        deleted_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-30T00:00:00Z"
         category:
-          $ref: '#/components/schemas/Category'
+          $ref: '#/components/schemas/CategoryKindermilch'
         status:
           type: string
           description: 주문 상황
-          example: 승인
-          enum:
-            - 확인 중
-            - 승인 완료
-            - 배송 중
-        complete:
-          type: boolean
-      xml:
-        name: order
+          example: 판매 중
+    #          enum:
+    #            - 판매 중
+    #            - 승인 완료
+    #            - 배송 중
+    #        complete:
+    #          type: boolean
+    #      xml:
+    #        name: order
 
-    Category:
+    CategoryKindermilch:
       type: object
       properties:
         category_id:
@@ -510,12 +659,31 @@ components:
           example: 35
         category_name:
           type: string
-          example: 유아 용품
+          example: 출산/유아동
         sort:
           type: string
-          example: 소분류
+          example: 분유/어린이 식품
       xml:
         name: category
+
+    CategoryList:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+        #          example: 35
+        categoryName:
+          type: string
+        #          example: 출산/유아동
+        sort:
+          type: string
+          #          example: 분유/어린이 식품
+          example:
+            - categoryId: 1,2,3,4,5,6
+            - categoryName: 출산/유아동 용품, 주류, 의류, 일반 식품, 건강 식품
+            - sort: 분유/어린이 용품, 와인, 보드카, 신발, 상의, 하의, 비타민
+
 
     User:
       type: object
@@ -560,81 +728,112 @@ components:
     #      xml:
     #        name: tag
 
-    Product:
-      required:
-        - product_name
-        - expired_date
-        - image_url
-        - price
-        #        - created_at
-        #        - updated_at
-        #        - deleted_at
-        - status
-      #        - category_id
-      #        - user_id
+    productId:
+      type: array
+      items:
+        type: object
+        properties:
+          product_name:
+            type: string
+          image_url:
+            type: string
+            items:
+              type: string
+          price:
+            type: string
+          category:
+            type: string
+          status:
+            type: string
+          location:
+            type: string
+
+      example:
+        - product_name: 분유
+          image_url:
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
+          price: 40,000원
+          category: 유아 식품
+          status: available
+          location:
+            - 구역: "구역을 지정 해주세요."
+            - 랙 번호: "랙 번호를 지정 해주세요."
+            - 층 높이: "층 높이를 지정 해주세요."
+
+
+    #        - product_name: 젤리
+    #          image_url:
+    #            - "https://m.media-amazon.com/images/I/416vlt3Mo5L.__AC_SX300_SY300_QL70_FMwebp_.jpg"
+    #          price: 15,000원
+    #          category: 유아 식품
+    #          status: available
+    #        - product_name: 신발
+    #          image_url:
+    #            - "https://m.media-amazon.com/images/I/61WYjGhP5CL._AC_SX695_.jpg"
+    #          price: 25,000원
+    #          category: 유아 용품
+    #          status: available
+
+    #    ApiResponse:
+    #      type: object
+    #      properties:
+    #        code:
+    #          type: integer
+    #          format: int32
+    #        type:
+    #          type: string
+    #        message:
+    #          type: string
+    #      xml:
+    #        name: '##default'
+
+    post:
       type: object
       properties:
-        product_id:
-          type: integer
-          format: int64
-          example: 7
-        product_name:
+        상품명:
           type: string
-          example: 분유
-        expired_date:
+          example: 오이 비누
+        유효기:
           type: string
-          format: date
-          example: "2035-01-30"
-        image_url:
-          type: array
+          format: date-time
+        사진:
+          type: object
           items:
             type: string
           example:
-            - "https://www.google.com/babyProducts/image1.jpg"
-            - "https://www.google.com/babyProducts/image2.jpg"
-          xml:
-            wrapped: true
-        price:
+            - "https://www.google.com/babyProducts/image5.jpg"
+        가격:
           type: string
-          example: 15,000원
+          example: 18,000원
           xml:
             name: image_url
-        created_at:
+        #        created_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
+        #        updated_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
+        #        deleted_at:
+        #          type: string
+        #          format: date-time
+        #          example: "2024-04-31T00:00:00Z"
+        카테고리:
+          $ref: '#/components/schemas/CategoryKindermilch'
+        상태:
           type: string
-          format: date-time
-          example: "2024-04-30T00:00:00Z"
-        updated_at:
-          type: string
-          format: date-time
-          example: "2024-04-30T00:00:00Z"
-        deleted_at:
-          type: string
-          format: date-time
-          example: "2024-04-30T00:00:00Z"
-        category:
-          $ref: '#/components/schemas/Category'
-        status:
-          type: string
-          description: product status in the warehouse
-          enum:
-            - available
-            - pending
-            - sold out(out of stock)
-      xml:
-        name: products
+          description: 주문 상황
+          example: 승인 완료
+    #          enum:
+    #            - 판매 중지
+    #            - 승인 완료
+    #            - 배송 중
+    #        complete:
+    #          type: boolean
+    #      xml:
+    #        name: order
 
-    ApiResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        type:
-          type: string
-        message:
-          type: string
-      xml:
-        name: '##default'
   requestBodies:
     edit:
       description: Pet object that needs to be added to the store
