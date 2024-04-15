@@ -256,10 +256,31 @@ paths:
         - name: productName
           in: query
           description: 상품 정보 수정
-          required: false
-          explode: true
+          #          required: false
+#          explode: true
           schema:
             type: string
+        - name: imageUrl
+          in: query
+          description: 상품명 수정
+          schema:
+            type: string
+        - name: price
+          in: query
+          description: 가격 수정
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: 카테고리 수정
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: 상태 변경
+          schema:
+            type: string
+
       responses:
         '200':
           description: 수정 완료 되었습니다.
