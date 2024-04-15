@@ -1,3 +1,12 @@
+/**
+ * 해당 방법보다 yml에 작성해서 진행 중
+ * => yml이 더 효율적이라 판단.
+ * 1)configuration으로 작성 시,
+ * controller,dto부분이 작성 완료 되어야만, 프론트와 소통이 가능함
+ * 2)yml로 작성 시,
+ * dto, controller부분 작성이 완료 안 되더라도, 빠르게 프론트와 소통이 가능함.
+ */
+
 //package warehouseLocation.config;
 //
 //import io.swagger.v3.oas.models.OpenAPI;
