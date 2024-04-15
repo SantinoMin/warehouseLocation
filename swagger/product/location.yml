@@ -88,6 +88,14 @@ paths:
       summary: 상품 검색
       description: 상품 검색 시, 상품 리스트를 보여줍니다.
       #      operationId: productsList
+      parameters:
+        - name: productName
+          in: query
+          description: 상품명
+          required: true
+          explode: true
+          schema:
+            type: string
       # requestBody:
       # description: Create a new pet in the store
       # content:
@@ -122,23 +130,23 @@ paths:
             - write:product
             - read:product
 
-  #  2.2 (GET) product/manage/search/{product_id} 상품 정보 보여주기
+  #  2.2 (GET) product/manage/search/{productId} 상품 정보 보여주기
   /product/manage/search/{productId}:
     get:
       tags:
         - product
       summary: 상품 정보
       description: 상품의 정보를 보여줍니다.(이미지,상품명,위치)
-      operationId: productInfo
+      #      operationId: productInfo
       parameters:
-        - name: productName
-          in: query
-          description: 상품명
+        - name: productId
+          in: path
+          description: 상품id
           required: true
           explode: true
           schema:
-            type: string
-#            format: int64
+            type: integer
+            format: int64
       responses:
         '200':
           description: 성공적인 접근입니다.
@@ -257,7 +265,7 @@ paths:
           in: query
           description: 상품 정보 수정
           #          required: false
-#          explode: true
+          #          explode: true
           schema:
             type: string
         - name: imageUrl
@@ -359,6 +367,25 @@ paths:
         - location
       summary: 위치 리스트
       description: 상품의 위치 리스트를 가져옵니다.
+      parameters:
+        - name: areaList
+          in: query
+          description: 전체 구역을 보여줍니다.
+          required: true
+          schema:
+            type: string
+        - name: rackList
+          in: query
+          description: 전체 랙 위치를 보여줍니다.
+          required: true
+          schema:
+            type: string
+        - name: floorList
+          in: query
+          description: 전체 층 높이를 보여줍니다.
+          required: true
+          schema:
+            type: string
       #      parameters:
       #        - name: 구역
       #          in: header
@@ -758,6 +785,8 @@ components:
       items:
         type: object
         properties:
+          productId:
+            type: integer
           productName:
             type: string
           imageUrl:
@@ -774,7 +803,8 @@ components:
             type: string
 
       example:
-        - productName : 분유
+        - productId: 3
+          productName: 분유
           imageUrl:
             - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
           price: 40,000원
@@ -860,23 +890,23 @@ components:
     #        name: order
 
   requestBodies:
-#    edit:
-#      description: Pet object that needs to be added to the store
-#      content:
-#        application/json:
-#          schema:
-#            $ref: '#/components/schemas/edit'
-#        application/xml:
-#          schema:
-#            $ref: '#/components/schemas/edit'
-#    location:
-#      description: List of user object
-#      content:
-#        application/json:
-#          schema:
-#            type: array
-#            items:
-#              $ref: '#/components/schemas/User'
+  #    edit:
+  #      description: Pet object that needs to be added to the store
+  #      content:
+  #        application/json:
+  #          schema:
+  #            $ref: '#/components/schemas/edit'
+  #        application/xml:
+  #          schema:
+  #            $ref: '#/components/schemas/edit'
+  #    location:
+  #      description: List of user object
+  #      content:
+  #        application/json:
+  #          schema:
+  #            type: array
+  #            items:
+  #              $ref: '#/components/schemas/User'
   securitySchemes:
     petstore_auth:
       type: oauth2
