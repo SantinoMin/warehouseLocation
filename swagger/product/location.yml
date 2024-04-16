@@ -527,19 +527,19 @@ components:
           status:
             type: string
       example:
-        - productName: 분유
+        - productName: 유아 분유
           imageUrl:
             - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
           price: 40,000원
           category: 유아 식품
           status: available
-        - productName: 젤리
+        - productName: 유아 젤리
           imageUrl:
             - "https://m.media-amazon.com/images/I/416vlt3Mo5L.__AC_SX300_SY300_QL70_FMwebp_.jpg"
           price: 15,000원
           category: 유아 식품
           status: available
-        - productName: 신발
+        - productName: 유아 신발
           imageUrl:
             - "https://m.media-amazon.com/images/I/61WYjGhP5CL._AC_SX695_.jpg"
           price: 25,000원
