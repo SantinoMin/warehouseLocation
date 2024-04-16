@@ -37,57 +37,14 @@ tags:
       description: Find out more about our api (visit Tistory)
       url: https://santino.tistory.com/
 
-# 1.1 (GET) /product/manage/search : 상품 관리 페이지로 이동
-#!! 수정 필요 상품 페이지로 이동하는 것까지만 하고 싶은데? - 검색 시 보여주는 거랑 다르게 출력해야 함.
-paths:
-  #  /product/manage/search:
-  #    get:
-  #      tags:
-  #        - product
-  #      summary: 상품 관리 페이지
-  #      description: 상품 관리 페이지를 보여줍니다.
-  #      operationId: search
-  #      #      requestBody:
-  #      #        description: 상품 관리 페이지로 이동.
-  #      #        content:
-  #      #          application/json:
-  #      #            schema:
-  #      #              $ref: '#/components/schemas/Product'
-  #      #          application/xml:
-  #      #            schema:
-  #      #              $ref: '#/components/schemas/Product'
-  #      #          application/x-www-form-urlencoded:
-  #      #            schema:
-  #      #              $ref: '#/components/schemas/Product'
-  #      responses:
-  #        '200':
-  #          description: 정상적인 접근입니다.
-  #          content:
-  #            application/json:
-  #              schema:
-  #                $ref: '#/components/schemas/Product'
-  #            application/xml:
-  #              schema:
-  #                $ref: '#/components/schemas/Product'
-  #        '400':
-  #          description: Invalid ID supplied
-  #        '404':
-  #          description: Pet not found
-  #        '422':
-  #          description: Validation exception
-  #      security:
-  #        - product_auth:
-  #            - write:product
-  #            - read:product
-
   # 2.1(Get) /product/manage/search : 상품 검색
+paths:
   /product/manage/search:
     get:
       tags:
         - product
       summary: 상품 검색
       description: 상품 검색 시, 상품 리스트를 보여줍니다.
-      #      operationId: productsList
       parameters:
         - name: productName
           in: query
@@ -96,19 +53,7 @@ paths:
           explode: true
           schema:
             type: string
-      # requestBody:
-      # description: Create a new pet in the store
-      # content:
-      #   application/json:
-      #     schema:
-      #       $ref: '#/components/schemas/Pet'
-      #   application/xml:
-      #     schema:
-      #       $ref: '#/components/schemas/Pet'
-      #   application/x-www-form-urlencoded:
-      #     schema:
-      #       $ref: '#/components/schemas/Pet'
-      # required: true
+
       responses:
         '200':
           description: 정상적인 접근입니다.
@@ -125,10 +70,6 @@ paths:
           description: Product not found
         '422':
           description: Validation exception
-      security:
-        - product_auth:
-            - write:product
-            - read:product
 
   #  2.2 (GET) product/manage/search/{productId} 상품 정보 보여주기
   /product/manage/search/{productId}:
@@ -137,7 +78,6 @@ paths:
         - product
       summary: 상품 정보
       description: 상품의 정보를 보여줍니다.(이미지,상품명,위치)
-      #      operationId: productInfo
       parameters:
         - name: productId
           in: path
@@ -167,10 +107,6 @@ paths:
           description: Product not found
         '422':
           description: Validation exception
-      security:
-        - product_auth:
-            - write:product
-            - read:product
 
   /product/manage/register/post:
     post:
@@ -178,46 +114,28 @@ paths:
         - product
       summary: 상품 등록
       description: 상품을 등록합니다. 기입 사항을 확인 해주세요.
-      operationId: post
+      requestBody:
+        description: 세부 내용을 변경합니다.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/beforePost'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/beforePost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/beforePost'
+        required: true
       parameters:
         - name: productName
           in: query
           description: 등록하실 상품명을 입력 해주세요.
-          example: 예시) 오이 비누
+          #          example: 예시) 오이 비누
           required: true
           schema:
-            type: integer
-            format: int64
-        - name: expiredDate
-          in: query
-          description: 상품의 유효기간을 작성 해주세요.
-          example: 예시) 2052년 1월 20일
-          schema:
             type: string
-        - name: imageUrl
-          in: query
-          description: 사진을 등록 해주세요.
-          schema:
-            type: string
-            format: binary
-        - name: price
-          in: query
-          description: 가격을 설정 해주세요.
-          example: 예시) 500원
-          schema:
-            type: string
-        - name: category
-          in: query
-          description: 카테고리를 설정 해주세요.
-          schema:
-            $ref: '#/components/schemas/CategoryList'
-        #            type: string
-        - name: status
-          in: query
-          description: 상태를 보여줍니다.
-          example: 예시) 판매 중
-          schema:
-            type: string
+
       responses:
         '200':
           description: 등록 완료 되었습니다.
@@ -240,13 +158,12 @@ paths:
           description: Validation exception
 
   #2.2(PUT) /product/manage/search/{productId}/edit : 상품 정보 변경
-  /product/manage/search/{product_id}/edit:
+  /product/manage/search/{productId}/edit:
     put:
       tags:
         - product
       summary: 상품 정보 변경
       description: 해당 상품의 정보를 변경 합니다.
-      operationId: edit
       requestBody:
         description: 세부 내용을 변경합니다.
         content:
@@ -260,34 +177,15 @@ paths:
             schema:
               $ref: '#/components/schemas/productInfo'
         required: true
+      operationId: edit
+
       parameters:
-        - name: productName
-          in: query
-          description: 상품 정보 수정
-          #          required: false
-          #          explode: true
+        - name: productId
+          in: path
+          description: productId (path에서 가져온 값)
+          required: true
           schema:
-            type: string
-        - name: imageUrl
-          in: query
-          description: 상품명 수정
-          schema:
-            type: string
-        - name: price
-          in: query
-          description: 가격 수정
-          schema:
-            type: string
-        - name: category
-          in: query
-          description: 카테고리 수정
-          schema:
-            type: string
-        - name: status
-          in: query
-          description: 상태 변경
-          schema:
-            type: string
+            type: integer
 
       responses:
         '200':
@@ -309,37 +207,25 @@ paths:
           description: Product not found
         '422':
           description: Validation exception
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
-  /product/manage/search/{product_id}/delete:
+      # security:
+      #   - product_auth:
+      #       - write:pets
+      #       - read:pets
+
+  /product/manage/search/{productId}/delete:
     put:
       tags:
         - product
       summary: 해당 상품 삭제(update로 진행)
       description: 해당 상품 삭제 -> 완전 삭제 보다는, update로 진행해서 valid=false로 설정.
       operationId: delete
-      requestBody:
-        description: 해당 상품을 삭제합니다.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/productInfo'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/productInfo'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/productInfo'
-        required: true
       parameters:
-        - name: productName
-          in: query
+        - name: productId
+          in: path
           description: 해당 상품을 삭제합니다.
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: 삭제 완료 되었습니다.
@@ -386,30 +272,7 @@ paths:
           required: true
           schema:
             type: string
-      #      parameters:
-      #        - name: 구역
-      #          in: header
-      #          description: 구역을 지정합니다.
-      #          example: 예시) B구역
-      #          required: true
-      #          schema:
-      #            type: string
-      #        - name: 랙
-      #          in: query
-      #          description: 랙 위치를 지정합니다.
-      #          example: 예시) 08번
-      #          required: true
-      #          schema:
-      #            type: integer
-      #            format: int64
-      #        - name: 층
-      #          in: query
-      #          description: 층을 지정합니다.
-      #          example: 예시) 2층
-      #          required: true
-      #          schema:
-      #            type: integer
-      #            format: int64
+
 
       responses:
         '200':
@@ -425,10 +288,7 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Location not found
-      security:
-        - product_auth:
-            - write:product
-            - read:product
+
 
 
 
@@ -441,24 +301,24 @@ paths:
       operationId: location_add
       parameters:
         - name: 구역
-          in: header
+          in: query
           description: 구역을 지정합니다.
-          example: 예시) B구역
+          example: 예시) B
           required: true
           schema:
             type: string
-        - name: 랙
+        - name: 랙 위치
           in: query
           description: 랙 위치를 지정합니다.
-          example: 예시) 08번
+          example: 예시) 8
           required: true
           schema:
             type: integer
             format: int64
-        - name: 층
+        - name: 층 높이
           in: query
           description: 층을 지정합니다.
-          example: 예시) 2층
+          example: 예시) 2
           required: true
           schema:
             type: integer
@@ -470,18 +330,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/location'
+                $ref: '#/components/schemas/addedLocation'
             application/xml:
               schema:
-                $ref: '#/components/schemas/location'
+                $ref: '#/components/schemas/addedLocation'
         '400':
           description: Invalid ID supplied
         '404':
           description: Pet not found
-      security:
-        - product_auth:
-            - write:product
-            - read:product
+      # security:
+      #   - product_auth:
+      #       - write:product
+      #       - read:product
 
 
 
@@ -537,9 +397,13 @@ components:
     delete:
       type: object
       properties:
+        productId:
+          type: integer
+          example: 8
         productName:
           type: string
           example: 힙 분유
+
         #        expired_date:
         #          type: string
         #          format: date-time
@@ -576,18 +440,57 @@ components:
 
 
     location:
-      type: array
-      items:
-        type: object
+      type: object
+      #      items:
+      #        type: object
       properties:
         구역:
+          type: array
+          items:
+            type: string
+            example: C
+        랙 위치:
+          type: array
+          items:
+            type: integer
+            example: 4
+        층 높이:
+          type: array
+          items:
+            type: integer
+            example: 2
+        status:
           type: string
+          description: 주문 상황
+          example: 등록 가능
+          enum:
+            - 등록 가능
+            - 해당 위치에 등록이 불가합니다.
+      example:
+        구역: [ "A", "B", "C", "D", "E" ]
+        랙 위치: [ 1, 2, 3, 4, 5 ]
+        층 높이: [ 1, 2, 3 ]
+        status: 등록 가능
+
+    addedLocation:
+      type: object
+      #      items:
+      #        type: object
+      properties:
+        구역:
+          type: array
+          items:
+            type: string
         #          example: C구역
         랙 위치:
-          type: integer
+          type: array
+          items:
+            type: integer
         #          example: 4번 랙
         층 높이:
-          type: integer
+          type: array
+          items:
+            type: integer
         #          example: 2층
         status:
           type: string
@@ -597,21 +500,10 @@ components:
             - 등록 가능
             - 해당 위치에 등록이 불가합니다.
       example:
-        - 구역: A
-        - 구역: B
-        - 구역: C
-        - 구역: D
-        - 구역: E
-
-        - 랙 위치: 1
-        - 랙 위치: 2
-        - 랙 위치: 3
-        - 랙 위치: 4
-        - 랙 위치: 5
-
-        - 층 높이: 1
-        - 층 높이: 2
-        - 층 높이: 3
+        구역: [ "C" ]
+        랙 위치: [ 4 ]
+        층 높이: [ 2 ]
+        status: 등록 완료
 
 
     #        complete:
@@ -657,6 +549,9 @@ components:
     productInfo:
       type: object
       properties:
+        productId:
+          type: integer
+          example: 6
         productName:
           type: string
           #          format: int64
@@ -874,22 +769,29 @@ components:
         #          type: string
         #          format: date-time
         #          example: "2024-04-31T00:00:00Z"
-        category:
-          $ref: '#/components/schemas/CategoryKindermilch'
-        status:
-          type: string
-          description: 주문 상황
-          example: 승인 완료
-    #          enum:
-    #            - 판매 중지
-    #            - 승인 완료
-    #            - 배송 중
-    #        complete:
-    #          type: boolean
-    #      xml:
-    #        name: order
 
-  requestBodies:
+    beforePost:
+      type: object
+      properties:
+        productName:
+          type: string
+          example: 오이 비누
+        expiredDate:
+          type: string
+          format: date-time
+        imageUrl:
+          type: string
+          items:
+            type: string
+          example:
+            - "https://www.google.com/babyProducts/image5.jpg"
+        price:
+          type: string
+          example: 18,000원
+          xml:
+            name: imageUrl
+
+  # requestBodies:
   #    edit:
   #      description: Pet object that needs to be added to the store
   #      content:
@@ -907,16 +809,16 @@ components:
   #            type: array
   #            items:
   #              $ref: '#/components/schemas/User'
-  securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+  # securitySchemes:
+  #   petstore_auth:
+  #     type: oauth2
+  #     flows:
+  #       implicit:
+  #         authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+  #         scopes:
+  #           write:pets: modify pets in your account
+  #           read:pets: read your pets
+  #   api_key:
+  #     type: apiKey
+  #     name: api_key
+  #     in: header
