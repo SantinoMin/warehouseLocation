@@ -115,7 +115,7 @@ paths:
       summary: 상품 등록
       description: 상품을 등록합니다. 기입 사항을 확인 해주세요.
       requestBody:
-        description: 세부 내용을 변경합니다.
+        description: 해당 상품을 등록합니다.
         content:
           application/json:
             schema:
