@@ -300,13 +300,12 @@ paths:
 
 
 
-  /product/location/add:
+  /product/location/addArea:
     post:
       tags:
         - location
-      summary: 위치 추가
-      description: 위치를 추가합니다.
-      operationId: location_add
+      summary: 구역 등록
+      description: 구역을 등록합니다.
       parameters:
         - name: area
           in: query
@@ -315,6 +314,29 @@ paths:
           required: true
           schema:
             type: string
+
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addArea'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/addArea'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: location not found
+
+  /product/location/addRack:
+    post:
+      tags:
+        - location
+      summary: 랙 추가
+      description: 랙을 추가합니다.
+      parameters:
         - name: rack
           in: query
           description: 랙 위치를 추가합니다.
@@ -323,6 +345,29 @@ paths:
           schema:
             type: integer
             format: int64
+
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addRack'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/addRack'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: location not found
+
+  /product/location/addFloor:
+    post:
+      tags:
+        - location
+      summary: 층 추가
+      description: 층을 추가합니다.
+      parameters:
         - name: floor
           in: query
           description: 층을 추가합니다.
@@ -338,22 +383,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/addedLocation'
+                $ref: '#/components/schemas/addFloor'
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/addedLocation'
+                $ref: '#/components/schemas/addFloor'
         '400':
           description: Invalid ID supplied
         '404':
-          description: Pet not found
-      # security:
-      #   - product_auth:
-      #       - write:product
-      #       - read:product
+          description: location not found
 
 
 
@@ -455,26 +492,26 @@ components:
 
 
     location:
+      # items:
+      type: object
       items:
         type: array
-          # items:
-        # type: array
       properties:
         area:
-          type: array
-          items:
-            type: string
-            example: C
+          type: string
+            # items:
+            #   type: string
+          # example: C
         rack:
           type: array
           items:
             type: integer
-            example: 4
+            # example: 4
         floor:
           type: array
           items:
             type: integer
-            example: 2
+            # example: 2
         status:
           type: string
           description: 주문 상황
@@ -484,40 +521,44 @@ components:
             - 해당 위치에 등록이 불가합니다.
 
       example:
-        - area:
-            - A, B, C, D, E
-        - rack:
-            - 1,2,3,4,5
-        - floor:
-            - 1,2,3,4,5
-        - status: 등록 가능
+        area:
+          - A, B, C, D, E
+        rack:
+          - 1,2,3,4,5
+        floor:
+          - 1,2,3,4,5
+        status: 등록 가능
 
-      # example:
-      # - area: [ "A", "B", "C", "D", "E" ]
-      # - rack: [ 1, 2, 3, 4, 5 ]
-      # - floor: [ 1, 2, 3 ]
-      #   status: 등록 가능
-
-    addedLocation:
+    addArea:
       type: object
       # items:
       # type: object
       properties:
         area:
-          type: array
-          items:
-            type: string
-        #          example: C구역
+          type: string
+          # items:
+          #   type: string
+
+        status:
+          type: string
+          description: 구역 등록 상태
+          example: 등록 가능
+          enum:
+            - 등록 가능
+            - 해당 위치에 등록이 불가합니다.
+
+      example:
+        area: "E"
+        status: 등록 완료
+
+
+    addRack:
+      type: object
+      # items:
+      # type: object
+      properties:
         rack:
-          type: array
-          items:
-            type: integer
-        #          example: 4번 랙
-        floor:
-          type: array
-          items:
-            type: integer
-        #          example: 2층
+          type: string
         status:
           type: string
           description: 주문 상황
@@ -526,14 +567,26 @@ components:
             - 등록 가능
             - 해당 위치에 등록이 불가합니다.
       example:
-        area: [ "E" ]
-        rack: [ 6 ]
-        floor: [ 2 ]
+        rack: "6"
         status: 등록 완료
 
-
-    #        complete:
-    #          type: boolean
+    addFloor:
+      type: string
+      # items:
+      # type: object
+      properties:
+        floor:
+          type: integer
+        status:
+          type: string
+          description: 주문 상황
+          example: 등록 가능
+          enum:
+            - 등록 가능
+            - 해당 위치에 등록이 불가합니다.
+      example:
+        floor: "2"
+        status: 등록 완료
 
     searchProduct:
       type: array
