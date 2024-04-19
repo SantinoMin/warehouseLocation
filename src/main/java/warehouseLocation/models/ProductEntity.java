@@ -26,29 +26,38 @@ public class ProductEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "product_id", nullable = false, unique = true)
-  private int product_id;
+  private int productId;
 
   @Column(name = "product_name", nullable = false)
-  private String product_name;
+  private String productName;
 
   @Column(name = "expired_date", nullable = false)
-  private LocalDateTime expired_date;
+  private LocalDateTime expiredDate;
 
   @Column(name = "image_url", nullable = false)
-  private String image_url;
+  private String imageUrl;
 
   @Column(name = "price", nullable = false)
   private int price;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime created_at;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updated_at;
+  private LocalDateTime updatedAt;
 
   @Column(name = "deleted_at", nullable = false)
-  private LocalDateTime deleted_at;
+  private LocalDateTime deletedAt;
 
   @Column(name = "status", nullable = false)
   private String status;
   };
+
+
+//여기부터 이어서 하기
+Entity값은 받아왔는데, dto로 변경 후에, repository에 .save()하고,
+return type으로 해당 dto타입에 맞게 해야함.
+public static class toDTO() {
+  ProductEntity toDTO = new ProductEntity();
+
+}

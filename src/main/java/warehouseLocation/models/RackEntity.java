@@ -26,19 +26,19 @@ public class RackEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "rack_id", nullable = false, unique = true)
-  private int rack_id;
+  private int rackId;
 
   @Column(name = "rack_number", nullable = false)
-  private int rack_number;
+  private int rackNumber;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime created_at;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updated_at;
+  private LocalDateTime updatedAt;
 
   @Column(name = "deleted_at", nullable = false)
-  private LocalDateTime deleted_at;
+  private LocalDateTime deletedAt;
 
   @Column(name = "status", nullable = false)
   private String status;

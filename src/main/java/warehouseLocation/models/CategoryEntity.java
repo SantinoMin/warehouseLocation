@@ -27,19 +27,19 @@ public class CategoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "category_id", nullable = false, unique = true)
-  private int category_id;
+  private int categoryId;
 
   @Column(name = "category_name", nullable = false)
-  private String category_name;
+  private String categoryName;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime created_at;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updated_at;
+  private LocalDateTime updatedAt;
 
   @Column(name = "deleted_at", nullable = false)
-  private LocalDateTime deleted_at;
+  private LocalDateTime deletedAt;
 
   @Column(name = "status", nullable = false)
   private String status;

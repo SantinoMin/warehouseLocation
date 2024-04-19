@@ -5,7 +5,6 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +25,7 @@ public class ProductController {
 
   @Autowired
   ProductController(ProductService productService) {
+
     this.productService = productService;
   }
 
@@ -33,10 +33,11 @@ public class ProductController {
   @GetMapping("/manage/search")
   public ProductResDto.ProductInfo search(@RequestParam String productName) {
     System.out.println("productManage");
+
     return this.productService.search(productName);
   }
 
-  //2.2 (GET) product/manage/search/{productId} 상품 정보 보여주기
+  //2.2 (GET) product/manage/search/{productId} 상품 정보
   @GetMapping("/manage/search/{productId}")
   public String productInfo(ProductReqDto body) {
     System.out.println("body" + body);
@@ -44,9 +45,8 @@ public class ProductController {
   }
 
 
-  //  3.1 (POST) /product/manage/register/post : 상품 등록
-  @PutMapping("/manage/manage/register/post")
-//@Operation(summary = "상품 등록", description = "새로운 상품 등록 작업")
+  //  3.1 (POST) /product/manage/register : 상품 등록
+  @PutMapping("/manage/register")
   public String ProductPost(ProductReqDto body,
       @Parameter(description = "key value값 필요") @RequestBody Map<String, Object> putData) {
     StringBuilder sb = new StringBuilder();
@@ -67,7 +67,6 @@ public class ProductController {
   @PutMapping("/manage/search/{productId}/edit")
 //  @Operation(summary = "상품 수정", description = "상품 정보 수정")
   public String productEdit(@RequestBody ProductReqDto body
-//      , @PathVariable({})
   ) {
 
     System.out.println("nice");
@@ -75,7 +74,7 @@ public class ProductController {
   }
 
 
-  //2.2(PUT) /product/manage/search/{productId}/delete : 상품 삭제
+  //2.2(PUT) /product/manage/search/{productId}/delete : 해당 상품 삭제
   @PutMapping("/manage/search/{productId}/delete")
   public String productDelete(@RequestBody ProductReqDto body,
       @Parameter(description = "key value값 필요")) {
@@ -84,7 +83,7 @@ public class ProductController {
     return this.productService.productDelete(body);
   }
 
-  //4.1 (GET) /product/locationManagement/locationList : 로케이션 리스트
+  //2.2 (GET) /product/locationManagement/locationList : 위치 리스트
   @GetMapping("/locationManagement/locationList")
   public String locationList(ProductReqDto body) {
     System.out.println("body" + body);
@@ -92,13 +91,22 @@ public class ProductController {
   }
 
 
-  //4.1 (POST) /product/location/add : 위치 등록
-  @PostMapping("/manage/location/add")
-//@Operation(summary = "위치 등록", description = "새로운 위치 등록")
-  public String locationAdd(@RequestBody ProductReqDto body
-//      , @Parameter(description = "위치 등록")
-  ) {
-    return this.productService.locationAdd(body);
+  //4 (POST) /product/location/addArea : 구역 등록
+  @PostMapping("/manage/location/addArea")
+  public String addArea(@RequestBody ProductReqDto body) {
+    return this.productService.addArea(body);
+  }
+
+  //4.1 (POST) /product/location/addRack : 랙 추가
+  @PostMapping("/manage/location/addRack")
+  public String addRack(@RequestBody ProductReqDto body) {
+    return this.productService.addRack(body);
+  }
+
+  //4.1 (POST) /product/location/addFloor : 층 추가
+  @PostMapping("/manage/location/addFloor")
+  public String addFloor(@RequestBody ProductReqDto body) {
+    return this.productService.addFloor(body);
   }
 
 

@@ -27,16 +27,16 @@ public class productLocationEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "product_location_id", nullable = false, unique = true)
-  private int product_location_id;
+  private int productLocationId;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime created_at;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updated_at;
+  private LocalDateTime updatedAt;
 
   @Column(name = "deleted_at", nullable = false)
-  private LocalDateTime deleted_at;
+  private LocalDateTime deletedAt;
 
   @Column(name = "status", nullable = false)
   private String status;

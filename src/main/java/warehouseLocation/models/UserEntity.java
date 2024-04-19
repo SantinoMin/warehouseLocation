@@ -28,10 +28,10 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id", nullable = false, unique = true)
-  private int user_id;
+  private int userId;
 
   @Column(name = "user_name", nullable = false)
-  private String user_name;
+  private String userName;
 
   @Column(name = "email", nullable = false)
   private String email;
@@ -43,13 +43,13 @@ public class UserEntity {
   private LocalDate birthday;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime created_at;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updated_at;
+  private LocalDateTime updatedAt;
 
   @Column(name = "deleted_at", nullable = false)
-  private LocalDateTime deleted_at;
+  private LocalDateTime deletedAt;
 
   @Column(name = "status", nullable = false)
   private String status;
