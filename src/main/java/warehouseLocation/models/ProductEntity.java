@@ -51,13 +51,12 @@ public class ProductEntity {
 
   @Column(name = "status", nullable = false)
   private String status;
-  };
 
 
+  ProductEntity toDto = new ProductEntity();
+
+
+};
 //여기부터 이어서 하기
-Entity값은 받아왔는데, dto로 변경 후에, repository에 .save()하고,
-return type으로 해당 dto타입에 맞게 해야함.
-public static class toDTO() {
-  ProductEntity toDTO = new ProductEntity();
-
-}
+//Entity값은 받아왔는데, dto로 변경 후에, repository에 .save()하고,
+//return type으로 해당 dto타입에 맞게 해야함.
