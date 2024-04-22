@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import warehouseLocation.domain.dto.ProductReqDto;
 
 @Entity
 @AllArgsConstructor
@@ -28,6 +29,12 @@ public class ProductEntity {
   @Column(name = "product_id", nullable = false, unique = true)
   private int productId;
 
+  @Column(name = "category_id", nullable = false, unique = true)
+  private int categoryId;
+
+  @Column(name = "user_id", nullable = false, unique = true)
+  private int userId;
+
   @Column(name = "product_name", nullable = false)
   private String productName;
 
@@ -40,7 +47,7 @@ public class ProductEntity {
   @Column(name = "price", nullable = false)
   private int price;
 
-  @Column(name = "created_at", nullable = false)
+  @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
 
   @Column(name = "updated_at", nullable = false)
@@ -53,10 +60,11 @@ public class ProductEntity {
   private String status;
 
 
-  ProductEntity toDto = new ProductEntity();
+  public static ProductEntity toProductEntity(ProductReqDto productReqDto){
+    ProductEntity productEntity = new ProductEntity();
+    productEntity.setProductName(productReqDto.getProductName());
+    return productEntity;
+  };
 
 
 };
-//여기부터 이어서 하기
-//Entity값은 받아왔는데, dto로 변경 후에, repository에 .save()하고,
-//return type으로 해당 dto타입에 맞게 해야함.
