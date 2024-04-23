@@ -17,4 +17,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
    **/
   @Query("SELECT p FROM ProductEntity p WHERE p.productName = :productName")
   Optional<ProductEntity> searchProduct(@Param("productName") String productName);
+
+  @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
+  ProductEntity productInfoById(@Param("productId") int productId);
 }
