@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import warehouseLocation.domain.dto.ProductReqDto;
+import warehouseLocation.domain.dto.ProductResDto.Location;
 
 @Entity
 @AllArgsConstructor
@@ -28,13 +29,13 @@ public class ProductEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "product_id", nullable = false, unique = true)
-  private int productId;
+  private Long productId;
 
   @Column(name = "category_id", nullable = false, unique = true)
-  private int categoryId;
+  private Long categoryId;
 
   @Column(name = "user_id", nullable = false, unique = true)
-  private int userId;
+  private Long userId;
 
   @Column(name = "product_name", nullable = false)
   private String productName;
@@ -46,7 +47,7 @@ public class ProductEntity {
   private String imageUrl;
 
   @Column(name = "price", nullable = false)
-  private int price;
+  private Long price;
 
   @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
@@ -57,15 +58,11 @@ public class ProductEntity {
   @Column(name = "deleted_at", nullable = false)
   private LocalDateTime deletedAt;
 
+  @Column(name = "location", nullable = false)
+  private String location;
+
   @Column(name = "status", nullable = false)
   private String status;
-
-
-  public static ProductEntity toProductEntity(ProductReqDto productReqDto){
-    ProductEntity productEntity = new ProductEntity();
-    productEntity.setProductName(productReqDto.getProductName());
-    return productEntity;
-  };
 
 
 };

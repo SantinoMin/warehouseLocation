@@ -1,5 +1,6 @@
 package warehouseLocation.domain.dto;
 
+import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
@@ -20,45 +21,38 @@ public class ProductResDto {
 
     String productName;
     List<String> imageUrl;
-    int price;
-    int categoryId;
+    Long price;
+    Long categoryId;
     String status;
   }
 
   @Data
   public static class ProductInfo {
 
-    int productId;
+    Long productId;
     String productName;
     List<String> imageUrl;
-    int price;
-    int categoryId;
+    Long price;
+    Long categoryId;
     String status;
     Location location;
   }
 
   @Data
+  @Setter
+  @Getter
   public static class Location {
+
     String area;
-    int rackNumber;
-    int floorHeight;
+    Long rackNumber;
+    Long floorHeight;
   }
 
 
   @Data
-  public static class message {
+  public static class Message {
 
     String message;
-  }
-
-    public static ProductResDto.ProductSearch toProductDto(ProductEntity productEntity) {
-      ProductResDto.ProductSearch productInfo = new ProductResDto.ProductSearch();
-      productInfo.setProductName(productInfo.getProductName());
-      productInfo.setImageUrl(productInfo.getImageUrl());
-      productInfo.setPrice(productInfo.getPrice());
-      productInfo. setCategoryId(productInfo.getCategoryId());
-      return productInfo;
-
   }
 };
 

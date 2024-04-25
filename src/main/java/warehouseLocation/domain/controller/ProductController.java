@@ -1,10 +1,8 @@
 package warehouseLocation.domain.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
-import warehouseLocation.domain.dto.ProductResDto.ProductInfo;
-import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
-import warehouseLocation.domain.dto.ProductResDto.message;
 import warehouseLocation.domain.service.ProductService;
 
 @RestController
@@ -42,13 +37,13 @@ public class ProductController {
    * 입력하세요 메시지 출력
    */
   @GetMapping("/manage/search")
-  public ProductSearch search(@Valid @RequestParam("productName") String productName) {
+  public ProductResDto.ProductSearch search(@Valid @RequestParam("productName") String productName) {
     return this.productService.search(productName);
   }
 
   //2.2 (GET) product/manage/search/{productId} 상품 정보
   @GetMapping("/manage/search/{productId}")
-  public ProductResDto.ProductInfo productInfo(@PathVariable int productId) {
+  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
     System.out.println("productId : " + productId);
     return this.productService.productInfo(productId);
   }
