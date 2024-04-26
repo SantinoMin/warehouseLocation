@@ -1,17 +1,16 @@
 package warehouseLocation.domain.service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
-import warehouseLocation.domain.dto.ProductResDto.Location;
+import warehouseLocation.domain.dto.ProductResDto.Register;
 import warehouseLocation.domain.repository.ProductRepository;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
@@ -28,7 +27,7 @@ public class ProductService {
   }
 
   /**
-   * 상품 검색 - 더 추가 필요: 1)상품명의 2글자만 일치하여도 db에서 찾아서 보이도록 하기. 2) imageUrl이 List형태로 보여지도록 해야됨.
+   * 상품 검색 - 더 추가 필요: 1)상품명의 2글자만 일치하여도 db에서 찾아서 보이도록 하기. 2)(완료) imageUrl이 List형태로 보여지도록 해야됨.
    */
   public ProductResDto.ProductSearch search(String productName) {
 
@@ -48,7 +47,8 @@ public class ProductService {
   }
 
   /**
-   * 상품 정보
+   * 상품 정보 !!해결 필요 1)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는 법(배열
+   * 형태로) // 생성자 만들어서 하는듯?
    */
   public ProductResDto.ProductInfo productInfo(@RequestParam Long productId) {
 
@@ -62,35 +62,64 @@ public class ProductService {
     info.setProductId(productInfo.getProductId());
     info.setProductName(productInfo.getProductName());
     info.setImageUrl(Collections.singletonList(productInfo.getImageUrl()));
+    info.setPrice(productInfo.getPrice());
     info.setCategoryId(productInfo.getCategoryId());
     info.setStatus(productInfo.getStatus());
+    return info;
 
-    // ProductEntity에서 location을 가져와서 ProductInfo에 설정
-    ProductResDto.Location location = new ProductResDto.Location();
-    location.setArea(productInfo.getLocation());
-    location.setRackNumber(productInfo());
-    location.setFloorHeight(productInfo.getLocation());
-    info.setLocation(location);
-    여기부터 이어서..!
+    //!! 값이 존재하지 않을 경우는 없음 -> search 메서드에서 검색한 이후의 상품 정보를 보여주는 것이기 때문에.
+
   }
 
   ;
 
-//  @Getter
-//  class Person {
-//    private String name;
-//    private Integer age;
-//  }
-//  위와 같은 객체가 있고 위 객체를 리스트로 가지고 있을 때, 해당 리스트의 특정 필드만 추출하여 새로운 리스트를 만드려면
-//
-//  List<Person> person = ...;
-//
-//  // name 필드만 갖는 리스트 만들기
-//  List<String> nameList = person.stream().map(Person::getName).collect(Collectors.toList();
-//
-//
+  public ProductResDto.Register productRegister(ProductReqDto body) {
 
-  public String productEdit(ProductReqDto body) {
+    //1. 상품이 중복이 아닌지 repo에서 확인 후, 중복이 아니라면 등록 가능하도록 하기.
+    //   +이미 등록되어 있는 경우 에러 메시지 / 등록 가능한 경우에도 메시지.
+
+    Optional<ProductEntity> register = this.productRepository.registerByProductName(
+        body.getProductName());
+
+    register.ifPresent(existingProduct -> {
+      throw new CustomException("이미 등록된 상품 입니다 : " + body.getProductName());
+//          (ErrorMessage.PRODUCT_ALREADY_EXIST);
+    });
+
+    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime updatedAt = LocalDateTime.now();
+
+    ProductEntity newProduct = new ProductEntity();
+    newProduct.setProductId(newProduct.getProductId());
+    newProduct.setProductName(body.getProductName());
+    newProduct.setExpiredDate(body.getExpiredDate());
+    newProduct.setImageUrl(body.getImageUrl());
+    newProduct.setPrice(body.getPrice());
+    newProduct.setCreatedAt(createdAt);
+    newProduct.setUpdatedAt(updatedAt);
+
+
+//    ProductEntity registerdProduct =
+    this.productRepository.save(newProduct);
+    System.out.println("newProduct = " + newProduct);
+
+    ProductResDto.Register toDto = new ProductResDto.Register();
+    toDto.setProductId((newProduct.getProductId()));
+    toDto.setProductName(newProduct.getProductName());
+    toDto.setExpiredDate(newProduct.getExpiredDate());
+    toDto.setImageUrl(newProduct.getImageUrl());
+    toDto.setPrice(newProduct.getPrice());
+    toDto.setCreatedAt(newProduct.getCreatedAt());
+//    toDto.setCreatedAt(newProduct.getCreatedAt());
+    toDto.setUpdatedAt(createdAt);
+//    toDto.setUpdatedAt(updatedAt);
+    return toDto;
+
+  }
+
+
+  public String productEdit(@RequestBody ProductReqDto body) {
+
     return null;
   }
 
@@ -113,5 +142,6 @@ public class ProductService {
   public String addFloor(ProductReqDto body) {
     return null;
   }
+
 
 }

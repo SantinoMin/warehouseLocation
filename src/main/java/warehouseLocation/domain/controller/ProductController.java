@@ -37,7 +37,8 @@ public class ProductController {
    * 입력하세요 메시지 출력
    */
   @GetMapping("/manage/search")
-  public ProductResDto.ProductSearch search(@Valid @RequestParam("productName") String productName) {
+  public ProductResDto.ProductSearch search(
+      @Valid @RequestParam("productName") String productName) {
     return this.productService.search(productName);
   }
 
@@ -48,20 +49,13 @@ public class ProductController {
     return this.productService.productInfo(productId);
   }
 
-  //  3.1 (POST) /product/manage/register : 상품 등록
-//  @PutMapping("/manage/register")
-//  public String ProductPost(ProductReqDto body @RequestBody Map<String, Object> putData) {
-//    StringBuilder sb = new StringBuilder();
-//
-//    putData.entrySet().forEach(map -> {
-//      sb.append(map.getKey()).append(" : ").append(map.getValue()).append("\n");
-//    });
-//
-//    System.out.println("nice");
-//    return sb.toString();
-//  }
+  //    3.1 (POST) /product/manage/register : 상품 등록
+  @PostMapping("/manage/register")
+  public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
 
-  //2.2(PUT) /product/manage/search{productId}/edit : 상품 정보 변경
+    return this.productService.productRegister(body);
+  }
+
 
   /**
    * 이거 ParamVariable인가 그거 설정하도록 해야함.

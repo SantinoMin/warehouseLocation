@@ -1,5 +1,8 @@
 package warehouseLocation.domain.dto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
@@ -21,7 +24,7 @@ public class ProductResDto {
 
     String productName;
     List<String> imageUrl;
-    Long price;
+    String price;
     Long categoryId;
     String status;
   }
@@ -32,11 +35,13 @@ public class ProductResDto {
     Long productId;
     String productName;
     List<String> imageUrl;
-    Long price;
+    String price;
     Long categoryId;
     String status;
-    Location location;
+    List<Location> location;
+
   }
+
 
   @Data
   @Setter
@@ -48,11 +53,26 @@ public class ProductResDto {
     Long floorHeight;
   }
 
-
   @Data
+  public static class Register {
+    Long productId;
+    String productName;
+    LocalDateTime expiredDate;
+    String imageUrl;
+    String price;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
+
+  }
+
+
+    @Data
   public static class Message {
 
     String message;
   }
+
+
 };
+
 
