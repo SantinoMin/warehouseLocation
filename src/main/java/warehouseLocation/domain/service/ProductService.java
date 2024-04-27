@@ -76,7 +76,7 @@ public class ProductService {
   public ProductResDto.Register productRegister(ProductReqDto body) {
 
     //1. 상품이 중복이 아닌지 repo에서 확인 후, 중복이 아니라면 등록 가능하도록 하기.
-    //   +이미 등록되어 있는 경우 에러 메시지 / 등록 가능한 경우에도 메시지.
+    //   +이미 등록되어 있는 경우 에러 메시지 / 등록 가능한 경우에도 메시지..
 
     Optional<ProductEntity> register = this.productRepository.registerByProductName(
         body.getProductName());
