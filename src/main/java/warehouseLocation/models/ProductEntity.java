@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -46,13 +47,16 @@ public class ProductEntity {
   private String productName;
 
   @Column(name = "expired_date", nullable = false)
-  private LocalDateTime expiredDate;
+  private LocalDate expiredDate;
 
   @Column(name = "image_url", nullable = false)
   private String imageUrl;
 
   @Column(name = "price", nullable = false)
   private String price;
+
+  @Column(name = "sort", nullable = true)
+  private String sort;
 
   @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
@@ -73,24 +77,8 @@ public class ProductEntity {
 
   @Column(name = "status", nullable = true)
   private String status;
+
+  @Column(name = "is_valid", nullable = false)
+  private boolean isValid;
 };
-//
-//@Entity
-//@Getter
-//@Setter
-//public class Location {
-//
-//  @Id
-//  @GeneratedValue(strategy = GenerationType.IDENTITY)
-//  private Long id;
-//
-//  @Column(nullable = false)
-//  private String area;
-//
-//  @Column(nullable = false)
-//  private Long rackNumber;
-//
-//  @Column(nullable = false)
-//  private Long floorHeight;
-//}
 

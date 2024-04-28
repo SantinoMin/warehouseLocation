@@ -2,43 +2,42 @@ package warehouseLocation.domain.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import warehouseLocation.models.ProductEntity;
 
 
 @Getter
 @Setter
 @Builder
 @Data
+@AllArgsConstructor
 public class ProductResDto {
 
 
   @Data
   public static class ProductSearch {
 
-    String productName;
-    List<String> imageUrl;
-    String price;
-    Long categoryId;
-    String status;
+    private String productName;
+    private List<String> imageUrl;
+    private String price;
+    private Long categoryId;
+    private String status;
   }
 
   @Data
   public static class ProductInfo {
 
-    Long productId;
-    String productName;
-    List<String> imageUrl;
-    String price;
-    Long categoryId;
-    String status;
-    List<Location> location;
+    private Long productId;
+    private String productName;
+    private List<String> imageUrl;
+    private String price;
+    private Long categoryId;
+    private String status;
+    private List<Location> location;
 
   }
 
@@ -48,31 +47,71 @@ public class ProductResDto {
   @Getter
   public static class Location {
 
-    String area;
-    Long rackNumber;
-    Long floorHeight;
+    private String area;
+    private Long rackNumber;
+    private Long floorHeight;
   }
 
   @Data
   public static class Register {
-    Long productId;
-    String productName;
-    LocalDateTime expiredDate;
-    String imageUrl;
-    String price;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+
+    private Long productId;
+    private String productName;
+    private LocalDate expiredDate;
+    private String imageUrl;
+    private String price;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private boolean isValid;
 
   }
 
+  @Data
+  public static class Edit {
 
-    @Data
+    private Long productId;
+    private String productName;
+    private String imageUrl;
+    private LocalDate expiredDate;
+    private String price;
+    private Long categoryId;
+    private String status;
+    private String location;
+    //    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    @Builder
+    public Edit(Long productId, String productName, String imageUrl, String price,
+        LocalDate expiredDate,
+
+        Long categoryId, String status, String location
+        , LocalDateTime updatedAt) {
+      this.productId = productId;
+      this.productName = productName;
+      this.imageUrl = imageUrl;
+      this.expiredDate = expiredDate;
+      this.price = price;
+      this.categoryId = categoryId;
+      this.status = status;
+      this.location = location;
+//      this.createdAt = createdAt;
+      this.updatedAt = updatedAt;
+    }
+  }
+
+  @Data
+  public static class Delete {
+
+    private Long productId;
+    private String productName;
+
+  }
+
+  @Data
   public static class Message {
 
     String message;
   }
-
-
 };
 
 

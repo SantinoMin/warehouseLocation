@@ -1,15 +1,20 @@
 package warehouseLocation.domain.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
+import warehouseLocation.domain.dto.ProductResDto.Delete;
+import warehouseLocation.domain.dto.ProductResDto.Message;
 import warehouseLocation.domain.dto.ProductResDto.Register;
 import warehouseLocation.domain.repository.ProductRepository;
 import warehouseLocation.global.utills.response.error.CustomException;
@@ -98,7 +103,6 @@ public class ProductService {
     newProduct.setCreatedAt(createdAt);
     newProduct.setUpdatedAt(updatedAt);
 
-
 //    ProductEntity registerdProduct =
     this.productRepository.save(newProduct);
     System.out.println("newProduct = " + newProduct);
@@ -118,13 +122,59 @@ public class ProductService {
   }
 
 
-  public String productEdit(@RequestBody ProductReqDto body) {
+  public ProductResDto.Edit productEdit(@PathVariable Long productId,
+      @RequestBody ProductReqDto.Edit body) {
+    //1. 일단 db에서 해당 productId에 대한 정보를 가져온 후
+    //   productId를 검색해서, 해당 product의 정보들을 가져온 후
+    //2. Repository에서 값을 update 하기.
+    //3. 업데이트 한 값을 변수에 담아서, 다시 save하기.
 
-    return null;
+    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime updatedAt = LocalDateTime.now();
+    LocalDate expiredDate = LocalDate.now();
+
+    //1번
+    ProductEntity product = this.productRepository.findById(productId);
+
+    product.setProductName(body.getProductName());
+    product.setExpiredDate(expiredDate);
+    product.setImageUrl(body.getImageUrl());
+    product.setPrice(body.getPrice());
+    product.setLocation(body.getLocation());
+//    product.setSort(body.getSort());
+    product.setCreatedAt(createdAt);
+    product.setCreatedAt(updatedAt);
+
+    productRepository.save(product);
+
+    ProductResDto.Edit updatedProduct = ProductResDto.Edit.builder()
+        .productId(productId)
+        .productName(product.getProductName())
+        .expiredDate(product.getExpiredDate())
+        .imageUrl(product.getImageUrl())
+        .price(product.getPrice())
+        .categoryId(product.getCategoryId())
+        .location(product.getLocation())
+//        .createdAt(createdAt)
+        .updatedAt(product.getUpdatedAt())
+        .build();
+
+    return updatedProduct;
   }
 
-  public String productDelete(ProductReqDto body) {
-    return null;
+  public ResponseEntity<ProductResDto.Message> productDelete(Long productId, ProductReqDto body) {
+
+    //1. productId로 해당 product 검색
+    //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
+    //3. productId repo에 저장
+    //4. ResponseEntity로 ok값 반환하기.
+
+   this.productRepository.deleteProductById(productId);
+
+    ProductResDto.Message success = new ProductResDto.Message();
+    success.setMessage("상품명 : " + body.getProductName() + " -> 삭제 완료");
+
+    return ResponseEntity.ok(success);
   }
 
   public String locationList(ProductReqDto body) {

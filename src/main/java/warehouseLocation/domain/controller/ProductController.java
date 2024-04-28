@@ -3,6 +3,7 @@ package warehouseLocation.domain.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
+import warehouseLocation.domain.dto.ProductResDto.Delete;
 import warehouseLocation.domain.service.ProductService;
 
 @RestController
@@ -39,6 +41,7 @@ public class ProductController {
   @GetMapping("/manage/search")
   public ProductResDto.ProductSearch search(
       @Valid @RequestParam("productName") String productName) {
+    System.out.println("productName : " + productName);
     return this.productService.search(productName);
   }
 
@@ -56,26 +59,20 @@ public class ProductController {
     return this.productService.productRegister(body);
   }
 
-
-  /**
-   * 이거 ParamVariable인가 그거 설정하도록 해야함.
-   */
+  // 2.2(Put) /product/manage/{productId}/edit
   @PutMapping("/manage/search/{productId}/edit")
-//  @Operation(summary = "상품 수정", description = "상품 정보 수정")
-  public String productEdit(@RequestBody ProductReqDto body
-  ) {
-
-    System.out.println("nice");
-    return this.productService.productEdit(body);
+  public ProductResDto.Edit productEdit(@PathVariable Long productId,
+      @RequestBody ProductReqDto.Edit body) {
+    System.out.println("producEdit = " + body);
+    return this.productService.productEdit(productId, body);
   }
 
 
   //2.2(PUT) /product/manage/search/{productId}/delete : 해당 상품 삭제
   @PutMapping("/manage/search/{productId}/delete")
-  public String productDelete(@RequestBody ProductReqDto body) {
-
-    System.out.println("nice");
-    return this.productService.productDelete(body);
+  public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId, @RequestBody ProductReqDto body) {
+    System.out.println("delete this productId = " + productId);
+    return this.productService.productDelete(productId, body);
   }
 
   //2.2 (GET) /product/locationManagement/locationList : 위치 리스트
