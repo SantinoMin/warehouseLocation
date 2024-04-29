@@ -1,6 +1,7 @@
 package warehouseLocation.domain.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -76,11 +77,38 @@ public class ProductController {
   }
 
   //2.2 (GET) /product/locationManagement/locationList : 위치 리스트
-  @GetMapping("/locationManagement/locationList")
-  public String locationList(ProductReqDto body) {
-    System.out.println("body" + body);
-    return this.productService.locationList(body);
+
+  /**
+   * 이거 위치 3개 하나씩 나눠서 다시 만들어야 될듯.
+   * swagger 수정 필요.
+   */
+//  @GetMapping("/locationManagement/locationList")
+//  public String locationList(@RequestParam List<String> areaList, @RequestParam List<String> rackList, @RequestParam List<String> floorList) {
+//    System.out.println("areaList" + areaList);
+//    System.out.println("rackList" + rackList);
+//    System.out.println("floorList" + floorList);
+//    return this.productService.locationList(areaList, rackList,floorList);
+//  }
+
+  //2.2 (GET) /locationManagement/area : areaList 위치 리스트
+  @GetMapping("/locationManagement/areaList")
+  public List<ProductResDto.Area> areaList() {
+    return this.productService.areaList();
   }
+
+  //2.2 (GET) /locationManagement/area : areaList 위치 리스트
+  @GetMapping("/locationManagement/rack")
+  public List<ProductResDto.Rack> rackList() {
+    return this.productService.rackList();
+  }
+
+  //2.2 (GET) /locationManagement/area : areaList 위치 리스트
+  @GetMapping("/locationManagement/floor")
+  public List<ProductResDto.Floor> floorList() {
+    return this.productService.floorList();
+  }
+
+
 
 
   //4 (POST) /product/location/addArea : 구역 등록

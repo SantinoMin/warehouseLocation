@@ -112,6 +112,25 @@ public class ProductResDto {
 
     String message;
   }
+
+  @Data
+  public static class Area {
+
+    Long areaId;
+  }
+
+  @Data
+  public static class Rack {
+
+    Long rackId;
+  }
+
+  @Data
+  public static class Floor {
+
+    Long floorId;
+  }
+
 };
 
 

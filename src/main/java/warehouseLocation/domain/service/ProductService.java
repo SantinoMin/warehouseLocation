@@ -2,9 +2,10 @@ package warehouseLocation.domain.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,22 +14,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
-import warehouseLocation.domain.dto.ProductResDto.Delete;
-import warehouseLocation.domain.dto.ProductResDto.Message;
-import warehouseLocation.domain.dto.ProductResDto.Register;
+import warehouseLocation.domain.dto.ProductResDto.Floor;
+import warehouseLocation.domain.repository.AreaRepository;
+import warehouseLocation.domain.repository.FloorRepository;
 import warehouseLocation.domain.repository.ProductRepository;
+import warehouseLocation.domain.repository.RackRepository;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
+import warehouseLocation.models.AreaEntity;
+import warehouseLocation.models.FloorEntity;
 import warehouseLocation.models.ProductEntity;
+import warehouseLocation.models.RackEntity;
 
 @Service
 public class ProductService {
 
   private final ProductRepository productRepository;
+  private final AreaRepository areaRepository;
+  private final RackRepository rackRepository;
+  private final FloorRepository floorRepository;
+
 
   @Autowired
-  ProductService(ProductRepository productRepository) {
+  ProductService(ProductRepository productRepository, AreaRepository areaRepository, RackRepository rackRepository, FloorRepository floorRepository) {
     this.productRepository = productRepository;
+    this.areaRepository = areaRepository;
+    this.rackRepository = rackRepository;
+    this.floorRepository = floorRepository;
   }
 
   /**
@@ -169,7 +181,7 @@ public class ProductService {
     //3. productId repo에 저장
     //4. ResponseEntity로 ok값 반환하기.
 
-   this.productRepository.deleteProductById(productId);
+    this.productRepository.deleteProductById(productId);
 
     ProductResDto.Message success = new ProductResDto.Message();
     success.setMessage("상품명 : " + body.getProductName() + " -> 삭제 완료");
@@ -177,8 +189,60 @@ public class ProductService {
     return ResponseEntity.ok(success);
   }
 
-  public String locationList(ProductReqDto body) {
-    return null;
+  public List<ProductResDto.Area> areaList() {
+
+    //area는 구역이 몇개 안돼서, findAll로 해도 되는데,
+    // 만약 userId 또는 productId였다면?
+    // FindAll로 찾는건 전체 데이터를 가져오는 거라 비효율적일듯
+
+    List<AreaEntity> areaEntities = this.areaRepository.findAll();
+
+    List<ProductResDto.Area> areaList = new ArrayList<>();
+
+    for(AreaEntity areaEntity : areaEntities){
+
+       ProductResDto.Area areaDto = new ProductResDto.Area();
+       areaDto.setAreaId(areaEntity.getAreaId());
+
+       areaList.add(areaDto);
+    }
+
+    return areaList;
+
+  }
+
+  public List<ProductResDto.Rack> rackList() {
+
+    List<RackEntity> rackEntities = this.rackRepository.findAll();
+
+    List<ProductResDto.Rack> rackList = new ArrayList<>();
+
+    for(RackEntity rackEntity : rackEntities){
+
+      ProductResDto.Rack rackDto = new ProductResDto.Rack();
+      rackDto.setRackId(rackEntity.getRackId());
+
+      rackList.add(rackDto);
+    }
+
+    return rackList;
+  }
+
+  public List<ProductResDto.Floor> floorList() {
+
+    List<FloorEntity> floorEntities = this.floorRepository.findAll();
+
+    List<ProductResDto.Floor> rackDto = new ArrayList<>();
+
+    for(FloorEntity floorEntity : floorEntities){
+
+      ProductResDto.Floor floor = new ProductResDto.Floor();
+      floor.setFloorId(floorEntity.getFloor_id());
+
+      rackDto.add(floor);
+    }
+
+    return rackDto;
   }
 
   public String addArea(ProductReqDto body) {

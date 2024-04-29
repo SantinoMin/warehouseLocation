@@ -26,7 +26,7 @@ public class AreaEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "area_id", nullable = false, unique = true)
-  private int areaId;
+  private Long areaId;
 
   @Column(name = "area_name", nullable = false)
   private String areaName;

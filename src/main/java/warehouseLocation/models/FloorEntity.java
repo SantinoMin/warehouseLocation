@@ -26,10 +26,10 @@ public class FloorEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "floor_id", nullable = false, unique = true)
-  private int floor_id;
+  private Long floor_id;
 
   @Column(name = "floor_number", nullable = false)
-  private int floor_number;
+  private Long floor_number;
 
   @Column(name = "created_at", nullable = false)
   private LocalDateTime created_at;

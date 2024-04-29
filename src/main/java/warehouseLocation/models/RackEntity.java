@@ -26,10 +26,10 @@ public class RackEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "rack_id", nullable = false, unique = true)
-  private int rackId;
+  private Long rackId;
 
   @Column(name = "rack_number", nullable = false)
-  private int rackNumber;
+  private Long rackNumber;
 
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;

@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto.Location;
+import warehouseLocation.models.AreaEntity;
 import warehouseLocation.models.ProductEntity;
 
 @Repository
@@ -37,5 +38,4 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   @Modifying
   @Query("UPDATE ProductEntity p SET p.isValid = false WHERE p.productId = :productId")
   void deleteProductById(@Param("productId") Long productId);
-
 }
