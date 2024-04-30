@@ -500,7 +500,7 @@ components:
         area:
           type: string
             # items:
-            #   type: string
+          #   type: string
           # example: C
         rack:
           type: array
