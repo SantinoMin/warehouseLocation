@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto.Location;
 import warehouseLocation.models.AreaEntity;
+import warehouseLocation.models.CategoryEntity;
 import warehouseLocation.models.ProductEntity;
 
 @Repository
@@ -32,6 +33,12 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   //상품 업데이트
   @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
   ProductEntity findById(@Param("productId") Long productId);
+
+  //메서드 category
+  @Query("SELECT p FROM ProductEntity p WHERE p.userId = :userId")
+  List<ProductEntity> categoryIdByUserId(@Param("userId") Long userId);
+
+//  omm.organId IN (:organIdList)
 
   //상품 삭제(업데이트로 진행)
   @Transactional

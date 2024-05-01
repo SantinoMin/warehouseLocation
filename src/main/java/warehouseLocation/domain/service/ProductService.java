@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
-import warehouseLocation.domain.dto.ProductResDto.Floor;
+import warehouseLocation.domain.dto.ProductResDto.CategoryList;
 import warehouseLocation.domain.repository.AreaRepository;
+import warehouseLocation.domain.repository.CategoryRepository;
 import warehouseLocation.domain.repository.FloorRepository;
 import warehouseLocation.domain.repository.ProductRepository;
 import warehouseLocation.domain.repository.RackRepository;
+import warehouseLocation.domain.repository.UserRepository;
+import warehouseLocation.global.utills.jwt.CustomUserDetails;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
 import warehouseLocation.models.AreaEntity;
@@ -33,14 +36,20 @@ public class ProductService {
   private final AreaRepository areaRepository;
   private final RackRepository rackRepository;
   private final FloorRepository floorRepository;
+  private final CategoryRepository categoryRepository;
+  private final UserRepository userRepository;
 
 
   @Autowired
-  ProductService(ProductRepository productRepository, AreaRepository areaRepository, RackRepository rackRepository, FloorRepository floorRepository) {
+  ProductService(ProductRepository productRepository, AreaRepository areaRepository,
+      RackRepository rackRepository, FloorRepository floorRepository,
+      CategoryRepository categoryRepository, UserRepository userRepository) {
     this.productRepository = productRepository;
     this.areaRepository = areaRepository;
     this.rackRepository = rackRepository;
     this.floorRepository = floorRepository;
+    this.categoryRepository = categoryRepository;
+    this.userRepository = userRepository;
   }
 
   /**
@@ -199,12 +208,12 @@ public class ProductService {
 
     List<ProductResDto.Area> areaList = new ArrayList<>();
 
-    for(AreaEntity areaEntity : areaEntities){
+    for (AreaEntity areaEntity : areaEntities) {
 
-       ProductResDto.Area areaDto = new ProductResDto.Area();
-       areaDto.setAreaId(areaEntity.getAreaId());
+      ProductResDto.Area areaDto = new ProductResDto.Area();
+      areaDto.setAreaId(areaEntity.getAreaId());
 
-       areaList.add(areaDto);
+      areaList.add(areaDto);
     }
 
     return areaList;
@@ -217,7 +226,7 @@ public class ProductService {
 
     List<ProductResDto.Rack> rackList = new ArrayList<>();
 
-    for(RackEntity rackEntity : rackEntities){
+    for (RackEntity rackEntity : rackEntities) {
 
       ProductResDto.Rack rackDto = new ProductResDto.Rack();
       rackDto.setRackId(rackEntity.getRackId());
@@ -234,7 +243,7 @@ public class ProductService {
 
     List<ProductResDto.Floor> rackDto = new ArrayList<>();
 
-    for(FloorEntity floorEntity : floorEntities){
+    for (FloorEntity floorEntity : floorEntities) {
 
       ProductResDto.Floor floor = new ProductResDto.Floor();
       floor.setFloorId(floorEntity.getFloor_id());
@@ -245,7 +254,26 @@ public class ProductService {
     return rackDto;
   }
 
-  public String addArea(ProductReqDto body) {
+  public CategoryList category(CustomUserDetails customUserDetails) {
+    //productEntity에서 userId로 categoryid정보를 하나씩 가져와서,
+    // 값들을 모아서 list로 만들어서 해당 리스트 보여주도록 해야될듯?
+
+//    UserEntity user = this.userRepository.findById();
+
+    long userId = customUserDetails.getUserId();
+
+    //productEntity에서 userId를 검색해서, categoryId들을 전부 가져오기.
+    List<ProductEntity> categoryList = this.productRepository.categoryIdByUserId(userId);
+
+
+    ProductResDto.CategoryList category = new ProductResDto.CategoryList();
+    category.setProductId(categoryList.);
+
+//    List<CategoryEntity> categoryList = this.categoryRepository.categoryList();
+    return category;
+  }
+
+  public String addLocation(ProductReqDto body) {
     return null;
   }
 

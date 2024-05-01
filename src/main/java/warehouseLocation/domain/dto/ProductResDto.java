@@ -108,6 +108,16 @@ public class ProductResDto {
   }
 
   @Data
+  public static class CategoryList {
+
+    private Long productId;
+//    private List<String> categoryList;
+
+  }
+
+
+
+  @Data
   public static class Message {
 
     String message;

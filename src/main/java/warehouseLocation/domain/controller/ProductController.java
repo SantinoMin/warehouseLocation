@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.service.ProductService;
+import warehouseLocation.global.utills.jwt.CustomUserDetails;
 
 @RestController
 //@Validated
@@ -33,6 +34,7 @@ public class ProductController {
   }
 
   //2.1(Get) /product/manage/search : 상품 검색
+
   /**
    * 값을 입력 안하고, 검색을 했을 경우 메시지 띄우려면? 메시지 아예 안 띄워도 되긴하지만,,만약에 띄운다면? 만약에 띄운다면, 1)전체 값들 보여주기 또는 2) 상품명을
    * 입력하세요 메시지 출력
@@ -79,13 +81,19 @@ public class ProductController {
 
   //2.2(PUT) /product/manage/{productId}/delete : 해당 상품 삭제(완전 삭제 대신, 업데이트로 진행)
   @PutMapping("/manage/{productId}/delete")
-  public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId, @RequestBody ProductReqDto body) {
+  public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId,
+      @RequestBody ProductReqDto body) {
     System.out.println("delete this productId = " + productId);
     return this.productService.productDelete(productId, body);
   }
 
 
   //3.1 (GET) /product/manage/categoryList : 카테고리 리스트
+  //CustomUserDetail 사용할 지? 있어야지 참고해서 가져올 수 있을듯
+  @GetMapping("/manage/categoryList")
+  public ProductResDto.CategoryList category(CustomUserDetails customUserDetails) {
+    return this.productService.category(customUserDetails);
+  }
 
 
   //3.1 (POST) /product/manage/post : 상품 등록
@@ -96,21 +104,16 @@ public class ProductController {
   }
 
 
-
-/**
- * 4 (POST) /product/location/setLocation : 구역 등록
- *  areaList, rackList, floorList에서 값들을 가져온 후
- *  해당 값들 중 하나씩 선택 후
- *  구역에 등록하기
- */
+  /**
+   * 4 (POST) /product/location/setLocation : 구역 등록 areaList, rackList, floorList에서 값들을 가져온 후 해당 값들
+   * 중 하나씩 선택 후 구역에 등록하기
+   */
 
 //4.1 (POST) /product/location/setLocation : 구역 등록
   @PostMapping("/manage/location/setLocation")
   public String addLocation(@RequestBody ProductReqDto body) {
     return this.productService.addLocation(body);
   }
-
-
 
   //4.1 (POST) /product/location/addArea : 구역 등록
 //  @PostMapping("/manage/location/addArea")
