@@ -116,55 +116,89 @@ paths:
         '422':
           description: Validation exception
 
-  /product/manage/register:
-    post:
+  /product/location/areaList:
+    get:
       tags:
         - product
-      summary: 상품 등록
-      description: 상품을 등록합니다. 기입 사항을 확인 해주세요.
-      requestBody:
-        description: 해당 상품을 등록합니다.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/beforePost'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/beforePost'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/beforePost'
-        required: true
-      #      parameters:
-      #        - name: productName
-      #          in: query
-      #          description: 등록하실 상품명을 입력 해주세요.
-      #          #          example: 예시) 오이 비누
-      #          required: true
-      #          schema:
-      #            type: string
-
+      summary: 구역 리스트
+      description: 사용 가능한 구역을 보여줍니다.
+      parameters:
+        - name: areaList
+          in: query
+          description: 사용 가능 구역
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: 등록 완료 되었습니다.
+          description: 정상적인 접근입니다.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/post'
+                $ref: '#/components/schemas/areaList'
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/post'
+                $ref: '#/components/schemas/areaList'
         '400':
-          description: Invalid tag value
+          description: Invalid ID supplied
         '404':
-          description: Product not found
-        '422':
-          description: Validation exception
+          description: Location not found
 
+  /product/location/rackList:
+    get:
+      tags:
+        - product
+      summary: 랙 리스트
+      description: 사용 가능한 랙 위치를 보여줍니다.
+      parameters:
+        - name: rackList
+          in: query
+          description: 사용 가능 랙
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rackList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/rackList'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Location not found
+
+  /product/location/floorList:
+    get:
+      tags:
+        - product
+      summary: 층 리스트
+      description: 사용 가능한 층을 보여줍니다.
+      parameters:
+        - name: floorList
+          in: query
+          description: 사용 가능 층
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/floorList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/floorList'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Location not found
   #2.2(PUT) /product/manage/search/{productId}/edit : 상품 정보 변경
   /product/manage/search/{productId}/edit:
     put:
@@ -215,17 +249,13 @@ paths:
           description: Product not found
         '422':
           description: Validation exception
-      # security:
-      #   - product_auth:
-      #       - write:pets
-      #       - read:pets
 
   /product/manage/search/{productId}/delete:
     put:
       tags:
         - product
       summary: 해당 상품 삭제(update로 진행)
-      description: 해당 상품 삭제 -> 완전 삭제 보다는, update로 진행해서 valid=false로 설정.
+      description: 해당 상품 삭제 -> 완전 삭제 보다는, update로 진행해서 is_valid=false로 설정.
       operationId: delete
       parameters:
         - name: productId
@@ -255,65 +285,84 @@ paths:
         '422':
           description: Validation exception
 
-  /product/locationManagement/locationList:
-    get:
+
+  /product/manage/register:
+    post:
       tags:
         - location
-      summary: 위치 리스트
-      description: 상품의 위치 리스트를 가져옵니다.
-      parameters:
-        - name: areaList
-          in: query
-          description: 전체 구역을 보여줍니다.
-          required: true
-          schema:
-            type: string
-        - name: rackList
-          in: query
-          description: 전체 랙 위치를 보여줍니다.
-          required: true
-          schema:
-            type: string
-        - name: floorList
-          in: query
-          description: 전체 층 높이를 보여줍니다.
-          required: true
-          schema:
-            type: string
-
+      summary: 상품 등록
+      description: 상품을 등록합니다. 기입 사항을 확인 해주세요.
+      requestBody:
+        description: 해당 상품을 등록합니다.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/register'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/register'
+        required: true
+      #      parameters:
+      #        - name: productName
+      #          in: query
+      #          description: 등록하실 상품명을 입력 해주세요.
+      #          #          example: 예시) 오이 비누
+      #          required: true
+      #          schema:
+      #            type: string
 
       responses:
         '200':
-          description: 정상적인 접근입니다.
+          description: 등록 완료 되었습니다.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/location'
+                type: array
+                items:
+                  $ref: '#/components/schemas/register'
             application/xml:
               schema:
-                $ref: '#/components/schemas/location'
+                type: array
+                items:
+                  $ref: '#/components/schemas/register'
         '400':
-          description: Invalid ID supplied
+          description: Invalid tag value
         '404':
-          description: Location not found
+          description: Product not found
+        '422':
+          description: Validation exception
 
-
-
-
-  /product/location/addArea:
+  /product/location/setLocation:
     post:
       tags:
         - location
       summary: 구역 등록
       description: 구역을 등록합니다.
-      parameters:
-        - name: area
-          in: query
-          description: 구역을 추가합니다.
-          example: 예시) B
-          required: true
-          schema:
-            type: string
+      requestBody:
+        description: 해당 상품을 등록합니다.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/setLocation'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/setLocation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/setLocation'
+        required: true
+
+      # parameters:
+      #   - name: area
+      #     in: query
+      #     description: 구역을 추가합니다.
+      #     example: 예시) B
+      #     required: true
+      #     schema:
+      #       type: string
 
       responses:
         '200':
@@ -321,76 +370,76 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/addArea'
+                $ref: '#/components/schemas/setLocationOk'
             application/xml:
               schema:
-                $ref: '#/components/schemas/addArea'
+                $ref: '#/components/schemas/setLocationOk'
         '400':
           description: Invalid ID supplied
         '404':
           description: location not found
 
-  /product/location/addRack:
-    post:
-      tags:
-        - location
-      summary: 랙 추가
-      description: 랙을 추가합니다.
-      parameters:
-        - name: rack
-          in: query
-          description: 랙 위치를 추가합니다.
-          example: 예시) 8
-          required: true
-          schema:
-            type: integer
-            format: int64
+  # /product/location/addRack:
+  #   post:
+  #     tags:
+  #       - location
+  #     summary: 랙 추가
+  #     description: 랙을 추가합니다.
+  #     parameters:
+  #       - name: rack
+  #         in: query
+  #         description: 랙 위치를 추가합니다.
+  #         example: 예시) 8
+  #         required: true
+  #         schema:
+  #           type: integer
+  #           format: int64
 
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/addRack'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/addRack'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: location not found
+  #     responses:
+  #       '200':
+  #         description: 정상적인 접근입니다.
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/addRack'
+  #           application/xml:
+  #             schema:
+  #               $ref: '#/components/schemas/addRack'
+  #       '400':
+  #         description: Invalid ID supplied
+  #       '404':
+  #         description: location not found
 
-  /product/location/addFloor:
-    post:
-      tags:
-        - location
-      summary: 층 추가
-      description: 층을 추가합니다.
-      parameters:
-        - name: floor
-          in: query
-          description: 층을 추가합니다.
-          example: 예시) 2
-          required: true
-          schema:
-            type: integer
-            format: int64
+  # /product/location/addFloor:
+  #   post:
+  #     tags:
+  #       - location
+  #     summary: 층 추가
+  #     description: 층을 추가합니다.
+  #     parameters:
+  #       - name: floor
+  #         in: query
+  #         description: 층을 추가합니다.
+  #         example: 예시) 2
+  #         required: true
+  #         schema:
+  #           type: integer
+  #           format: int64
 
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/addFloor'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/addFloor'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: location not found
+  #     responses:
+  #       '200':
+  #         description: 정상적인 접근입니다.
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/addFloor'
+  #           application/xml:
+  #             schema:
+  #               $ref: '#/components/schemas/addFloor'
+  #       '400':
+  #         description: Invalid ID supplied
+  #       '404':
+  #         description: location not found
 
 
 
@@ -491,7 +540,8 @@ components:
           example: 상품 삭제(=상품 비활성화로 전환)
 
 
-    location:
+    #//areaList schema
+    areaList:
       # items:
       type: object
       items:
@@ -499,14 +549,54 @@ components:
       properties:
         area:
           type: string
-            # items:
+          # items:
           #   type: string
           # example: C
+        status:
+          type: string
+          description: 주문 상황
+          example: 등록 가능
+          enum:
+            - 등록 가능
+            - 해당 위치에 등록이 불가합니다.
+
+      example:
+        area:
+          - A구역, B구역, C구역, D구역, E구역
+        status: 등록 가능
+
+    #//rackList schema
+    rackList:
+      # items:
+      type: object
+      items:
+        type: array
+      properties:
         rack:
           type: array
           items:
             type: integer
             # example: 4
+        status:
+          type: string
+          description: 주문 상황
+          example: 등록 가능
+          enum:
+            - 등록 가능
+            - 해당 위치에 등록이 불가합니다.
+
+      example:
+        rack:
+          - rack 1, rack 2, rack 3, rack 4, rack 5
+        status: 등록 가능
+
+    #//floorList schema
+    floorList:
+      # items:
+      type: object
+      items:
+        type: array
+      properties:
         floor:
           type: array
           items:
@@ -521,72 +611,68 @@ components:
             - 해당 위치에 등록이 불가합니다.
 
       example:
-        area:
-          - A, B, C, D, E
-        rack:
-          - 1,2,3,4,5
         floor:
-          - 1,2,3,4,5
+          - 1층, 2층, 3층
         status: 등록 가능
 
-    addArea:
-      type: object
-      # items:
-      # type: object
-      properties:
-        area:
-          type: string
-          # items:
-          #   type: string
+    # addArea:
+    #   type: object
+    #   # items:
+    #   # type: object
+    #   properties:
+    #     area:
+    #       type: string
+    #       # items:
+    #       #   type: string
 
-        status:
-          type: string
-          description: 구역 등록 상태
-          example: 등록 가능
-          enum:
-            - 등록 가능
-            - 해당 위치에 등록이 불가합니다.
+    #     status:
+    #       type: string
+    #       description: 구역 등록 상태
+    #       example: 등록 가능
+    #       enum:
+    #         - 등록 가능
+    #         - 해당 위치에 등록이 불가합니다.
 
-      example:
-        area: "E"
-        status: 등록 완료
+    #   example:
+    #     area: "E"
+    #     status: 등록 완료
 
 
-    addRack:
-      type: object
-      # items:
-      # type: object
-      properties:
-        rack:
-          type: string
-        status:
-          type: string
-          description: 주문 상황
-          example: 등록 가능
-          enum:
-            - 등록 가능
-            - 해당 위치에 등록이 불가합니다.
-      example:
-        rack: "6"
-        status: 등록 완료
+    # addRack:
+    #   type: object
+    #   # items:
+    #   # type: object
+    #   properties:
+    #     rack:
+    #       type: string
+    #     status:
+    #       type: string
+    #       description: 주문 상황
+    #       example: 등록 가능
+    #       enum:
+    #         - 등록 가능
+    #         - 해당 위치에 등록이 불가합니다.
+    #   example:
+    #     rack: "6"
+    #     status: 등록 완료
 
-    addFloor:
-      type: string
-      # items:
-      # type: object
-      properties:
-        floor:
-          type: integer
-        status:
-          type: string
-          description: 주문 상황
-          example: 등록 가능
-          enum:
-            - 등록 가능
-            - 해당 위치에 등록이 불가합니다.
-      example:
-        floor: "2"
-        status: 등록 완료
+    # addFloor:
+    #   type: string
+    #   # items:
+    #   # type: object
+    #   properties:
+    #     floor:
+    #       type: integer
+    #     status:
+    #       type: string
+    #       description: 주문 상황
+    #       example: 등록 가능
+    #       enum:
+    #         - 등록 가능
+    #         - 해당 위치에 등록이 불가합니다.
+    #   example:
+    #     floor: "2"
+    #     status: 등록 완료
 
     searchProduct:
       type: array
@@ -609,7 +695,7 @@ components:
       example:
         - productName: 유아 분유
           imageUrl:
-            -  "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
           price: 40,000원
           category: 유아 식품
           status: available
@@ -792,65 +878,6 @@ components:
           floorHeight: "층 높이를 지정 해주세요."
 
 
-    #        - productName: 젤리
-    #          imageUrl:
-    #            - "https://m.media-amazon.com/images/I/416vlt3Mo5L.__AC_SX300_SY300_QL70_FMwebp_.jpg"
-    #          price: 15,000원
-    #          category: 유아 식품
-    #          status: available
-    #        - productName: 신발
-    #          imageUrl:
-    #            - "https://m.media-amazon.com/images/I/61WYjGhP5CL._AC_SX695_.jpg"
-    #          price: 25,000원
-    #          category: 유아 용품
-    #          status: available
-
-    #    ApiResponse:
-    #      type: object
-    #      properties:
-    #        code:
-    #          type: integer
-    #          format: int32
-    #        type:
-    #          type: string
-    #        message:
-    #          type: string
-    #      xml:
-    #        name: '##default'
-
-    post:
-      type: object
-      properties:
-        productName:
-          type: string
-          example: 오이 비누
-        expiredDate:
-          type: string
-          format: date-time
-        imageUrl:
-          type: object
-          items:
-            type: string
-          example:
-            - "https://www.google.com/babyProducts/image5.jpg"
-        price:
-          type: string
-          example: 18,000원
-          xml:
-            name: imageUrl
-        #        created_at:
-        #          type: string
-        #          format: date-time
-        #          example: "2024-04-31T00:00:00Z"
-        #        updated_at:
-        #          type: string
-        #          format: date-time
-        #          example: "2024-04-31T00:00:00Z"
-        #        deleted_at:
-        #          type: string
-        #          format: date-time
-        #          example: "2024-04-31T00:00:00Z"
-
     beforePost:
       type: object
       properties:
@@ -871,6 +898,67 @@ components:
           example: 18,000원
           xml:
             name: imageUrl
+
+    setLocation:
+      type: object
+      properties:
+        area:
+          type: string
+          example: E 구역
+        rack:
+          type: string
+          example: 3번 랙
+        floor:
+          type: string
+          example: 2층
+
+    setLocationOk:
+      type: object
+      properties:
+        area:
+          type: string
+          example: E 구역
+        rack:
+          type: string
+          example: 3번 랙
+        floor:
+          type: string
+          example: 2층
+        status:
+          type: string
+          example: 등록 완료
+
+
+    register:
+      type: object
+      properties:
+        productName:
+          type: string
+          example: 다이슨 청소기
+        price:
+          type: string
+          example: 18,000원
+        category:
+          type: string
+          example: 가전 용품
+        # expiredDate:
+        #   type: string
+        #   format: date-time
+        #   example: "2028-03-03T00:00:00"
+        status:
+          type: string
+          example: 판매 중
+
+        imageUrl:
+          type: string
+          items:
+            type: string
+          example:
+            - "https://www.google.com/babyProducts/image5.jpg"
+            - "https://www.google.com/babyProducts/image18.jpg"
+
+          # xml:
+          #   name: imageUrl
 
   # requestBodies:
   #    edit:
