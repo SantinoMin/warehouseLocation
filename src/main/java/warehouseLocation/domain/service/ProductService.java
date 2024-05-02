@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import warehouseLocation.domain.dto.LocationReqDto;
+import warehouseLocation.domain.dto.LocationResDto;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.dto.ProductResDto.CategoryList;
@@ -254,6 +256,9 @@ public class ProductService {
     return rackDto;
   }
 
+
+  //jwt인증된 user만 접근이 가능해서, 현재 customUserDetails는 실행이 안되는 듯?
+  //일단 jwt설정 놔두고, 다른 api부터 작성하자.
   public CategoryList category(CustomUserDetails customUserDetails) {
     //productEntity에서 userId로 categoryid정보를 하나씩 가져와서,
     // 값들을 모아서 list로 만들어서 해당 리스트 보여주도록 해야될듯?
@@ -263,27 +268,45 @@ public class ProductService {
     long userId = customUserDetails.getUserId();
 
     //productEntity에서 userId를 검색해서, categoryId들을 전부 가져오기.
-    List<ProductEntity> categoryList = this.productRepository.categoryIdByUserId(userId);
+    List<ProductEntity> productList = this.productRepository.categoryIdByUserId(userId);
+    ProductResDto.CategoryList categoryList = new ProductResDto.CategoryList();
+    System.out.println("productList = "+ productList);
 
+    for (ProductEntity product : productList) {
+      // ProductEntity에서 categoryId를 가져와서 categoryList에 추가
+      categoryList.setProductId(product.getCategoryId());
+      System.out.println("productList = "+ productList);
 
-    ProductResDto.CategoryList category = new ProductResDto.CategoryList();
-    category.setProductId(categoryList.);
+    }
 
-//    List<CategoryEntity> categoryList = this.categoryRepository.categoryList();
-    return category;
+    System.out.println("categoryList = "+ categoryList);
+
+    return categoryList;
   }
 
-  public String addLocation(ProductReqDto body) {
-    return null;
+  public ResponseEntity<LocationResDto.Message> setLocation(LocationReqDto body) {
+
+    //area, rack, floor repo에 user가 입력한 값을 저장하기.
+    //중복되는 값이 이미 있는지 확인 필요할듯
+    AreaEntity area = new AreaEntity();
+    area.setAreaId(body.getAreaId());
+    this.areaRepository.save(area);
+
+    RackEntity rack = new RackEntity();
+    rack.setRackId(body.getRackId());
+    this.rackRepository.save(rack);
+
+    FloorEntity floor = new FloorEntity();
+    floor.setFloor_id(body.getFloorId());
+    this.floorRepository.save(floor);
+
+    // LocationResDto 객체 생성 및 값 설정
+    LocationResDto.Message locationResDto = new LocationResDto.Message();
+    locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
+
+    return ResponseEntity.ok(locationResDto);
   }
 
-  public String addRack(ProductReqDto body) {
-    return null;
-  }
-
-  public String addFloor(ProductReqDto body) {
-    return null;
-  }
 
 
 }

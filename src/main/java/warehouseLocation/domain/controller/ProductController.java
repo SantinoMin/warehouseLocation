@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import warehouseLocation.domain.dto.LocationReqDto;
+import warehouseLocation.domain.dto.LocationResDto;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.service.ProductService;
-import warehouseLocation.global.utills.jwt.CustomUserDetails;
 
 @RestController
 //@Validated
@@ -90,10 +91,12 @@ public class ProductController {
 
   //3.1 (GET) /product/manage/categoryList : 카테고리 리스트
   //CustomUserDetail 사용할 지? 있어야지 참고해서 가져올 수 있을듯
-  @GetMapping("/manage/categoryList")
-  public ProductResDto.CategoryList category(CustomUserDetails customUserDetails) {
-    return this.productService.category(customUserDetails);
-  }
+  //customUserDetail사용하려면 User인증을 거친 상태여야 되는데..
+//  @GetMapping("/manage/categoryList")
+//  public ProductResDto.CategoryList category(CustomUserDetails customUserDetails) {
+//    System.out.println(customUserDetails.getUserId());
+//    return this.productService.category(customUserDetails);
+//  }
 
 
   //3.1 (POST) /product/manage/post : 상품 등록
@@ -111,27 +114,9 @@ public class ProductController {
 
 //4.1 (POST) /product/location/setLocation : 구역 등록
   @PostMapping("/manage/location/setLocation")
-  public String addLocation(@RequestBody ProductReqDto body) {
-    return this.productService.addLocation(body);
+  public ResponseEntity<LocationResDto.Message> addLocation(@RequestBody LocationReqDto body) {
+    return this.productService.setLocation(body);
   }
-
-  //4.1 (POST) /product/location/addArea : 구역 등록
-//  @PostMapping("/manage/location/addArea")
-//  public String addArea(@RequestBody ProductReqDto body) {
-//    return this.productService.addArea(body);
-//  }
-
-  //4.1 (POST) /product/location/addRack : 랙 추가
-//  @PostMapping("/manage/location/addRack")
-//  public String addRack(@RequestBody ProductReqDto body) {
-//    return this.productService.addRack(body);
-//  }
-
-  //4.1 (POST) /product/location/addFloor : 층 추가
-//  @PostMapping("/manage/location/addFloor")
-//  public String addFloor(@RequestBody ProductReqDto body) {
-//    return this.productService.addFloor(body);
-//  }
 
 
 };

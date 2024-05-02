@@ -38,8 +38,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   @Query("SELECT p FROM ProductEntity p WHERE p.userId = :userId")
   List<ProductEntity> categoryIdByUserId(@Param("userId") Long userId);
 
-//  omm.organId IN (:organIdList)
-
   //상품 삭제(업데이트로 진행)
   @Transactional
   @Modifying

@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,12 +21,21 @@ import lombok.Setter;
 @Setter
 @Builder
 @Table(name = "product_location")
-public class productLocationEntity {
+public class ProductLocationEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "product_location_id", nullable = false, unique = true)
-  private int productLocationId;
+  private Long productLocationId;
+
+  @Column(name = "area_id", nullable = false)
+  private Long area_id;
+
+  @Column(name = "rack_id", nullable = false)
+  private Long rack_id;
+
+  @Column(name = "floor_id", nullable = false)
+  private Long floor_id;
 
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
