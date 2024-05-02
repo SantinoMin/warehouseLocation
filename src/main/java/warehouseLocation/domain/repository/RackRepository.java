@@ -1,6 +1,9 @@
 package warehouseLocation.domain.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import warehouseLocation.models.AreaEntity;
 import warehouseLocation.models.RackEntity;
@@ -8,11 +11,8 @@ import warehouseLocation.models.RackEntity;
 @Repository
 public interface RackRepository extends JpaRepository<RackEntity, Integer> {
 
-  //area(구역) 검색
-//  @Query("SELECT a FROM AreaEntity a WHERE a.areaId = :areaId")
-//  List<AreaEntity> (@Param("areaId") Long areaId);
-
-
-
+  //rack(랙) 검색
+  @Query("SELECT r FROM RackEntity r WHERE r.rackId = :rackId")
+  Optional<RackEntity> findByRackId(@Param("rackId") Long rackId);
 
 }
