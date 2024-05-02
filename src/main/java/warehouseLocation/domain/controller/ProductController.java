@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,13 +90,12 @@ public class ProductController {
 
 
   //3.1 (GET) /product/manage/categoryList : 카테고리 리스트
-  //CustomUserDetail 사용할 지? 있어야지 참고해서 가져올 수 있을듯
-  //customUserDetail사용하려면 User인증을 거친 상태여야 되는데..
-//  @GetMapping("/manage/categoryList")
-//  public ProductResDto.CategoryList category(CustomUserDetails customUserDetails) {
-//    System.out.println(customUserDetails.getUserId());
-//    return this.productService.category(customUserDetails);
-//  }
+//  CustomUserDetail 사용할 지? 있어야지 참고해서 가져올 수 있을듯
+//  customUserDetail사용하려면 User인증을 거친 상태여야 되는데..
+  @GetMapping("/manage/categoryList")
+  public ProductResDto.CategoryList categoryList() {
+    return this.productService.categoryList();
+  }
 
 
   //3.1 (POST) /product/manage/post : 상품 등록

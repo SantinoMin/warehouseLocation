@@ -23,10 +23,10 @@ import warehouseLocation.domain.repository.FloorRepository;
 import warehouseLocation.domain.repository.ProductRepository;
 import warehouseLocation.domain.repository.RackRepository;
 import warehouseLocation.domain.repository.UserRepository;
-import warehouseLocation.global.utills.jwt.CustomUserDetails;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
 import warehouseLocation.models.AreaEntity;
+import warehouseLocation.models.CategoryEntity;
 import warehouseLocation.models.FloorEntity;
 import warehouseLocation.models.ProductEntity;
 import warehouseLocation.models.RackEntity;
@@ -259,29 +259,17 @@ public class ProductService {
 
   //jwt인증된 user만 접근이 가능해서, 현재 customUserDetails는 실행이 안되는 듯?
   //일단 jwt설정 놔두고, 다른 api부터 작성하자.
-  public CategoryList category(CustomUserDetails customUserDetails) {
-    //productEntity에서 userId로 categoryid정보를 하나씩 가져와서,
-    // 값들을 모아서 list로 만들어서 해당 리스트 보여주도록 해야될듯?
+  public CategoryList categoryList( ) {
 
-//    UserEntity user = this.userRepository.findById();
+    List<CategoryEntity> categoryList = this.categoryRepository.findAll();
 
-    long userId = customUserDetails.getUserId();
+    List<String> categoryIdList = categoryList.stream().map(CategoryEntity::getCategoryName).toList();
 
-    //productEntity에서 userId를 검색해서, categoryId들을 전부 가져오기.
-    List<ProductEntity> productList = this.productRepository.categoryIdByUserId(userId);
-    ProductResDto.CategoryList categoryList = new ProductResDto.CategoryList();
-    System.out.println("productList = " + productList);
 
-    for (ProductEntity product : productList) {
-      // ProductEntity에서 categoryId를 가져와서 categoryList에 추가
-      categoryList.setProductId(product.getCategoryId());
-      System.out.println("productList = " + productList);
+    ProductResDto.CategoryList categoryListDto = new ProductResDto.CategoryList();
+    categoryListDto.setCategoryList(categoryIdList);
 
-    }
-
-    System.out.println("categoryList = " + categoryList);
-
-    return categoryList;
+    return categoryListDto;
   }
 
 
