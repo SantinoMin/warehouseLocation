@@ -30,6 +30,7 @@ import warehouseLocation.global.utills.response.error.ErrorMessage;
 import warehouseLocation.models.AreaEntity;
 import warehouseLocation.models.CategoryEntity;
 import warehouseLocation.models.FloorEntity;
+import warehouseLocation.models.Location;
 import warehouseLocation.models.ProductEntity;
 import warehouseLocation.models.RackEntity;
 
@@ -106,6 +107,7 @@ public class ProductService {
     info.setPrice(productInfo.getPrice());
     info.setCategoryId(productInfo.getCategoryId());
     info.setStatus(productInfo.getStatus());
+    info.setLocation((Location) productInfo.getLocation());
     return info;
 
     //!! 값이 존재하지 않을 경우는 없음 -> search 메서드에서 검색한 이후의 상품 정보를 보여주는 것이기 때문에.
@@ -176,7 +178,7 @@ public class ProductService {
     product.setExpiredDate(expiredDate);
     product.setImageUrl(body.getImageUrl());
     product.setPrice(body.getPrice());
-    product.setLocation(body.getLocation());
+//    product.setLocation(body.getLocation());
 //    product.setSort(body.getSort());
     product.setCreatedAt(createdAt);
     product.setCreatedAt(updatedAt);
@@ -190,7 +192,7 @@ public class ProductService {
         .imageUrl(product.getImageUrl())
         .price(product.getPrice())
         .categoryId(product.getCategoryId())
-        .location(product.getLocation())
+//        .location(product.getLocation())
 //        .createdAt(createdAt)
         .updatedAt(product.getUpdatedAt())
         .build();

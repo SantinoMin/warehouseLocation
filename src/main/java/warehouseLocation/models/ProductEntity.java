@@ -1,15 +1,13 @@
 package warehouseLocation.models;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,9 +17,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import warehouseLocation.domain.dto.ProductReqDto;
-import warehouseLocation.domain.dto.ProductResDto;
-import warehouseLocation.domain.dto.ProductResDto.Location;
 
 @Entity
 @AllArgsConstructor
@@ -71,9 +66,11 @@ public class ProductEntity {
 //  @JoinColumn(name = "product_location_id", nullable = false)
 
   //nullable false로 해아함 나중에.
-  @Setter
-  @Column(name = "location", nullable = true)
-  private String location;
+
+  // Location 타입으로 변경
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "location_id", referencedColumnName = "product_id")
+  private List<Location> location;
 
   @Column(name = "status", nullable = true)
   private String status;
@@ -81,4 +78,6 @@ public class ProductEntity {
   @Column(name = "is_valid", nullable = false)
   private boolean isValid;
 };
+
+
 

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import warehouseLocation.models.Location;
 
 
 @Getter
@@ -37,20 +38,20 @@ public class ProductResDto {
     private String price;
     private Long categoryId;
     private String status;
-    private List<Location> location;
+    private Location location;
 
   }
 
 
-  @Data
-  @Setter
-  @Getter
-  public static class Location {
-
-    private String area;
-    private Long rackNumber;
-    private Long floorHeight;
-  }
+//  @Data
+//  @Setter
+//  @Getter
+//  public static class Location {
+//
+//    private String area;
+//    private Long rackNumber;
+//    private Long floorHeight;
+//  }
 
   @Data
   public static class Register {
