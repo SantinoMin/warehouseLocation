@@ -41,9 +41,8 @@ public class ProductController {
    * 입력하세요 메시지 출력
    */
   @GetMapping("/manage/search")
-  public ProductResDto.ProductSearch search(
-      @Valid @RequestParam("productName") String productName) {
-    System.out.println("productName : " + productName);
+  public List<ProductResDto.ProductSearch> search(
+      @RequestParam(required = true) String productName) {
     return this.productService.search(productName);
   }
 

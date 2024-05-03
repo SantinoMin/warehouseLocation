@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import warehouseLocation.domain.dto.LocationResDto;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.dto.ProductResDto.CategoryList;
+import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
 import warehouseLocation.domain.repository.AreaRepository;
 import warehouseLocation.domain.repository.CategoryRepository;
 import warehouseLocation.domain.repository.FloorRepository;
@@ -55,24 +57,35 @@ public class ProductService {
   }
 
   /**
-   * 상품 검색 - 더 추가 필요: 1)상품명의 2글자만 일치하여도 db에서 찾아서 보이도록 하기. 2)(완료) imageUrl이 List형태로 보여지도록 해야됨.
+   * 상품 검색 - 더 추가 필요: 1)상품명의 2글자만 일치하여도 db에서 찾아서 보이도록 하기. -> 이 부분은 프론트에서 담당하는건가..? => 쿼리에서 %를 이용해서
+   * 상품명 2자리 일치시 전부 보여주도록 하기. 2)(완료) imageUrl이 List형태로 보여지도록 해야됨.
    */
-  public ProductResDto.ProductSearch search(String productName) {
+  public List<ProductResDto.ProductSearch> search(String productName) {
 
-    Optional<ProductEntity> product = this.productRepository.searchProduct(productName);
+    //!!아무 단어나 검색해도 일단 다 검색이 되는 이유는 뭐지?
 
-    ProductEntity searchProduct = product.orElseThrow(() -> new CustomException(
-        ErrorMessage.NOT_FOUND_PRODUCT));
+    List<ProductEntity> productList = this.productRepository.searchProduct(productName);
+    // 콜라라고 검색했을 경우에도, [코카 콜라, 제로 콜라, 펩시 콜라] 모두 다 검색된 상황.
 
-    ProductResDto.ProductSearch toDto = new ProductResDto.ProductSearch();
-    toDto.setProductName(searchProduct.getProductName());
-    toDto.setImageUrl(Collections.singletonList(searchProduct.getImageUrl()));
-    toDto.setPrice(searchProduct.getPrice());
-    //category Id말고, category를 보여줄 순 없는지?
-    toDto.setCategoryId(searchProduct.getCategoryId());
-    toDto.setStatus(searchProduct.getStatus());
-    return toDto;
-  }
+    if(productList.isEmpty()){
+      throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCT);
+    }
+
+    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
+
+    for (ProductEntity product : productList) {
+      ProductResDto.ProductSearch productSearch = new ProductSearch();
+      productSearch.setProductName(product.getProductName());
+      //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
+      productSearch.setImageUrl(Collections.singletonList(product.getImageUrl()));
+      productSearch.setPrice(product.getPrice());
+      productSearch.setCategoryId(product.getCategoryId());
+      productSearch.setStatus(product.getStatus());
+
+      productDto.add(productSearch);
+    }
+    return productDto;
+  };
 
   /**
    * 상품 정보 !!해결 필요 1)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는 법(배열
@@ -259,12 +272,12 @@ public class ProductService {
 
   //jwt인증된 user만 접근이 가능해서, 현재 customUserDetails는 실행이 안되는 듯?
   //일단 jwt설정 놔두고, 다른 api부터 작성하자.
-  public CategoryList categoryList( ) {
+  public CategoryList categoryList() {
 
     List<CategoryEntity> categoryList = this.categoryRepository.findAll();
 
-    List<String> categoryIdList = categoryList.stream().map(CategoryEntity::getCategoryName).toList();
-
+    List<String> categoryIdList = categoryList.stream().map(CategoryEntity::getCategoryName)
+        .toList();
 
     ProductResDto.CategoryList categoryListDto = new ProductResDto.CategoryList();
     categoryListDto.setCategoryList(categoryIdList);
@@ -326,7 +339,6 @@ public class ProductService {
 
     return ResponseEntity.ok(locationResDto);
   }
-
 
 
 }
