@@ -22,7 +22,7 @@ import org.springframework.data.annotation.Id;
 @Setter
 @Builder
 @Table(name = "location")
-public class Location {
+public class Location{
 //여기부터 이어서.
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
