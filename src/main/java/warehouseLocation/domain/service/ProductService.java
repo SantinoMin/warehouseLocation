@@ -18,10 +18,13 @@ import warehouseLocation.domain.dto.LocationResDto;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.dto.ProductResDto.CategoryList;
+import warehouseLocation.domain.dto.ProductResDto.Location;
+import warehouseLocation.domain.dto.ProductResDto.ProductInfo;
 import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
 import warehouseLocation.domain.repository.AreaRepository;
 import warehouseLocation.domain.repository.CategoryRepository;
 import warehouseLocation.domain.repository.FloorRepository;
+import warehouseLocation.domain.repository.ProductLocationRepository;
 import warehouseLocation.domain.repository.ProductRepository;
 import warehouseLocation.domain.repository.RackRepository;
 import warehouseLocation.domain.repository.UserRepository;
@@ -30,8 +33,8 @@ import warehouseLocation.global.utills.response.error.ErrorMessage;
 import warehouseLocation.models.AreaEntity;
 import warehouseLocation.models.CategoryEntity;
 import warehouseLocation.models.FloorEntity;
-import warehouseLocation.models.Location;
 import warehouseLocation.models.ProductEntity;
+import warehouseLocation.models.ProductLocationEntity;
 import warehouseLocation.models.RackEntity;
 
 @Service
@@ -43,18 +46,21 @@ public class ProductService {
   private final FloorRepository floorRepository;
   private final CategoryRepository categoryRepository;
   private final UserRepository userRepository;
+  private ProductLocationRepository productLocationRepository;
 
 
   @Autowired
   ProductService(ProductRepository productRepository, AreaRepository areaRepository,
       RackRepository rackRepository, FloorRepository floorRepository,
-      CategoryRepository categoryRepository, UserRepository userRepository) {
+      CategoryRepository categoryRepository, UserRepository userRepository,
+      ProductLocationRepository productLocationRepository) {
     this.productRepository = productRepository;
     this.areaRepository = areaRepository;
     this.rackRepository = rackRepository;
     this.floorRepository = floorRepository;
     this.categoryRepository = categoryRepository;
     this.userRepository = userRepository;
+    this.productLocationRepository = productLocationRepository;
   }
 
   /**
@@ -64,16 +70,26 @@ public class ProductService {
   public List<ProductResDto.ProductSearch> search(String productName) {
 
     //!!아무 단어나 검색해도 일단 다 검색이 되는 이유는 뭐지?
+    //1.상품명으로 상품Id 찾기 -> 2. 상품Id로 categoryId찾고 -> 3. categoryId로 categoryName찾기
+
+//    ProductEntity productIdByProductName = this.productRepository.productIdByProductName(productName);
+    //
+    //여 기 부 터 이 어 서 !
+    //
+    //
+
+
+
+
 
     List<ProductEntity> productList = this.productRepository.searchProduct(productName);
     // 콜라라고 검색했을 경우에도, [코카 콜라, 제로 콜라, 펩시 콜라] 모두 다 검색된 상황.
 
-    if(productList.isEmpty()){
+    if (productList.isEmpty()) {
       throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCT);
     }
 
     List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
-
     for (ProductEntity product : productList) {
       ProductResDto.ProductSearch productSearch = new ProductSearch();
       productSearch.setProductName(product.getProductName());
@@ -82,36 +98,42 @@ public class ProductService {
       productSearch.setPrice(product.getPrice());
       productSearch.setCategoryId(product.getCategoryId());
       productSearch.setStatus(product.getStatus());
-
       productDto.add(productSearch);
     }
     return productDto;
-  };
+  }
+
+  ;
 
   /**
-   * 상품 정보 !!해결 필요 1)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는 법(배열
-   * 형태로) // 생성자 만들어서 하는듯?
+   * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+   * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
    */
   public ProductResDto.ProductInfo productInfo(@RequestParam Long productId) {
 
-    //search에서 검색한 후, product의 세부 정보를 보는 거라, id는 무조건 참이여야 함.
-    // 그 전에 일단 productId을 productRepo에서 찾아서
-    // id값을 통해서, 정보들을 가져와야 되는듯?
+    ProductLocationEntity productLocation = this.productLocationRepository.productLocation(
+        productId);
+    String area = productLocation.getArea();
+    String rack = productLocation.getRack();
+    String floor = productLocation.getFloor();
 
-    ProductEntity productInfo = this.productRepository.productInfoById(productId);
+    Location location = new Location();
+    location.setArea(area + "번 구역");
+    location.setRack(rack + "번 랙");
+    location.setFloor(floor + "층");
+
+    ProductEntity product = this.productRepository.productInfoByProductId(productId);
 
     ProductResDto.ProductInfo info = new ProductResDto.ProductInfo();
-    info.setProductId(productInfo.getProductId());
-    info.setProductName(productInfo.getProductName());
-    info.setImageUrl(Collections.singletonList(productInfo.getImageUrl()));
-    info.setPrice(productInfo.getPrice());
-    info.setCategoryId(productInfo.getCategoryId());
-    info.setStatus(productInfo.getStatus());
-    info.setLocation((Location) productInfo.getLocation());
+    info.setProductId(productId);
+    info.setProductName(product.getProductName());
+    info.setImageUrl(Collections.singletonList(product.getImageUrl()));
+    info.setPrice(product.getPrice());
+    info.setCategoryId(product.getCategoryId());
+    info.setStatus(product.getStatus());
+    info.setLocation(location);
+
     return info;
-
-    //!! 값이 존재하지 않을 경우는 없음 -> search 메서드에서 검색한 이후의 상품 정보를 보여주는 것이기 때문에.
-
   }
 
   ;
@@ -158,7 +180,6 @@ public class ProductService {
     return toDto;
 
   }
-
 
   public ProductResDto.Edit productEdit(@PathVariable Long productId,
       @RequestBody ProductReqDto.Edit body) {
@@ -271,7 +292,6 @@ public class ProductService {
     return rackDto;
   }
 
-
   //jwt인증된 user만 접근이 가능해서, 현재 customUserDetails는 실행이 안되는 듯?
   //일단 jwt설정 놔두고, 다른 api부터 작성하자.
   public CategoryList categoryList() {
@@ -286,7 +306,6 @@ public class ProductService {
 
     return categoryListDto;
   }
-
 
   public ResponseEntity<LocationResDto.Message> setLocation(LocationReqDto body) {
 

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import warehouseLocation.models.CategoryEntity;
+import warehouseLocation.models.ProductEntity;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Integer> {
@@ -15,6 +16,6 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Intege
    * 카테고리 리스트 검색하
    **/
 //  @Query("SELECT c FROM CategoryEntity c WHERE c.categoryId = :categoryId")
-//  CategoryEntity categoryIdByUserId(@Param("categoryId") Long categoryId);
+//  CategoryEntity categoryNameByCategoryId(@Param("categoryId") Long categoryId);
 
 }

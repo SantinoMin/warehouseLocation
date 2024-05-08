@@ -32,6 +32,9 @@ public class ProductEntity {
   @Column(name = "product_id", nullable = false, unique = true)
   private Long productId;
 
+  @Column(name = "product_location_id", nullable = true, unique = true)
+  private Long ProductLocationId;
+
   @Column(name = "category_id", nullable = true, unique = true)
   private Long categoryId;
 

@@ -38,20 +38,19 @@ public class ProductResDto {
     private String price;
     private Long categoryId;
     private String status;
+
     private Location location;
 
   }
 
+  @Data
+  @Setter
+  public static class Location {
 
-//  @Data
-//  @Setter
-//  @Getter
-//  public static class Location {
-//
-//    private String area;
-//    private Long rackNumber;
-//    private Long floorHeight;
-//  }
+    private String area;
+    private String rack;
+    private String floor;
+  }
 
   @Data
   public static class Register {
@@ -114,7 +113,6 @@ public class ProductResDto {
     private List<String> categoryList;
 
   }
-
 
 
   @Data

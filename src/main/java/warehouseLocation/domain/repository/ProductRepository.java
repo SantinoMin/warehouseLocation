@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import warehouseLocation.models.CategoryEntity;
 import warehouseLocation.models.ProductEntity;
 
 @Repository
@@ -21,7 +22,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   List<ProductEntity> searchProduct(@Param("productName") String productName);
 
   @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
-  ProductEntity productInfoById(@Param("productId") Long productId);
+  ProductEntity productInfoByProductId(@Param("productId") Long productId);
 
   @Query("SELECT p FROM ProductEntity p WHERE p.productName = :productName")
   Optional<ProductEntity> registerByProductName(@Param("productName") String productName);
@@ -31,8 +32,12 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   ProductEntity findById(@Param("productId") Long productId);
 
   //메서드 category
-  @Query("SELECT p FROM ProductEntity p WHERE p.userId = :userId")
-  List<ProductEntity> categoryIdByUserId(@Param("userId") Long userId);
+  @Query("SELECT p FROM ProductEntity p WHERE p.productName = :productName")
+  ProductEntity productIdByProductName(@Param("productName") String productName);
+
+//  @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
+//  CategoryEntity categoryIdByProductId(@Param("productId") Long productId);
+
 
   //상품 삭제(업데이트로 진행)
   @Transactional

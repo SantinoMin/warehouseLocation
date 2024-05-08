@@ -28,14 +28,17 @@ public class ProductLocationEntity {
   @Column(name = "product_location_id", nullable = false, unique = true)
   private Long productLocationId;
 
+  @Column(name = "product_id", nullable = false)
+  private Long productId;
+
   @Column(name = "area_id", nullable = false)
-  private Long area_id;
+  private String area;
 
   @Column(name = "rack_id", nullable = false)
-  private Long rack_id;
+  private String rack;
 
   @Column(name = "floor_id", nullable = false)
-  private Long floor_id;
+  private String floor;
 
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
