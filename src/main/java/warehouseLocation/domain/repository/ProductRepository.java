@@ -33,11 +33,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 
   //메서드 category
   @Query("SELECT p FROM ProductEntity p WHERE p.productName = :productName")
-  ProductEntity productIdByProductName(@Param("productName") String productName);
-
-//  @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
-//  CategoryEntity categoryIdByProductId(@Param("productId") Long productId);
-
+  ProductEntity categoryIdByProductName(@Param("productName") String productName);
 
   //상품 삭제(업데이트로 진행)
   @Transactional

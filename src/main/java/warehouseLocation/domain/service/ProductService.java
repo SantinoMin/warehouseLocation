@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.dto.ProductResDto.CategoryList;
 import warehouseLocation.domain.dto.ProductResDto.Location;
-import warehouseLocation.domain.dto.ProductResDto.ProductInfo;
 import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
 import warehouseLocation.domain.repository.AreaRepository;
 import warehouseLocation.domain.repository.CategoryRepository;
@@ -71,16 +69,12 @@ public class ProductService {
 
     //!!아무 단어나 검색해도 일단 다 검색이 되는 이유는 뭐지?
     //1.상품명으로 상품Id 찾기 -> 2. 상품Id로 categoryId찾고 -> 3. categoryId로 categoryName찾기
+  // -> 상품명으로 categoryId를 찾기. -> categoryId로 categoryName찾기
 
-//    ProductEntity productIdByProductName = this.productRepository.productIdByProductName(productName);
-    //
-    //여 기 부 터 이 어 서 !
-    //
-    //
-
-
-
-
+   ProductEntity byProductName = this.productRepository.categoryIdByProductName(productName);
+   Long categoryId = byProductName.getCategoryId();
+   CategoryEntity categoryNameByCategoryId = this.categoryRepository.categoryNameByCategoryId(categoryId);
+   String categoryName = categoryNameByCategoryId.getCategoryName();
 
     List<ProductEntity> productList = this.productRepository.searchProduct(productName);
     // 콜라라고 검색했을 경우에도, [코카 콜라, 제로 콜라, 펩시 콜라] 모두 다 검색된 상황.
@@ -92,7 +86,7 @@ public class ProductService {
     List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
     for (ProductEntity product : productList) {
       ProductResDto.ProductSearch productSearch = new ProductSearch();
-      productSearch.setProductName(product.getProductName());
+      productSearch.setProductName(categoryName);
       //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
       productSearch.setImageUrl(Collections.singletonList(product.getImageUrl()));
       productSearch.setPrice(product.getPrice());

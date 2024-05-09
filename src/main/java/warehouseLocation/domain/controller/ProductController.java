@@ -20,9 +20,7 @@ import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.service.ProductService;
 
 @RestController
-//@Validated
 @Slf4j // 응답을 기록하는 데 도움이 되며 주로 디버깅 목적
-//@ResponseBody // 요거 왜 쓰고있지? // return되는 확인용으로 html이 아닌 문자열을 받기 위해.
 @RequestMapping("/product")
 public class ProductController {
 
@@ -35,7 +33,6 @@ public class ProductController {
   }
 
   //2.1(Get) /product/manage/search : 상품 검색
-
   /**
    * 값을 입력 안하고, 검색을 했을 경우 메시지 띄우려면? 메시지 아예 안 띄워도 되긴하지만,,만약에 띄운다면? 만약에 띄운다면, 1)전체 값들 보여주기 또는 2) 상품명을
    * 입력하세요 메시지 출력

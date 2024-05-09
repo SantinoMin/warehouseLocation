@@ -32,6 +32,7 @@ dependencies {
 
     // DB
     implementation 'mysql:mysql-connector-java:8.0.32'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     // MapStruct
@@ -42,7 +43,7 @@ dependencies {
 //    implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 //    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
     // Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
     // SMS
     implementation "com.twilio.sdk:twilio:9.10.0"
     // EMAIL
