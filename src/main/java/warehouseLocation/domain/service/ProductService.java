@@ -67,7 +67,7 @@ public class ProductService {
    */
   public List<ProductResDto.ProductSearch> search(String productName) {
 
-    //!!아무 단어나 검색해도 일단 다 검색이 되는 이유는 뭐지?
+    //!!아무 단어나 검색해도 일단 다 검색이 되는 이유는 뭐지?//
     //1.상품명으로 상품Id 찾기 -> 2. 상품Id로 categoryId찾고 -> 3. categoryId로 categoryName찾기
   // -> 상품명으로 categoryId를 찾기. -> categoryId로 categoryName찾기
 
