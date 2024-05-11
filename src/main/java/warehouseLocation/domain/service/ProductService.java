@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -62,36 +63,54 @@ public class ProductService {
   }
 
   /**
-   * 상품 검색 - 더 추가 필요: 1)상품명의 2글자만 일치하여도 db에서 찾아서 보이도록 하기. -> 이 부분은 프론트에서 담당하는건가..? => 쿼리에서 %를 이용해서
-   * 상품명 2자리 일치시 전부 보여주도록 하기. 2)(완료) imageUrl이 List형태로 보여지도록 해야됨.
+   * 상품 검색 - 더 추가 필요: (완료) 1)상품명의 2글자만 일치하여도 db에서 찾아서 보이도록 하기. -> 이 부분은 프론트에서 담당하는건가..? => 쿼리에서 %를
+   * 이용해서 상품명 2자리 일치시 전부 보여주도록 하기. 2)(완료) imageUrl이 List형태로 보여지도록 해야됨.
    */
   public List<ProductResDto.ProductSearch> search(String productName) {
 
-    //!!아무 단어나 검색해도 일단 다 검색이 되는 이유는 뭐지?//
-    //1.상품명으로 상품Id 찾기 -> 2. 상품Id로 categoryId찾고 -> 3. categoryId로 categoryName찾기
-  // -> 상품명으로 categoryId를 찾기. -> categoryId로 categoryName찾기
+    /**
+     * 1) 상품명이 일부라도 포함되는 경우, 전부 검색 가능 (검색: 콜라 -> 펩시 콜라, 제로 콜라, 코카 콜라 검색 가능)
+     * 2) 이미지는 여러개 등록 가능
+     */
 
-   ProductEntity byProductName = this.productRepository.categoryIdByProductName(productName);
-   Long categoryId = byProductName.getCategoryId();
-   CategoryEntity categoryNameByCategoryId = this.categoryRepository.categoryNameByCategoryId(categoryId);
-   String categoryName = categoryNameByCategoryId.getCategoryName();
+    //1-1.productName을 가지고, ProductEntity에서 categoryId 가져오기
+    List<ProductEntity> productList = this.productRepository.ByProductName(
+        productName);
+    System.out.println("productList : " + productList);
 
-    List<ProductEntity> productList = this.productRepository.searchProduct(productName);
-    // 콜라라고 검색했을 경우에도, [코카 콜라, 제로 콜라, 펩시 콜라] 모두 다 검색된 상황.
-
+    // 만약 product 값이 없을 시, 에러 띄우기.
     if (productList.isEmpty()) {
-      throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCT);
+      throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCTLIST);
     }
 
+    //1-2 CategoryIdList를 productList에서 가져오기
+    List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
+
+    //카테고리 list에서 id값들이 3,4,5라면
+    // 그 중에서 랜덤으로 1개만 가져온다고? 그래 그럼 3번만 가져온다면?
+
+    //1-3 CategoryId를 CategoryIdList에서 가져오기
+    //* findAny()도 Optional을 반환함 * // 이건 category가 같다는 가정하에 가능한데, 만약 카테고리가 다르다면? ("주방"으로 검색 -> 주방 세제, 주방 칼 카테고리 다를건데?)
+
+    Long categoryId = categoryIdList.stream().findAny().orElseThrow(() ->
+        new CustomException(ErrorMessage.NOT_FOUND_CATEGORY));
+
+    //1-4 categoryId로 categoryName을 가져오기
+    CategoryEntity categoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
+        categoryId);
+    String categoryName = categoryNameEntity.getCategoryName();
+
+    //2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
     List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
-    for (ProductEntity product : productList) {
+    for (
+        ProductEntity OneProduct : productList) {
       ProductResDto.ProductSearch productSearch = new ProductSearch();
-      productSearch.setProductName(categoryName);
+      productSearch.setProductName(OneProduct.getProductName());
       //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
-      productSearch.setImageUrl(Collections.singletonList(product.getImageUrl()));
-      productSearch.setPrice(product.getPrice());
-      productSearch.setCategoryId(product.getCategoryId());
-      productSearch.setStatus(product.getStatus());
+      productSearch.setImageUrl(Collections.singletonList(OneProduct.getImageUrl()));
+      productSearch.setPrice(OneProduct.getPrice());
+      productSearch.setCategoryName(categoryName);
+      productSearch.setStatus(OneProduct.getStatus());
       productDto.add(productSearch);
     }
     return productDto;
@@ -100,13 +119,16 @@ public class ProductService {
   ;
 
   /**
-   * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
-   * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
+   * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법?
+   * 2)imageUrl이 Postman response에서 리스트 형태로 보여지는 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
    */
   public ProductResDto.ProductInfo productInfo(@RequestParam Long productId) {
 
-    ProductLocationEntity productLocation = this.productLocationRepository.productLocation(
+    Optional<ProductLocationEntity> optionalProductLocation = this.productLocationRepository.productLocation(
         productId);
+    ProductLocationEntity productLocation = optionalProductLocation.orElseThrow(
+        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+
     String area = productLocation.getArea();
     String rack = productLocation.getRack();
     String floor = productLocation.getFloor();
@@ -132,6 +154,8 @@ public class ProductService {
 
   ;
 
+
+  //여기부터 이어서 0511 토요일 여기 앞까지 함.
   public ProductResDto.Register productRegister(ProductReqDto body) {
 
     //1. 상품이 중복이 아닌지 repo에서 확인 후, 중복이 아니라면 등록 가능하도록 하기.
@@ -287,7 +311,7 @@ public class ProductService {
   }
 
   //jwt인증된 user만 접근이 가능해서, 현재 customUserDetails는 실행이 안되는 듯?
-  //일단 jwt설정 놔두고, 다른 api부터 작성하자.
+//일단 jwt설정 놔두고, 다른 api부터 작성하자.
   public CategoryList categoryList() {
 
     List<CategoryEntity> categoryList = this.categoryRepository.findAll();
@@ -354,6 +378,5 @@ public class ProductService {
 
     return ResponseEntity.ok(locationResDto);
   }
-
 
 }

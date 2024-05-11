@@ -25,7 +25,7 @@ public class ProductResDto {
     private String productName;
     private List<String> imageUrl;
     private String price;
-    private Long categoryId;
+    private String categoryName;
     private String status;
   }
 
