@@ -1,9 +1,11 @@
 //package beispiel;
 //
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+//
 ///**
 // * 디버깅 예시
 // */
-//
+//@SpringBootApplication
 //public class Main {
 //
 //  public static void main(String[] args) {

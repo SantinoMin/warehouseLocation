@@ -5,15 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+
 
 //@Getter
 //@Setter
@@ -26,7 +22,7 @@ public class ProductReqDto {
   @Size(min = 2, max = 10, message = "The productName must be from 2 to 10 characters.")
   private String productName;
 
-  @NotBlank(message = "expiredDate is required.")
+//  @NotBlank(message = "expiredDate is required.")
   private LocalDate expiredDate;
 
   @NotBlank(message = "productName is required.")
@@ -35,14 +31,14 @@ public class ProductReqDto {
   @NotBlank(message = "price is required.")
   private String price;
 
-  @NotBlank(message = "createdAt is required.")
+//  @NotBlank(message = "createdAt is required.")
   LocalDateTime createdAt;
 
-  @NotBlank(message = "updatedAt is required.")
+//  @NotBlank(message = "updatedAt is required.")
   LocalDateTime updatedAt;
 
-  @NotBlank(message = "isValid is required.")
-  String isValid;
+//  @NotBlank(message = "isValid is required.")
+  boolean isValid;
 
 
   @Data

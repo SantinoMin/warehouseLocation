@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import warehouseLocation.models.Location;
+
 
 
 @Getter
@@ -23,7 +23,7 @@ public class ProductResDto {
   public static class ProductSearch {
 
     private String productName;
-    private List<String> imageUrl;
+    private String imageUrl;
     private String price;
     private String categoryName;
     private String status;
@@ -32,11 +32,12 @@ public class ProductResDto {
   @Data
   public static class ProductInfo {
 
-    private Long productId;
+//    private Long productId;
     private String productName;
-    private List<String> imageUrl;
+    private String imageUrl;
     private String price;
-    private Long categoryId;
+//    private Long categoryId;
+    private String categoryName;
     private String status;
 
     private Location location;
@@ -55,14 +56,17 @@ public class ProductResDto {
   @Data
   public static class Register {
 
-    private Long productId;
+//    private Long productId;
     private String productName;
-    private LocalDate expiredDate;
-    private String imageUrl;
     private String price;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private boolean isValid;
+    private String category;
+    private String status;
+    private String imageUrl;
+
+//    private LocalDate expiredDate;
+//    private LocalDateTime createdAt;
+//    private LocalDateTime updatedAt;
+//    private boolean isValid;
 
   }
 

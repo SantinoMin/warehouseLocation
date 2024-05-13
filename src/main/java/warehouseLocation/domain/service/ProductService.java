@@ -1,5 +1,6 @@
 package warehouseLocation.domain.service;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -95,9 +96,12 @@ public class ProductService {
         new CustomException(ErrorMessage.NOT_FOUND_CATEGORY));
 
     //1-4 categoryId로 categoryName을 가져오기
-    CategoryEntity categoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
+    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
         categoryId);
+    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(() -> new CustomException("no data"));
+
     String categoryName = categoryNameEntity.getCategoryName();
+    System.out.println("categoryName = " + categoryName);
 
     //2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
     List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
@@ -106,7 +110,7 @@ public class ProductService {
       ProductResDto.ProductSearch productSearch = new ProductSearch();
       productSearch.setProductName(OneProduct.getProductName());
       //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
-      productSearch.setImageUrl(Collections.singletonList(OneProduct.getImageUrl()));
+      productSearch.setImageUrl(OneProduct.getImageUrl());
       productSearch.setPrice(OneProduct.getPrice());
       productSearch.setCategoryName(categoryName);
       productSearch.setStatus(OneProduct.getStatus());
@@ -118,8 +122,8 @@ public class ProductService {
   ;
 
   /**
-   * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법?
-   * 2)imageUrl이 Postman response에서 리스트 형태로 보여지는 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
+   * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+   * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
    */
   public ProductResDto.ProductInfo productInfo(@RequestParam Long productId) {
 
@@ -139,12 +143,23 @@ public class ProductService {
 
     ProductEntity product = this.productRepository.productInfoByProductId(productId);
 
+    ProductEntity findCategoryId = this.productRepository.categoryIdByProductId(productId);
+    Long categoryId = findCategoryId.getCategoryId();
+    System.out.println("categoryId = " + categoryId);
+
+    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
+        categoryId);
+    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow( () -> new CustomException("no dataaa"));
+    String categoryName = categoryNameEntity.getCategoryName();
+    System.out.println("categoryName = " + categoryName);
+
     ProductResDto.ProductInfo info = new ProductResDto.ProductInfo();
-    info.setProductId(productId);
+//    info.setProductId(productId);
     info.setProductName(product.getProductName());
-    info.setImageUrl(Collections.singletonList(product.getImageUrl()));
+    info.setImageUrl(product.getImageUrl());
     info.setPrice(product.getPrice());
-    info.setCategoryId(product.getCategoryId());
+//    info.setCategoryId(product.getCategoryId());
+    info.setCategoryName(categoryName);
     info.setStatus(product.getStatus());
     info.setLocation(location);
 
@@ -154,7 +169,6 @@ public class ProductService {
   ;
 
 
-  //여기부터 이어서 0511 토요일 여기 앞까지 함.
   public ProductResDto.Register productRegister(ProductReqDto body) {
 
     //1. 상품이 중복이 아닌지 repo에서 확인 후, 중복이 아니라면 등록 가능하도록 하기.
@@ -162,38 +176,58 @@ public class ProductService {
 
     Optional<ProductEntity> register = this.productRepository.registerByProductName(
         body.getProductName());
+    System.out.println("register = " + register );
 
-    register.ifPresent(existingProduct -> {
-      throw new CustomException("이미 등록된 상품 입니다 : " + body.getProductName());
-//          (ErrorMessage.PRODUCT_ALREADY_EXIST);
+    ProductEntity registerNoOpt = register.orElseGet( ()-> {
+
+
+          return null;
+    }
+    );
+
+    Long categoryId = registerNoOpt.getCategoryId())
+
+
+
+    Optional<CategoryEntity> optionalCategoryName = this.categoryRepository.categoryNameByCategoryId(categoryId);
+    CategoryEntity categoryNameEntity = optionalCategoryName.orElseThrow( () -> new CustomException("noo"));
+    String categoryName = categoryNameEntity.getCategoryName();
+
+
+    ProductEntity newProduct = register.orElseGet(() -> {
+      LocalDateTime createdAt = LocalDateTime.now();
+      LocalDateTime updatedAt = LocalDateTime.now();
+
+      ProductEntity product = new ProductEntity();
+      product.setProductName(body.getProductName());
+      product.setExpiredDate(body.getExpiredDate());
+      product.setImageUrl(body.getImageUrl());
+      product.setPrice(body.getPrice());
+      product.setCategoryId(categoryId);
+      product.setCreatedAt(createdAt);
+      product.setUpdatedAt(updatedAt);
+      product.setValid(body.isValid());
+      System.out.println("product = "+ product);
+
+      return this.productRepository.save(product);
     });
 
-    LocalDateTime createdAt = LocalDateTime.now();
-    LocalDateTime updatedAt = LocalDateTime.now();
 
-    ProductEntity newProduct = new ProductEntity();
-    newProduct.setProductId(newProduct.getProductId());
-    newProduct.setProductName(body.getProductName());
-    newProduct.setExpiredDate(body.getExpiredDate());
-    newProduct.setImageUrl(body.getImageUrl());
-    newProduct.setPrice(body.getPrice());
-    newProduct.setCreatedAt(createdAt);
-    newProduct.setUpdatedAt(updatedAt);
-
-//    ProductEntity registerdProduct =
-    this.productRepository.save(newProduct);
-    System.out.println("newProduct = " + newProduct);
 
     ProductResDto.Register toDto = new ProductResDto.Register();
-    toDto.setProductId((newProduct.getProductId()));
+//    toDto.setProductId((newProduct.getProductId()));
     toDto.setProductName(newProduct.getProductName());
-    toDto.setExpiredDate(newProduct.getExpiredDate());
-    toDto.setImageUrl(newProduct.getImageUrl());
     toDto.setPrice(newProduct.getPrice());
-    toDto.setCreatedAt(newProduct.getCreatedAt());
+    toDto.setCategory(categoryName);
+    toDto.setImageUrl(newProduct.getImageUrl());
+
+//    toDto.setExpiredDate(newProduct.getExpiredDate());
 //    toDto.setCreatedAt(newProduct.getCreatedAt());
-    toDto.setUpdatedAt(createdAt);
+//    toDto.setCreatedAt(newProduct.getCreatedAt());
+//    toDto.setUpdatedAt(newProduct.getUpdatedAt());
 //    toDto.setUpdatedAt(updatedAt);
+//    toDto.setValid(newProduct.isValid());
+    System.out.println("toDto = "+ toDto);
     return toDto;
 
   }
@@ -208,6 +242,7 @@ public class ProductService {
     LocalDateTime createdAt = LocalDateTime.now();
     LocalDateTime updatedAt = LocalDateTime.now();
     LocalDate expiredDate = LocalDate.now();
+//    List<Image> image = new ArrayList<>();
 
     //1번
     ProductEntity product = this.productRepository.findById(productId);
@@ -227,7 +262,7 @@ public class ProductService {
         .productId(productId)
         .productName(product.getProductName())
         .expiredDate(product.getExpiredDate())
-        .imageUrl(product.getImageUrl())
+        .imageUrl(body.getImageUrl())
         .price(product.getPrice())
         .categoryId(product.getCategoryId())
 //        .location(product.getLocation())
