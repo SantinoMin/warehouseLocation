@@ -2,10 +2,8 @@ package warehouseLocation.domain.controller;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +19,7 @@ import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.service.ProductService;
 
 @RestController
-@Slf4j // 응답을 기록하는 데 도움이 되며 주로 디버깅 목적
+//@Slf4j // 응답을 기록하는 데 도움이 되며 주로 디버깅 목적
 @RequestMapping("/product")
 public class ProductController {
 
@@ -97,7 +95,7 @@ public class ProductController {
 
   //3.1 (POST) /product/manage/post : 상품 등록
   @PostMapping("/manage/post")
-  public ProductResDto.Register ProductRegister(@RequestBody ProductReqDto body) {
+  public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
 
     return this.productService.productRegister(body);
   }

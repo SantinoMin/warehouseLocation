@@ -26,8 +26,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
+
+    //바로 아래 dependencies없어야지 @Valid 적용됨
+//    implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
+
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // DB

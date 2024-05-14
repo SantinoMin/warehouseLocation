@@ -1,10 +1,8 @@
 package warehouseLocation.domain.service;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,30 +169,18 @@ public class ProductService {
 
   public ProductResDto.Register productRegister(ProductReqDto body) {
 
-    //1. 상품이 중복이 아닌지 repo에서 확인 후, 중복이 아니라면 등록 가능하도록 하기.
-    //   +이미 등록되어 있는 경우 에러 메시지 / 등록 가능한 경우에도 메시지..
-
-    Optional<ProductEntity> register = this.productRepository.registerByProductName(
+    // 1. 상품 중복 확인
+    Optional<ProductEntity> optRegister = this.productRepository.registerByProductName(
         body.getProductName());
-    System.out.println("register = " + register );
+    System.out.println("optRegister = " + optRegister );
 
-    ProductEntity registerNoOpt = register.orElseGet( ()-> {
+    optRegister.ifPresent( name -> {
+      if(name.getProductName().equals(body.getProductName())){
+        throw new CustomException("해당 상품명은 이미 존재합니다.");
+      }
+    });
 
-
-          return null;
-    }
-    );
-
-    Long categoryId = registerNoOpt.getCategoryId())
-
-
-
-    Optional<CategoryEntity> optionalCategoryName = this.categoryRepository.categoryNameByCategoryId(categoryId);
-    CategoryEntity categoryNameEntity = optionalCategoryName.orElseThrow( () -> new CustomException("noo"));
-    String categoryName = categoryNameEntity.getCategoryName();
-
-
-    ProductEntity newProduct = register.orElseGet(() -> {
+    // 2. 상품 DB에 저장
       LocalDateTime createdAt = LocalDateTime.now();
       LocalDateTime updatedAt = LocalDateTime.now();
 
@@ -203,33 +189,28 @@ public class ProductService {
       product.setExpiredDate(body.getExpiredDate());
       product.setImageUrl(body.getImageUrl());
       product.setPrice(body.getPrice());
-      product.setCategoryId(categoryId);
       product.setCreatedAt(createdAt);
       product.setUpdatedAt(updatedAt);
-      product.setValid(body.isValid());
-      System.out.println("product = "+ product);
+//      product.setValid(body.isValid());
+      this.productRepository.save(product);
+    System.out.println("product = "+ product);
 
-      return this.productRepository.save(product);
-    });
+    // 3. 사용자가 카테고리 리스트에서 카테고리 선택하기 -> 이건 좀 복잡해지네. api를 따로 둬서 카테고리를 선택하는 걸로 가야될듯.
 
-
-
+    // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
     ProductResDto.Register toDto = new ProductResDto.Register();
-//    toDto.setProductId((newProduct.getProductId()));
-    toDto.setProductName(newProduct.getProductName());
-    toDto.setPrice(newProduct.getPrice());
-    toDto.setCategory(categoryName);
-    toDto.setImageUrl(newProduct.getImageUrl());
+    toDto.setProductName(product.getProductName());
+    toDto.setPrice(product.getPrice());
+    toDto.setCategoryName(body.getCategoryName());
+    toDto.setExpiredDate(product.getExpiredDate());
+    toDto.setStatus(body.getStatus());
+    toDto.setImageUrl(product.getImageUrl());
 
-//    toDto.setExpiredDate(newProduct.getExpiredDate());
-//    toDto.setCreatedAt(newProduct.getCreatedAt());
-//    toDto.setCreatedAt(newProduct.getCreatedAt());
-//    toDto.setUpdatedAt(newProduct.getUpdatedAt());
-//    toDto.setUpdatedAt(updatedAt);
-//    toDto.setValid(newProduct.isValid());
+    // 보여줄 필요 없는 내용들이지만, 일단 반환되는 거 확인하는 용도로 기입 해 봄
+    toDto.setCreatedAt(createdAt);
+    toDto.setUpdatedAt(updatedAt);
     System.out.println("toDto = "+ toDto);
     return toDto;
-
   }
 
   public ProductResDto.Edit productEdit(@PathVariable Long productId,
@@ -344,8 +325,6 @@ public class ProductService {
     return rackDto;
   }
 
-  //jwt인증된 user만 접근이 가능해서, 현재 customUserDetails는 실행이 안되는 듯?
-//일단 jwt설정 놔두고, 다른 api부터 작성하자.
   public CategoryList categoryList() {
 
     List<CategoryEntity> categoryList = this.categoryRepository.findAll();

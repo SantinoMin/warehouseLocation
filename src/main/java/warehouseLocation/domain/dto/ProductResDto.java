@@ -59,13 +59,13 @@ public class ProductResDto {
 //    private Long productId;
     private String productName;
     private String price;
-    private String category;
+    private String categoryName;
+    private LocalDate expiredDate;
     private String status;
     private String imageUrl;
 
-//    private LocalDate expiredDate;
-//    private LocalDateTime createdAt;
-//    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 //    private boolean isValid;
 
   }

@@ -999,13 +999,16 @@ components:
         price:
           type: string
           example: 18,000원
+#        expiredDate:
+#          type: Date
+#          example: 2024년 12월 12일
         category:
           type: string
           example: 가전 용품
-        # expiredDate:
-        #   type: string
-        #   format: date-time
-        #   example: "2028-03-03T00:00:00"
+        expiredDate:
+           type: string
+           format: date-time
+           example: "2028-03-03T00:00:00"
         status:
           type: string
           example: 판매 중
