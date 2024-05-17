@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -338,6 +339,7 @@ public class ProductService {
     return categoryListDto;
   }
 
+  @Transactional
   public ResponseEntity<LocationResDto.Message> setLocation(LocationReqDto body) {
 
     //area, rack, floor repo에 user가 입력한 값을 저장하기.
