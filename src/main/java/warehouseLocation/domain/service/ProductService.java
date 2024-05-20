@@ -287,7 +287,6 @@ public class ProductService {
     }
 
     return areaList;
-
   }
 
   public List<ProductResDto.Rack> rackList() {
