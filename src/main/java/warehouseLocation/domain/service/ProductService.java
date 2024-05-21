@@ -305,7 +305,6 @@ public class ProductService {
 
     return rackList;
   }
-
   public List<ProductResDto.Floor> floorList() {
 
     List<FloorEntity> floorEntities = this.floorRepository.findAll();
