@@ -32,17 +32,14 @@ public class ProductEntity {
   @Column(name = "product_id", nullable = false, unique = true)
   private Long productId;
 
-  @Column(name = "product_location_id", nullable = true, unique = true)
-  private Long ProductLocationId;
-
-  @Column(name = "category_id", nullable = true, unique = true)
-  private Long categoryId;
-
-  @Column(name = "user_id", nullable = true, unique = true)
-  private Long userId;
+//  @Column(name = "product_location_id", nullable = true, unique = true)
+//  private Long ProductLocationId;
 
   @Column(name = "product_name", nullable = false)
   private String productName;
+
+  @Column(name = "category_name", nullable = false)
+  private String categoryName;
 
   @Column(name = "expired_date", nullable = false)
   private LocalDate expiredDate;
@@ -53,9 +50,6 @@ public class ProductEntity {
   @Column(name = "price", nullable = false)
   private String price;
 
-  @Column(name = "sort", nullable = true)
-  private String sort;
-
   @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
 
@@ -65,15 +59,16 @@ public class ProductEntity {
   @Column(name = "deleted_at", nullable = true)
   private LocalDateTime deletedAt;
 
-//  @OneToMany
-//  @JoinColumn(name = "product_location_id", nullable = false)
-
-  //nullable false로 해아함 나중에.
-
   // Location 타입으로 변경
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "location_id", referencedColumnName = "product_id")
   private List<Location> location;
+
+  @Column(name = "category_id", nullable = true, unique = true)
+  private Long categoryId;
+
+  @Column(name = "user_id", nullable = true, unique = true)
+  private Long userId;
 
   @Column(name = "status", nullable = true)
   private String status;

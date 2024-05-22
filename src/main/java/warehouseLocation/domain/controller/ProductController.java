@@ -49,6 +49,28 @@ public class ProductController {
     return this.productService.productInfo(productId);
   }
 
+  //3.1 (put) product/manage/{productId}/edit : 상품 정보 변경
+  @PutMapping("/manage/{productId}/edit")
+  public ProductResDto.Edit productEdit(@PathVariable Long productId,
+      @RequestBody ProductReqDto.Edit body) {
+    System.out.println("producEdit = " + body);
+    return this.productService.productEdit(productId, body);
+  }
+
+  //3.1(PUT) /product/manage/{productId}/delete : 해당 상품 삭제(완전 삭제 대신, 업데이트로 진행)
+  @PutMapping("/manage/{productId}/delete")
+  public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId,
+      @RequestBody ProductReqDto body) {
+    System.out.println("delete this productId = " + productId);
+    return this.productService.productDelete(productId, body);
+  }
+
+  //3.1 (GET) /product/manage/categoryList : 카테고리 리스트
+  @GetMapping("/manage/categoryList")
+  public ProductResDto.CategoryList categoryList() {
+    return this.productService.categoryList();
+  }
+
   //2.2 (GET) /product/location/areaList : 구역 리스트
   @GetMapping("/location/areaList")
   public List<ProductResDto.Area> areaList() {
@@ -67,32 +89,6 @@ public class ProductController {
     return this.productService.floorList();
   }
 
-  //2.2 (put) product/manage/{productId}/edit : 상품 정보 변경
-  @PutMapping("/manage/{productId}/edit")
-  public ProductResDto.Edit productEdit(@PathVariable Long productId,
-      @RequestBody ProductReqDto.Edit body) {
-    System.out.println("producEdit = " + body);
-    return this.productService.productEdit(productId, body);
-  }
-
-  //2.2(PUT) /product/manage/{productId}/delete : 해당 상품 삭제(완전 삭제 대신, 업데이트로 진행)
-  @PutMapping("/manage/{productId}/delete")
-  public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId,
-      @RequestBody ProductReqDto body) {
-    System.out.println("delete this productId = " + productId);
-    return this.productService.productDelete(productId, body);
-  }
-
-
-  //3.1 (GET) /product/manage/categoryList : 카테고리 리스트
-//  CustomUserDetail 사용할 지? 있어야지 참고해서 가져올 수 있을듯
-//  customUserDetail사용하려면 User인증을 거친 상태여야 되는데..
-  @GetMapping("/manage/categoryList")
-  public ProductResDto.CategoryList categoryList() {
-    return this.productService.categoryList();
-  }
-
-
   //3.1 (POST) /product/manage/post : 상품 등록
   @PostMapping("/manage/post")
   public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
@@ -105,11 +101,22 @@ public class ProductController {
    * 4 (POST) /product/location/setLocation : 구역 등록 areaList, rackList, floorList에서 값들을 가져온 후 해당 값들
    * 중 하나씩 선택 후 구역에 등록하기
    */
+//4.1 (POST) /product/location/setArea : 구역 등록
+  @PostMapping("/location/addArea")
+  public ResponseEntity<LocationResDto.Message> addArea(@RequestBody LocationReqDto body) {
+    return this.productService.addArea(body);
+  }
 
-//4.1 (POST) /product/location/setLocation : 구역 등록
-  @PostMapping("/manage/location/setLocation")
-  public ResponseEntity<LocationResDto.Message> addLocation(@RequestBody LocationReqDto body) {
-    return this.productService.setLocation(body);
+  //4.1 (POST) /product/location/setRack : 랙 등록
+  @PostMapping("/location/setRack")
+  public ResponseEntity<LocationResDto.Message> addRack(@RequestBody LocationReqDto body) {
+    return this.productService.addRack(body);
+  }
+
+  //4.1 (POST) /product/location/setFloor : 층 등록
+  @PostMapping("/location/setFloor")
+  public ResponseEntity<LocationResDto.Message> addFloor(@RequestBody LocationReqDto body) {
+    return this.productService.addFloor(body);
   }
 
 

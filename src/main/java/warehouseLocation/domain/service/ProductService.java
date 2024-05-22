@@ -336,21 +336,8 @@ public class ProductService {
   }
 
   @Transactional
-  public ResponseEntity<LocationResDto.Message> setLocation(LocationReqDto body) {
+  public ResponseEntity<LocationResDto.Message> addArea(LocationReqDto body) {
 
-    //area, rack, floor repo에 user가 입력한 값을 저장하기.
-    //중복되는 값이 이미 있는지 확인 필요할듯, 방법 2가지 일 거 같은데.
-    //1) DB에 area,rack,floor값들을 미리 다 저장해두고, user는 리스트에서 선택만 해서, 위치 저장하도록.
-    //2) 그냥 user가 임의로 값을 입력해서, repository에 저장 하도록.
-
-    //1)번으로 실행하면 -> repo에 있는 각(area,rack,floor) 리스트 정보들을 보여주기만 하면 됨
-    //근데 4번에서는 보여주고 선택하고 등록하는 게 아니라, 값 넣고 저장하는 걸로 등록하는 거 끝 // 2번에서 선택하고 저장하는 걸로.
-
-    //2)번으로 실행하면 -> user가 입력한 값 그대로 db에 저장해보기 + 중복값만 없도록.
-    // *중복값 찾기 + repo에 저장
-    /**
-     * Area 중복 확인 후, 중복 아니라면 repo에 저장하기.
-     */
     AreaEntity area = new AreaEntity();
     area.setAreaId(body.getAreaId());
 
@@ -359,35 +346,41 @@ public class ProductService {
       throw new CustomException(ErrorMessage.DUPLICATE_AREA);
     });
     this.areaRepository.save(area);
+    return null;
+  };
 
-    /**
-     * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
-     */
-    RackEntity rack = new RackEntity();
-    rack.setRackId(body.getRackId());
+    public ResponseEntity<LocationResDto.Message> addRack (LocationReqDto body){
+      /**
+       * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
+       */
+      RackEntity rack = new RackEntity();
+      rack.setRackId(body.getRackId());
 
-    Optional<RackEntity> duplicatedRack = this.rackRepository.findByRackId(body.getRackId());
-    duplicatedRack.ifPresent(r -> {
-      throw new CustomException(ErrorMessage.DUPLICATE_RACK);
-    });
-    this.rackRepository.save(rack);
+      Optional<RackEntity> duplicatedRack = this.rackRepository.findByRackId(body.getRackId());
+      duplicatedRack.ifPresent(r -> {
+        throw new CustomException(ErrorMessage.DUPLICATE_RACK);
+      });
+      this.rackRepository.save(rack);
 
-    /**
-     * Floor중복 확인 후, 중복 아니라면 repo에 저장하기
-     */
-    FloorEntity floor = new FloorEntity();
-    floor.setFloor_id(body.getFloorId());
-    Optional<FloorEntity> duplicatedFloor = this.floorRepository.findByFloorId(body.getFloorId());
-    duplicatedFloor.ifPresent(f -> {
-      throw new CustomException(ErrorMessage.DUPLICATE_FLOOR);
-    });
-    this.floorRepository.save(floor);
+      return null;
+    };
+    public ResponseEntity<LocationResDto.Message> addFloor(LocationReqDto body){
+      /**
+       * Floor중복 확인 후, 중복 아니라면 repo에 저장하기
+       */
+      FloorEntity floor = new FloorEntity();
+      floor.setFloor_id(body.getFloorId());
+      Optional<FloorEntity> duplicatedFloor = this.floorRepository.findByFloorId(body.getFloorId());
+      duplicatedFloor.ifPresent(f -> {
+        throw new CustomException(ErrorMessage.DUPLICATE_FLOOR);
+      });
+      this.floorRepository.save(floor);
 
-    // LocationResDto 객체 생성 및 값 설정
-    LocationResDto.Message locationResDto = new LocationResDto.Message();
-    locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
+      // LocationResDto 객체 생성 및 값 설정
+      LocationResDto.Message locationResDto = new LocationResDto.Message();
+      locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
 
-    return ResponseEntity.ok(locationResDto);
+      return ResponseEntity.ok(locationResDto);
+    }
   }
-
-}
+;
