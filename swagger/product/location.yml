@@ -116,6 +116,91 @@ paths:
         '422':
           description: Validation exception
 
+    put:
+      tags:
+        - product
+      summary: 상품 정보 변경
+      description: 해당 상품의 정보를 변경 합니다.
+      requestBody:
+        description: 세부 내용을 변경합니다.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/productInfo'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/productInfo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/productInfo'
+        required: true
+      operationId: edit
+
+      parameters:
+        - name: productId
+          in: path
+          description: productId (path에서 가져온 값)
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: 수정 완료 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/edited'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/edited'
+        '400':
+          description: Invalid tag value
+        '404':
+          description: Product not found
+        '422':
+          description: Validation exception
+
+    /product/manage/search/{productId}:
+    delete:
+      tags:
+        - product
+      summary: 해당 상품 삭제
+      description: 해당 상품 삭제 -> 완전 삭제 보다는, update로 진행해서 is_valid=false로 설정.
+      operationId: delete
+      parameters:
+        - name: productId
+          in: path
+          description: 해당 상품을 삭제합니다.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 삭제 완료 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/delete'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/delete'
+        '400':
+          description: Invalid tag value
+        '404':
+          description: Product not found
+        '422':
+          description: Validation exception
+
+
   /product/location/areaList:
     get:
       tags:
@@ -200,91 +285,9 @@ paths:
         '404':
           description: Location not found
 
-  #2.2(PUT) /product/manage/search/{productId}/edit : 상품 정보 변경
-  /product/manage/search/{productId}/edit:
-    put:
-      tags:
-        - product
-      summary: 상품 정보 변경
-      description: 해당 상품의 정보를 변경 합니다.
-      requestBody:
-        description: 세부 내용을 변경합니다.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/productInfo'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/productInfo'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/productInfo'
-        required: true
-      operationId: edit
+  #2.2(PUT) /product/manage/search/{productId}: 상품 정보 변경
 
-      parameters:
-        - name: productId
-          in: path
-          description: productId (path에서 가져온 값)
-          required: true
-          schema:
-            type: integer
 
-      responses:
-        '200':
-          description: 수정 완료 되었습니다.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/edited'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/edited'
-        '400':
-          description: Invalid tag value
-        '404':
-          description: Product not found
-        '422':
-          description: Validation exception
-
-  /product/manage/search/{productId}/delete:
-    put:
-      tags:
-        - product
-      summary: 해당 상품 삭제(update로 진행)
-      description: 해당 상품 삭제 -> 완전 삭제 보다는, update로 진행해서 is_valid=false로 설정.
-      operationId: delete
-      parameters:
-        - name: productId
-          in: path
-          description: 해당 상품을 삭제합니다.
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: 삭제 완료 되었습니다.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/delete'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/delete'
-        '400':
-          description: Invalid tag value
-        '404':
-          description: Product not found
-        '422':
-          description: Validation exception
 
 
   /product/manage/register:
@@ -999,16 +1002,16 @@ components:
         price:
           type: string
           example: 18,000원
-#        expiredDate:
-#          type: Date
-#          example: 2024년 12월 12일
+        #        expiredDate:
+        #          type: Date
+        #          example: 2024년 12월 12일
         category:
           type: string
           example: 가전 용품
         expiredDate:
-           type: string
-           format: date-time
-           example: "2028-03-03T00:00:00"
+          type: string
+          format: date-time
+          example: "2028-03-03T00:00:00"
         status:
           type: string
           example: 판매 중
