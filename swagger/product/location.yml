@@ -373,13 +373,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setArea'
           application/xml:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setArea'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setArea'
         required: true
 
       responses:
@@ -388,10 +388,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/setLocationOk'
+                $ref: '#/components/schemas/setAreaResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/setLocationOk'
+                $ref: '#/components/schemas/setAreaResponse'
         '400':
           description: Invalid ID supplied
         '404':
@@ -408,13 +408,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setRack'
           application/xml:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setRack'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setRack'
         required: true
 
       responses:
@@ -423,10 +423,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/setLocationOk'
+                $ref: '#/components/schemas/setRackResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/setLocationOk'
+                $ref: '#/components/schemas/setRackResponse'
         '400':
           description: Invalid ID supplied
         '404':
@@ -443,13 +443,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setFloor'
           application/xml:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setFloor'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/setLocation'
+              $ref: '#/components/schemas/setFloor'
         required: true
 
       responses:
@@ -458,10 +458,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/setLocationOk'
+                $ref: '#/components/schemas/setFloorResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/setLocationOk'
+                $ref: '#/components/schemas/setFloorResponse'
         '400':
           description: Invalid ID supplied
         '404':
@@ -979,35 +979,83 @@ components:
           xml:
             name: imageUrl
 
-    setLocation:
+    setArea:
       type: object
       properties:
-        area:
+        id:
           type: string
-          example: E 구역
-        rack:
+          example: 27
+        name:
           type: string
-          example: 3번 랙
-        floor:
-          type: string
-          example: 2층
-
-    setLocationOk:
-      type: object
-      properties:
-        area:
-          type: string
-          example: E 구역
-        rack:
-          type: string
-          example: 3번 랙
-        floor:
-          type: string
-          example: 2층
+          example: A16
         status:
           type: string
-          example: 등록 완료
+          example: available
 
+    setAreaResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 27
+        area:
+          type: string
+          example: A16
+        status:
+          type: string
+          example: registration successful
+
+    setRack:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8
+        name:
+          type: string
+          example: R5
+        status:
+          type: string
+          example: available
+
+    setRackResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8
+        area:
+          type: string
+          example: R5
+        status:
+          type: string
+          example: registration successful
+
+    setFloor:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 14
+        name:
+          type: string
+          example: F2
+        status:
+          type: string
+          example: available
+
+    setFloorResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 14
+        area:
+          type: string
+          example: F2
+        status:
+          type: string
+          example: registration successful
 
     register:
       type: object
