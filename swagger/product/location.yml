@@ -853,6 +853,10 @@ components:
             Area: A10
             Rack: R5
             Floor: F2
+        updatedDate:
+          type: string
+          format: date-time
+          example: 2024-06-25
 
     CategoryKindermilch:
       type: object

@@ -58,7 +58,7 @@ public class ProductReqDto {
     private String price;
 
     @NotBlank(message = "sort is required.")
-    private String sort;
+    private String status;
 
     @NotBlank(message = "location is required.")
     private String location;

@@ -22,6 +22,7 @@ import warehouseLocation.domain.dto.ProductResDto.Category;
 import warehouseLocation.domain.dto.ProductResDto.CategoryList;
 import warehouseLocation.domain.dto.ProductResDto.Location;
 import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
+import warehouseLocation.domain.dto.ProductResDto.Rack;
 import warehouseLocation.domain.repository.AreaRepository;
 import warehouseLocation.domain.repository.CategoryRepository;
 import warehouseLocation.domain.repository.FloorRepository;
@@ -254,7 +255,7 @@ public class ProductService {
     //2. Repository에서 값을 update 하기.
     //3. 업데이트 한 값을 변수에 담아서, 다시 save하기.
 
-    LocalDateTime createdAt = LocalDateTime.now();
+//    LocalDateTime createdAt = LocalDateTime.now();
     LocalDateTime updatedAt = LocalDateTime.now();
     LocalDate expiredDate = LocalDate.now();
 
@@ -262,8 +263,8 @@ public class ProductService {
     ProductEntity productIdEntity = this.productRepository.findById(productId);
 
     Category category = new Category();
-    category.setCategoryId(category.getCategoryId());
-    category.setCategoryName(category.getCategoryName());
+    category.setCategoryId(productIdEntity.getCategoryId());
+    category.setCategoryName(productIdEntity.getCategoryName());
 
     ProductEntity product = new ProductEntity();
     product.setProductId(product.getProductId());
@@ -271,22 +272,34 @@ public class ProductService {
     product.setExpiredDate(expiredDate);
     product.setImageUrl(body.getImageUrl());
     product.setPrice(body.getPrice());
-//    product.setLocation(body.getLocation());
-//    product.setSort(body.getSort());
-    product.setCreatedAt(createdAt);
+    product.setStatus(body.getStatus());
     product.setCreatedAt(updatedAt);
 
     productRepository.save(product);
 
-    ProductResDto.Edit updatedProduct = ProductResDto.Edit.builder()
-        .productId(productId)
-        .productName(product.getProductName())
-        .expiredDate(product.getExpiredDate())
-        .imageUrl(body.getImageUrl())
-        .price(product.getPrice())
-        .categoryId(product.getCategoryId())
-        .updatedAt(product.getUpdatedAt())
-        .build();
+    Optional<ProductLocationEntity> optProductLocation = this.productLocationRepository.productLocation(productId);
+    ProductLocationEntity productLocation = optProductLocation.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+
+    String area = productLocation.getArea();
+    String rack = productLocation.getRack();
+    String floor = productLocation.getFloor();
+
+    Location location = new Location();
+    location.setArea("A"+area);
+    location.setRack("R"+rack);
+    location.setFloor("F"+floor);
+
+    ProductResDto.Edit updatedProduct = new ProductResDto.Edit();
+    updatedProduct.setProductId(productId);
+    updatedProduct.setProductName(product.getProductName());
+    updatedProduct.setCategory(category);
+    updatedProduct.setExpiredDate(product.getExpiredDate());
+    updatedProduct.setImageUrl(product.getImageUrl());
+    updatedProduct.setPrice(product.getPrice());
+    updatedProduct.setStatus(product.getStatus());
+    updatedProduct.setLocation(location);
+    updatedProduct.setUpdatedAt(updatedAt);
+
 
     return updatedProduct;
   }
