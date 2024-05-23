@@ -163,9 +163,9 @@ public class ProductService {
     String floor = productLocation.getFloor();
 
     Location location = new Location();
-    location.setArea(area + "번 구역");
-    location.setRack(rack + "번 랙");
-    location.setFloor(floor + "층");
+    location.setArea("A"+area);
+    location.setRack("R"+rack);
+    location.setFloor("F"+floor);
 
     ProductEntity product = this.productRepository.productInfoByProductId(productId);
 
@@ -179,13 +179,19 @@ public class ProductService {
     String categoryName = categoryNameEntity.getCategoryName();
     System.out.println("categoryName = " + categoryName);
 
+    Category category = new Category();
+    category.setCategoryId(categoryId);
+    category.setCategoryName(categoryName);
+
+
     ProductResDto.ProductInfo info = new ProductResDto.ProductInfo();
-//    info.setProductId(productId);
+    info.setProductId(productId);
     info.setProductName(product.getProductName());
+    info.setCategory(category);
     info.setImageUrl(product.getImageUrl());
     info.setPrice(product.getPrice());
-//    info.setCategoryId(product.getCategoryId());
-    info.setCategoryName(categoryName);
+    info.setCreatedDate(product.getCreatedAt());
+    info.setUpdatedDate(product.getUpdatedAt());
     info.setStatus(product.getStatus());
     info.setLocation(location);
 
@@ -251,11 +257,16 @@ public class ProductService {
     LocalDateTime createdAt = LocalDateTime.now();
     LocalDateTime updatedAt = LocalDateTime.now();
     LocalDate expiredDate = LocalDate.now();
-//    List<Image> image = new ArrayList<>();
 
     //1번
-    ProductEntity product = this.productRepository.findById(productId);
+    ProductEntity productIdEntity = this.productRepository.findById(productId);
 
+    Category category = new Category();
+    category.setCategoryId(category.getCategoryId());
+    category.setCategoryName(category.getCategoryName());
+
+    ProductEntity product = new ProductEntity();
+    product.setProductId(product.getProductId());
     product.setProductName(body.getProductName());
     product.setExpiredDate(expiredDate);
     product.setImageUrl(body.getImageUrl());
@@ -274,8 +285,6 @@ public class ProductService {
         .imageUrl(body.getImageUrl())
         .price(product.getPrice())
         .categoryId(product.getCategoryId())
-//        .location(product.getLocation())
-//        .createdAt(createdAt)
         .updatedAt(product.getUpdatedAt())
         .build();
 

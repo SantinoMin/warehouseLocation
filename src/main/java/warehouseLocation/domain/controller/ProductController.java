@@ -44,11 +44,10 @@ public class ProductController {
     return this.productService.productInfo(productId);
   }
 
-  //3.1 (put) product/manage/{productId}/edit : 상품 정보 변경
-  @PutMapping("/manage/{productId}/edit")
+  //3.1 (put) product/manage/search/{productId} : 상품 정보 변경
+  @PutMapping("/manage/search/{productId}")
   public ProductResDto.Edit productEdit(@PathVariable Long productId,
       @RequestBody ProductReqDto.Edit body) {
-    System.out.println("producEdit = " + body);
     return this.productService.productEdit(productId, body);
   }
 

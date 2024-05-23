@@ -45,14 +45,14 @@ public class ProductResDto {
   @Data
   public static class ProductInfo {
 
-    //    private Long productId;
+    private Long productId;
     private String productName;
+    private Category category;
     private String imageUrl;
     private String price;
-    //    private Long categoryId;
-    private String categoryName;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
     private String status;
-
     private Location location;
 
   }
@@ -88,10 +88,11 @@ public class ProductResDto {
 
     private Long productId;
     private String productName;
+    private Category category;
     private String imageUrl;
     private LocalDate expiredDate;
     private String price;
-    private Long categoryId;
+
     private String status;
     private String location;
     //    private LocalDateTime createdAt;

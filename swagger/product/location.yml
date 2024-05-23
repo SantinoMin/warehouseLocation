@@ -483,6 +483,10 @@ components:
           example:
             category_id: 9
             category_name: 유아 식품
+        expiredDate:
+          type: string
+          format: date-time
+          example: 2024-04-02
         imageUrl:
           type: array
           items:
@@ -532,6 +536,9 @@ components:
           example:
             category_id: 9
             category_name: 유아 식품
+        expiredDate:
+          type: string
+          example: 2025-12-01
         imageUrl:
           type: array
           items:
@@ -822,6 +829,10 @@ components:
           example: 힙 분유
         category:
           $ref: '#/components/schemas/CategoryKindermilch'
+        expiredDate:
+          type: string
+          format: date-time
+          example: 2024-05-02
         imageUrl:
           type: array
           items:
@@ -949,6 +960,7 @@ components:
         category:
           category_id: 9
           category_name: 유아 식품
+        expiredDate: 2026-02-01
         imageUrl:
           - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
         price: 40,000원
