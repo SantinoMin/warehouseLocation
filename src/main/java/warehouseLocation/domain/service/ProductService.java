@@ -262,9 +262,14 @@ public class ProductService {
     //1번
     ProductEntity productIdEntity = this.productRepository.findById(productId);
 
+
+    Optional<CategoryEntity> OptCategoryName = this.categoryRepository.categoryNameByCategoryId(productIdEntity.getCategoryId());
+    CategoryEntity categoryNameEntity = OptCategoryName.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+    String categoryName = categoryNameEntity.getCategoryName();
+
     Category category = new Category();
     category.setCategoryId(productIdEntity.getCategoryId());
-    category.setCategoryName(productIdEntity.getCategoryName());
+    category.setCategoryName(categoryName);
 
     ProductEntity product = new ProductEntity();
     product.setProductId(product.getProductId());

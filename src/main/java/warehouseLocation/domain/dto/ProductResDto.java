@@ -94,7 +94,6 @@ public class ProductResDto {
     private String price;
     private String status;
     private Location location;
-    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
 //    @Builder

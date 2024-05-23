@@ -51,11 +51,10 @@ public class ProductController {
     return this.productService.productEdit(productId, body);
   }
 
-  //3.1(PUT) /product/manage/{productId}/delete : 해당 상품 삭제(완전 삭제 대신, 업데이트로 진행)
-  @PutMapping("/manage/{productId}/delete")
+  //3.1(PUT) /product/manage/{productId} : 해당 상품 삭제(완전 삭제 대신, 업데이트로 진행)
+  @PutMapping("/manage/search/{productId}/delete")
   public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId,
       @RequestBody ProductReqDto body) {
-    System.out.println("delete this productId = " + productId);
     return this.productService.productDelete(productId, body);
   }
 

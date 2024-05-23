@@ -524,39 +524,11 @@ components:
 
     delete:
       type: object
+      items:
+        type: array
       properties:
-        productId:
-          type: integer
-          example: 6
-        productName:
+        area:
           type: string
-          example: 압타밀
-        category:
-          type: object
-          example:
-            category_id: 9
-            category_name: 유아 식품
-        expiredDate:
-          type: string
-          example: 2025-12-01
-        imageUrl:
-          type: array
-          items:
-            type: string
-          example:
-            - "https://www.google.com/babyProducts/image3.jpg"
-        price:
-          type: string
-          example: 18,000원
-        status:
-          type: string
-          example: out of stock
-        location:
-          type: object
-          example:
-            Area: A3
-            Rack: R5
-            Floor: F1
 
     #//areaList schema
     areaList:
