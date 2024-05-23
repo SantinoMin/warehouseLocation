@@ -2,13 +2,13 @@ package warehouseLocation.domain.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 
 
 @Getter
@@ -23,20 +23,33 @@ public class ProductResDto {
   public static class ProductSearch {
 
     private String productName;
+    private Long productId;
+    private Category category;
+    private LocalDate expiredDate;
     private String imageUrl;
     private String price;
-    private String categoryName;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
     private String status;
+    private Location location;
+  }
+
+  @Data
+  public static class Category {
+
+    private Long categoryId;
+    private String categoryName;
+
   }
 
   @Data
   public static class ProductInfo {
 
-//    private Long productId;
+    //    private Long productId;
     private String productName;
     private String imageUrl;
     private String price;
-//    private Long categoryId;
+    //    private Long categoryId;
     private String categoryName;
     private String status;
 
@@ -56,7 +69,7 @@ public class ProductResDto {
   @Data
   public static class Register {
 
-//    private Long productId;
+    //    private Long productId;
     private String productName;
     private String price;
     private String categoryName;

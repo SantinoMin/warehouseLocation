@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import warehouseLocation.domain.dto.LocationReqDto;
 import warehouseLocation.domain.dto.LocationResDto;
+import warehouseLocation.domain.dto.LocationResDto.Area;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
+import warehouseLocation.domain.dto.ProductResDto.Category;
 import warehouseLocation.domain.dto.ProductResDto.CategoryList;
 import warehouseLocation.domain.dto.ProductResDto.Location;
 import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
@@ -61,17 +64,13 @@ public class ProductService {
     this.productLocationRepository = productLocationRepository;
   }
 
-  /**
-   * 상품 검색 - 더 추가 필요: (완료) 1)상품명의 2글자만 일치하여도 db에서 찾아서 보이도록 하기. -> 이 부분은 프론트에서 담당하는건가..? => 쿼리에서 %를
-   * 이용해서 상품명 2자리 일치시 전부 보여주도록 하기. 2)(완료) imageUrl이 List형태로 보여지도록 해야됨.
-   */
+  //2.1(Get) /product/manage/search : 상품 검색
   public List<ProductResDto.ProductSearch> search(String productName) {
 
     /**
-     * 1) 상품명이 일부라도 포함되는 경우, 전부 검색 가능 (검색: 콜라 -> 펩시 콜라, 제로 콜라, 코카 콜라 검색 가능)
-     * 2) 이미지는 여러개 등록 가능
+     * 1) (완료)상품명이 일부라도 포함되는 경우, 전부 검색 가능 (검색: 콜라 -> 펩시 콜라, 제로 콜라, 코카 콜라 검색 가능)
+     * 2) (완료)이미지는 여러개 등록 가능
      */
-
     //1-1.productName을 가지고, ProductEntity에서 categoryId 가져오기
     List<ProductEntity> productList = this.productRepository.ByProductName(
         productName);
@@ -82,15 +81,18 @@ public class ProductService {
       throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCTLIST);
     }
 
+    /**
+     * (미완성) product에 맞는 categoryId와 categoryName을 보여주도록 설정 필요
+     */
+    List<Long> productIdList = productList.stream().map(ProductEntity::getProductId).toList();
+    Optional<Long> optProductId = productIdList.stream().findFirst();
+    Long productId = optProductId.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+
     //1-2 CategoryIdList를 productList에서 가져오기
     List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
 
-    //카테고리 list에서 id값들이 3,4,5라면
-    // 그 중에서 랜덤으로 1개만 가져온다고? 그래 그럼 3번만 가져온다면?
-
     //1-3 CategoryId를 CategoryIdList에서 가져오기
     //* findAny()도 Optional을 반환함 * // 이건 category가 같다는 가정하에 가능한데, 만약 카테고리가 다르다면? ("주방"으로 검색 -> 주방 세제, 주방 칼 카테고리 다를건데?)
-
     Long categoryId = categoryIdList.stream().findAny().orElseThrow(() ->
         new CustomException(ErrorMessage.NOT_FOUND_CATEGORY));
 
@@ -103,16 +105,41 @@ public class ProductService {
     System.out.println("categoryName = " + categoryName);
 
     //2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
+    Category category = new Category();
+    category.setCategoryId(categoryId);
+    category.setCategoryName(categoryName);
+
+    Optional<ProductLocationEntity> optionalProductLocation = this.productLocationRepository.productLocation(
+        productId);
+    ProductLocationEntity productLocation = optionalProductLocation.orElseThrow(
+        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+
+    String area = productLocation.getArea();
+    String rack = productLocation.getRack();
+    String floor = productLocation.getFloor();
+
+    Location location = new Location();
+    location.setArea(area + "번 구역");
+    location.setRack(rack + "번 랙");
+    location.setFloor(floor + "층");
+
     List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
     for (
         ProductEntity OneProduct : productList) {
       ProductResDto.ProductSearch productSearch = new ProductSearch();
       productSearch.setProductName(OneProduct.getProductName());
+      productSearch.setProductId(OneProduct.getProductId());
+      productSearch.setCategory(category);
+      productSearch.setExpiredDate(OneProduct.getExpiredDate());
       //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
       productSearch.setImageUrl(OneProduct.getImageUrl());
       productSearch.setPrice(OneProduct.getPrice());
-      productSearch.setCategoryName(categoryName);
+      productSearch.setCreatedDate(OneProduct.getCreatedAt());
+      productSearch.setUpdatedDate(OneProduct.getUpdatedAt());
       productSearch.setStatus(OneProduct.getStatus());
+      productSearch.setLocation(location);
+
+
       productDto.add(productSearch);
     }
     return productDto;

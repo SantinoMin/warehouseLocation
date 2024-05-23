@@ -32,20 +32,15 @@ public class ProductController {
   }
 
   //2.1(Get) /product/manage/search : 상품 검색
-  /**
-   * 값을 입력 안하고, 검색을 했을 경우 메시지 띄우려면? 메시지 아예 안 띄워도 되긴하지만,,만약에 띄운다면? 만약에 띄운다면, 1)전체 값들 보여주기 또는 2) 상품명을
-   * 입력하세요 메시지 출력
-   */
   @GetMapping("/manage/search")
   public List<ProductResDto.ProductSearch> search(
-      @RequestParam(required = true) String productName) {
+      @RequestParam String productName) {
     return this.productService.search(productName);
   }
 
   //2.2 (GET) product/manage/search/{product_id} : 해당 상품 정보
   @GetMapping("/manage/search/{productId}")
   public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
-    System.out.println("productId : " + productId);
     return this.productService.productInfo(productId);
   }
 
