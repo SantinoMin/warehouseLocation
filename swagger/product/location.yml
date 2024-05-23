@@ -761,6 +761,7 @@ components:
 
       example:
         - productName: 하리보 캔디
+          productId: 12
           category:
             category_id: 1
             category_name: 일반 식품
@@ -777,6 +778,7 @@ components:
             Floor: F1
 
         - productName: 비타민 캔디
+          productId: 13
           category:
             category_id: 6
             category_name: 건강 식품
@@ -793,6 +795,7 @@ components:
             Floor: F2
 
         - productName: 유아 캔디
+          productId: 14
           category:
             category_id: 9
             category_name: 유아 식품
@@ -1063,6 +1066,9 @@ components:
         productName:
           type: string
           example: 다이슨 청소기
+        productId:
+          type: string
+          example: 23
         category:
           type: object
           example:
