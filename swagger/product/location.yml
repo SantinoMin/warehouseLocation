@@ -184,14 +184,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/delete'
+                # type: array
+                # items:
+                $ref: '#/components/schemas/delete'
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/delete'
+                # type: array
+                # items:
+                $ref: '#/components/schemas/delete'
         '400':
           description: Invalid tag value
         '404':
@@ -498,18 +498,6 @@ components:
           example: 18,000원
           xml:
             name: imageUrl
-        #        created_at:
-        #          type: string
-        #          format: date-time
-        #          example: "2024-04-31T00:00:00Z"
-        #        updated_at:
-        #          type: string
-        #          format: date-time
-        #          example: "2024-04-31T00:00:00Z"
-        #        deleted_at:
-        #          type: string
-        #          format: date-time
-        #          example: "2024-04-31T00:00:00Z"
 
         status:
           type: string
@@ -524,11 +512,16 @@ components:
 
     delete:
       type: object
-      items:
-        type: array
       properties:
-        area:
+        productId:
+          type: integer
+          example: 6
+        productName:
           type: string
+          example: 압타밀
+        status:
+          type: string
+          example: 삭제 완료
 
     #//areaList schema
     areaList:
@@ -989,7 +982,7 @@ components:
         id:
           type: string
           example: 27
-        area:
+        name:
           type: string
           example: A16
         status:
@@ -1015,7 +1008,7 @@ components:
         id:
           type: string
           example: 8
-        area:
+        name:
           type: string
           example: R5
         status:
@@ -1041,7 +1034,7 @@ components:
         id:
           type: string
           example: 14
-        area:
+        name:
           type: string
           example: F2
         status:
