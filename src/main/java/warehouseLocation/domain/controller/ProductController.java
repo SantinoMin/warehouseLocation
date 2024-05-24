@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,11 +52,18 @@ public class ProductController {
     return this.productService.productEdit(productId, body);
   }
 
-  //3.1(PUT) /product/manage/{productId} : 해당 상품 삭제(완전 삭제 대신, 업데이트로 진행)
-  @PutMapping("/manage/search/{productId}/delete")
+  //3.1(DELETE) /product/manage/{productId} : 해당 상품 삭제(완전 삭제 대신, 업데이트로 진행)
+  @DeleteMapping("/manage/search/{productId}/delete")
   public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId,
       @RequestBody ProductReqDto body) {
     return this.productService.productDelete(productId, body);
+  }
+
+  //3.1 (POST) /product/manage/post : 상품 등록
+  @PostMapping("/manage/post")
+  public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
+
+    return this.productService.productRegister(body);
   }
 
   //3.1 (GET) /product/manage/categoryList : 카테고리 리스트
@@ -82,12 +90,7 @@ public class ProductController {
     return this.productService.floorList();
   }
 
-  //3.1 (POST) /product/manage/post : 상품 등록
-  @PostMapping("/manage/post")
-  public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
 
-    return this.productService.productRegister(body);
-  }
 
 
   /**

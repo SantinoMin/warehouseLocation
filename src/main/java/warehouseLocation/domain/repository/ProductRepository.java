@@ -18,8 +18,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   /**
    * 상품 검색
    **/
-  @Query("SELECT p FROM ProductEntity p WHERE p.productName LIKE %:productName%")
-  List<ProductEntity> searchProduct(@Param("productName") String productName);
+  @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
+  Optional<ProductEntity> productNameByProductId(@Param("productId") Long productId);
 
   @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
   ProductEntity productInfoByProductId(@Param("productId") Long productId);
@@ -48,4 +48,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   @Modifying
   @Query("UPDATE ProductEntity p SET p.isValid = false WHERE p.productId = :productId")
   void deleteProductById(@Param("productId") Long productId);
+
 }

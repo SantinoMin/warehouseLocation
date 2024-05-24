@@ -69,13 +69,15 @@ public class ProductResDto {
   @Data
   public static class Register {
 
-    //    private Long productId;
+    private Long productId;
     private String productName;
     private String price;
-    private String categoryName;
+    private Category category;
     private LocalDate expiredDate;
     private String status;
     private String imageUrl;
+    private Location location;
+
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -135,7 +137,9 @@ public class ProductResDto {
   @Data
   public static class Message {
 
-    String message;
+    Long productId;
+    String productName;
+    String status;
   }
 
   @Data

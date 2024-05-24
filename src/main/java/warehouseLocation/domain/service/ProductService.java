@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -233,17 +237,40 @@ public class ProductService {
     // 3. 사용자가 카테고리 리스트에서 카테고리 선택하기 -> 이건 좀 복잡해지네. api를 따로 둬서 카테고리를 선택하는 걸로 가야될듯.
 
     // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
+//    Pageable pageable = PageRequest.of(0, 10, Sort.by("categoryName").ascending());
+//    Page<String> categoryPage = categoryRepository.findAllCategoryNames(pageable);
+//    List<CategoryEntity> categoryEntityList = categoryPage.getContent();
+//    List<String> categoryList = categoryPage.stream().map(CategoryEntity::getCategoryName).toList();
+//    String categoryName = categoryList.get(0);
+
+//    CategoryEntity categoryList = this.categoryRepository.categoryList();
+
+//    Category category = new Category();
+//    category.setCategoryId(categoryId); (categoryId는 AI로 실행됨)
+//    category.setCategoryName(categoryName);
+
+    List<AreaEntity> areaEntityList = this.areaRepository.findAll();
+    List<String> areaList = areaEntityList.stream().map(AreaEntity::getAreaName).toList();
+    String area = areaList.get(0);
+
+    Location location = new Location();
+    location.setArea(area);
+//    location.setRack();
+//    location.setFloor();
+
+
     ProductResDto.Register toDto = new ProductResDto.Register();
     toDto.setProductName(product.getProductName());
-    toDto.setPrice(product.getPrice());
-    toDto.setCategoryName(body.getCategoryName());
+    toDto.setProductId(product.getProductId());
+//    toDto.setCategory(category);
     toDto.setExpiredDate(product.getExpiredDate());
-    toDto.setStatus(body.getStatus());
     toDto.setImageUrl(product.getImageUrl());
+    toDto.setPrice(product.getPrice());
+    toDto.setStatus(body.getStatus());
+    toDto.setLocation(location);
 
     // 보여줄 필요 없는 내용들이지만, 일단 반환되는 거 확인하는 용도로 기입 해 봄
     toDto.setCreatedAt(createdAt);
-    toDto.setUpdatedAt(updatedAt);
     System.out.println("toDto = "+ toDto);
     return toDto;
   }
@@ -317,8 +344,14 @@ public class ProductService {
 
     this.productRepository.deleteProductById(productId);
 
+    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(productId);
+    ProductEntity ProductNameByProductId = OptProductNameByProductId.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+    String productName = ProductNameByProductId.getProductName();
+
     ProductResDto.Message success = new ProductResDto.Message();
-    success.setMessage("상품명 : " + body.getProductName() + " -> 삭제 완료");
+    success.setProductId(productId);
+    success.setProductName(productName);
+    success.setStatus("(삭제 완료) ->" +  " 상품명: " + productName);
 
     return ResponseEntity.ok(success);
   }

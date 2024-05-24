@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import warehouseLocation.models.Location;
 
 @Data
 @ToString
@@ -21,24 +22,26 @@ public class ProductReqDto {
   @Size(min = 2, max = 10, message = "The productName must be from 2 to 10 characters.")
   private String productName;
 
-  @NotBlank(message = "price is required.")
-  private String price;
+//  @NotBlank(message = "productId is required.")
+//  private Long productId;
 
-  @NotBlank(message = "category is required.")
-  private String categoryName;
+  @NotNull(message = "category is required.")
+  private ProductResDto.Category category;
 
   @NotNull(message = "expiredDate is required.")
   private LocalDate expiredDate;
 
-  @NotBlank(message = "status is required.")
-  private String status;
-
   @NotBlank(message = "productName is required.")
   private String imageUrl;
 
-  private LocalDateTime createdAt = LocalDateTime.now();// 생성자에 추가
+  @NotBlank(message = "price is required.")
+  private String price;
 
-  private LocalDateTime updatedAt = LocalDateTime.now(); // 생성자에 추가
+  @NotBlank(message = "status is required.")
+  private String status;
+
+  @NotNull(message = "location is required.")
+  private Location location;
 
 
   @Data

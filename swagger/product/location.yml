@@ -319,14 +319,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/register'
+                # type: array
+                # items:
+                $ref: '#/components/schemas/registerOK'
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/register'
+                # type: array
+                # items:
+                $ref: '#/components/schemas/registerOK'
         '400':
           description: Invalid tag value
         '404':
@@ -518,10 +518,10 @@ components:
           example: 6
         productName:
           type: string
-          example: 압타밀
+          example: 압타밀 분유
         status:
           type: string
-          example: 삭제 완료
+          example: "(삭제 완료) -> 상품명: 압타밀 분유"
 
     #//areaList schema
     areaList:
@@ -1080,6 +1080,30 @@ components:
             Area: A19
             Rack: R8
             Floor: F1
+        # registeredDate:
+        #     type: string
+        #     example: 2024-06-24
+
+
+    registerOK:
+      type: object
+      properties:
+        productName:
+          type: string
+          example: 다이슨 청소기
+        productId:
+          type: string
+          example: 33
+        status:
+          type: string
+          example: "등록 완료 되었습니다"
+        createdDate:
+          type: string
+          example: "2024-06-24"
+
+
+
+
 
 
 
