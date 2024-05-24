@@ -322,6 +322,7 @@ public class ProductService {
 
     return ResponseEntity.ok(success);
   }
+
   public List<ProductResDto.Area> areaList() {
 
     //area는 구역이 몇개 안돼서, findAll로 해도 되는데,
