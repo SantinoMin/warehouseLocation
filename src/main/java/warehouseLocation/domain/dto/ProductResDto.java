@@ -71,16 +71,14 @@ public class ProductResDto {
 
     private Long productId;
     private String productName;
-    private String price;
-    private Category category;
-    private LocalDate expiredDate;
+//    private String price;
+//    private Category category;
+//    private LocalDate expiredDate;
     private String status;
-    private String imageUrl;
-    private Location location;
-
-
+//    private String imageUrl;
+//    private Location location;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+//    private LocalDateTime updatedAt;
 //    private boolean isValid;
 
   }
@@ -129,7 +127,7 @@ public class ProductResDto {
   @Data
   public static class CategoryList {
 
-    private List<String> categoryList;
+    private List<String> categoryNameList;
 
   }
 
@@ -145,7 +143,14 @@ public class ProductResDto {
   @Data
   public static class Area {
 
-    Long areaId;
+    Long id;
+    String name;
+    String status;
+  }
+
+  @Data
+  public static class AreaResponse {
+    List<Area> area;
   }
 
   @Data

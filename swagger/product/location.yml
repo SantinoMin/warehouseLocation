@@ -741,8 +741,8 @@ components:
           imageUrl:
             - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
           price: 3,500원
-          createdDate: 2023-12-24
-          updatedDate: 2024-02-20
+          createdAt: 2023-12-24
+          updatedAt: 2024-02-20
           status: on sale
           location:
             Area: A9
@@ -758,8 +758,8 @@ components:
           imageUrl:
             - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
           price: 40,000원
-          createdDate: 2023-12-24
-          updatedDate: 2024-02-20
+          createdAt: 2023-12-24
+          updatedAt: 2024-02-20
           status: on sale
           location:
             Area: A3
@@ -775,8 +775,8 @@ components:
           imageUrl:
             - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
           price: 2,000원
-          createdDate: 2023-12-24
-          updatedDate: 2024-02-20
+          createdAt: 2023-12-24
+          updatedAt: 2024-02-20
           status: in sale
           location:
             Area: A3
@@ -933,8 +933,8 @@ components:
         imageUrl:
           - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
         price: 40,000원
-        createdDate: "2023-12-24"
-        updatedDate: "2024-04-04"
+        createdAt: "2023-12-24"
+        updatedAt: "2024-04-04"
         status: available
         location:
           Area: "A9"
@@ -1047,9 +1047,9 @@ components:
         productName:
           type: string
           example: 다이슨 청소기
-        productId:
-          type: string
-          example: 23
+        # productId:
+        #   type: string
+        #   example: 23
         category:
           type: object
           example:
@@ -1097,7 +1097,7 @@ components:
         status:
           type: string
           example: "등록 완료 되었습니다"
-        createdDate:
+        createdAt:
           type: string
           example: "2024-06-24"
 

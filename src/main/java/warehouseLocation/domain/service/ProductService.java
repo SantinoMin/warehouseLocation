@@ -3,6 +3,7 @@ package warehouseLocation.domain.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -91,7 +92,8 @@ public class ProductService {
      */
     List<Long> productIdList = productList.stream().map(ProductEntity::getProductId).toList();
     Optional<Long> optProductId = productIdList.stream().findFirst();
-    Long productId = optProductId.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+    Long productId = optProductId.orElseThrow(
+        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
 
     //1-2 CategoryIdList를 productList에서 가져오기
     List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
@@ -104,7 +106,8 @@ public class ProductService {
     //1-4 categoryId로 categoryName을 가져오기
     Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
         categoryId);
-    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(() -> new CustomException("no data"));
+    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
+        () -> new CustomException("no data"));
 
     String categoryName = categoryNameEntity.getCategoryName();
     System.out.println("categoryName = " + categoryName);
@@ -144,7 +147,6 @@ public class ProductService {
       productSearch.setStatus(OneProduct.getStatus());
       productSearch.setLocation(location);
 
-
       productDto.add(productSearch);
     }
     return productDto;
@@ -168,9 +170,9 @@ public class ProductService {
     String floor = productLocation.getFloor();
 
     Location location = new Location();
-    location.setArea("A"+area);
-    location.setRack("R"+rack);
-    location.setFloor("F"+floor);
+    location.setArea("A" + area);
+    location.setRack("R" + rack);
+    location.setFloor("F" + floor);
 
     ProductEntity product = this.productRepository.productInfoByProductId(productId);
 
@@ -180,14 +182,14 @@ public class ProductService {
 
     Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
         categoryId);
-    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow( () -> new CustomException("no dataaa"));
+    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
+        () -> new CustomException("no dataaa"));
     String categoryName = categoryNameEntity.getCategoryName();
     System.out.println("categoryName = " + categoryName);
 
     Category category = new Category();
     category.setCategoryId(categoryId);
     category.setCategoryName(categoryName);
-
 
     ProductResDto.ProductInfo info = new ProductResDto.ProductInfo();
     info.setProductId(productId);
@@ -205,76 +207,6 @@ public class ProductService {
 
   ;
 
-
-  public ProductResDto.Register productRegister(ProductReqDto body) {
-
-    // 1. 상품 중복 확인
-    Optional<ProductEntity> optRegister = this.productRepository.registerByProductName(
-        body.getProductName());
-    System.out.println("optRegister = " + optRegister );
-
-    optRegister.ifPresent( name -> {
-      if(name.getProductName().equals(body.getProductName())){
-        throw new CustomException("해당 상품명은 이미 존재합니다.");
-      }
-    });
-
-    // 2. 상품 DB에 저장
-      LocalDateTime createdAt = LocalDateTime.now();
-      LocalDateTime updatedAt = LocalDateTime.now();
-
-      ProductEntity product = new ProductEntity();
-      product.setProductName(body.getProductName());
-      product.setExpiredDate(body.getExpiredDate());
-      product.setImageUrl(body.getImageUrl());
-      product.setPrice(body.getPrice());
-      product.setCreatedAt(createdAt);
-      product.setUpdatedAt(updatedAt);
-//      product.setValid(body.isValid());
-      this.productRepository.save(product);
-    System.out.println("product = "+ product);
-
-    // 3. 사용자가 카테고리 리스트에서 카테고리 선택하기 -> 이건 좀 복잡해지네. api를 따로 둬서 카테고리를 선택하는 걸로 가야될듯.
-
-    // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
-//    Pageable pageable = PageRequest.of(0, 10, Sort.by("categoryName").ascending());
-//    Page<String> categoryPage = categoryRepository.findAllCategoryNames(pageable);
-//    List<CategoryEntity> categoryEntityList = categoryPage.getContent();
-//    List<String> categoryList = categoryPage.stream().map(CategoryEntity::getCategoryName).toList();
-//    String categoryName = categoryList.get(0);
-
-//    CategoryEntity categoryList = this.categoryRepository.categoryList();
-
-//    Category category = new Category();
-//    category.setCategoryId(categoryId); (categoryId는 AI로 실행됨)
-//    category.setCategoryName(categoryName);
-
-    List<AreaEntity> areaEntityList = this.areaRepository.findAll();
-    List<String> areaList = areaEntityList.stream().map(AreaEntity::getAreaName).toList();
-    String area = areaList.get(0);
-
-    Location location = new Location();
-    location.setArea(area);
-//    location.setRack();
-//    location.setFloor();
-
-
-    ProductResDto.Register toDto = new ProductResDto.Register();
-    toDto.setProductName(product.getProductName());
-    toDto.setProductId(product.getProductId());
-//    toDto.setCategory(category);
-    toDto.setExpiredDate(product.getExpiredDate());
-    toDto.setImageUrl(product.getImageUrl());
-    toDto.setPrice(product.getPrice());
-    toDto.setStatus(body.getStatus());
-    toDto.setLocation(location);
-
-    // 보여줄 필요 없는 내용들이지만, 일단 반환되는 거 확인하는 용도로 기입 해 봄
-    toDto.setCreatedAt(createdAt);
-    System.out.println("toDto = "+ toDto);
-    return toDto;
-  }
-
   public ProductResDto.Edit productEdit(@PathVariable Long productId,
       @RequestBody ProductReqDto.Edit body) {
     //1. 일단 db에서 해당 productId에 대한 정보를 가져온 후
@@ -289,9 +221,10 @@ public class ProductService {
     //1번
     ProductEntity productIdEntity = this.productRepository.findById(productId);
 
-
-    Optional<CategoryEntity> OptCategoryName = this.categoryRepository.categoryNameByCategoryId(productIdEntity.getCategoryId());
-    CategoryEntity categoryNameEntity = OptCategoryName.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+    Optional<CategoryEntity> OptCategoryName = this.categoryRepository.categoryNameByCategoryId(
+        productIdEntity.getCategoryId());
+    CategoryEntity categoryNameEntity = OptCategoryName.orElseThrow(
+        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
     String categoryName = categoryNameEntity.getCategoryName();
 
     Category category = new Category();
@@ -309,17 +242,19 @@ public class ProductService {
 
     productRepository.save(product);
 
-    Optional<ProductLocationEntity> optProductLocation = this.productLocationRepository.productLocation(productId);
-    ProductLocationEntity productLocation = optProductLocation.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+    Optional<ProductLocationEntity> optProductLocation = this.productLocationRepository.productLocation(
+        productId);
+    ProductLocationEntity productLocation = optProductLocation.orElseThrow(
+        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
 
     String area = productLocation.getArea();
     String rack = productLocation.getRack();
     String floor = productLocation.getFloor();
 
     Location location = new Location();
-    location.setArea("A"+area);
-    location.setRack("R"+rack);
-    location.setFloor("F"+floor);
+    location.setArea("A" + area);
+    location.setRack("R" + rack);
+    location.setFloor("F" + floor);
 
     ProductResDto.Edit updatedProduct = new ProductResDto.Edit();
     updatedProduct.setProductId(productId);
@@ -332,9 +267,9 @@ public class ProductService {
     updatedProduct.setLocation(location);
     updatedProduct.setUpdatedAt(updatedAt);
 
-
     return updatedProduct;
   }
+
   public ResponseEntity<ProductResDto.Message> productDelete(Long productId, ProductReqDto body) {
 
     //1. productId로 해당 product 검색
@@ -344,37 +279,121 @@ public class ProductService {
 
     this.productRepository.deleteProductById(productId);
 
-    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(productId);
-    ProductEntity ProductNameByProductId = OptProductNameByProductId.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(
+        productId);
+    ProductEntity ProductNameByProductId = OptProductNameByProductId.orElseThrow(
+        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
     String productName = ProductNameByProductId.getProductName();
 
     ProductResDto.Message success = new ProductResDto.Message();
     success.setProductId(productId);
     success.setProductName(productName);
-    success.setStatus("(삭제 완료) ->" +  " 상품명: " + productName);
+    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
 
     return ResponseEntity.ok(success);
   }
 
-  public List<ProductResDto.Area> areaList() {
 
-    //area는 구역이 몇개 안돼서, findAll로 해도 되는데,
-    // 만약 userId 또는 productId였다면?
-    // FindAll로 찾는건 전체 데이터를 가져오는 거라 비효율적일듯
+  public ProductResDto.Register productRegister(ProductReqDto body) {
+
+    // 1. 상품 중복 확인
+    Optional<ProductEntity> optRegister = this.productRepository.registerByProductName(
+        body.getProductName());
+    System.out.println("optRegister = " + optRegister);
+
+    optRegister.ifPresent(name -> {
+      if (name.getProductName().equals(body.getProductName())) {
+        throw new CustomException("해당 상품명은 이미 존재합니다.");
+      }
+    });
+
+    // 2. 상품 DB에 저장
+    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime updatedAt = LocalDateTime.now();
+
+    ProductEntity product = new ProductEntity();
+    product.setProductName(body.getProductName());
+//      product.setProductId();
+    product.setExpiredDate(body.getExpiredDate());
+    product.setImageUrl(body.getImageUrl());
+    product.setPrice(body.getPrice());
+    product.setCreatedAt(createdAt);
+    product.setUpdatedAt(updatedAt);
+//      product.setValid(body.isValid());
+    this.productRepository.save(product);
+    System.out.println("product = " + product);
+
+    // 3. 사용자가 카테고리 리스트에서 카테고리 선택하기 -> 이건 좀 복잡해지네. api를 따로 둬서 카테고리를 선택하는 걸로 가야될듯.
+
+    // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
+//    Pageable pageable = PageRequest.of(0, 10, Sort.by("categoryName").ascending());
+//    Page<String> categoryPage = categoryRepository.findAllCategoryNames(pageable);
+//    List<CategoryEntity> categoryEntityList = categoryPage.getContent();
+//    List<String> categoryList = categoryPage.stream().map(CategoryEntity::getCategoryName).toList();
+//    String categoryName = categoryList.get(0);
+
+//    CategoryEntity categoryList = this.categoryRepository.categoryList();
+
+//    Category category = new Category();
+//    category.setCategoryId(categoryId); (categoryId는 AI로 실행됨)
+//    category.setCategoryName(categoryName);
+
+//    List<AreaEntity> areaEntityList = this.areaRepository.findAll();
+//    List<String> areaList = areaEntityList.stream().map(AreaEntity::getAreaName).toList();
+//    String area = areaList.get(0);
+//
+//    Location location = new Location();
+//    location.setArea(area);
+////    location.setRack();
+////    location.setFloor();
+
+    ProductResDto.Register toDto = new ProductResDto.Register();
+    toDto.setProductName(product.getProductName());
+    toDto.setProductId(product.getProductId());
+    toDto.setStatus("등록 완료 되었습니다");
+    toDto.setCreatedAt(createdAt);
+    return toDto;
+  }
+
+  public CategoryList categoryList() {
+
+    List<CategoryEntity> categoryList = this.categoryRepository.findAll();
+
+    List<String> categoryNameList = categoryList.stream().map(CategoryEntity::getCategoryName)
+        .toList();
+
+    ProductResDto.CategoryList categoryListDto = new ProductResDto.CategoryList();
+    categoryListDto.setCategoryNameList(categoryNameList);
+
+    return categoryListDto;
+  }
+
+
+  public ProductResDto.AreaResponse areaList() {
 
     List<AreaEntity> areaEntities = this.areaRepository.findAll();
 
     List<ProductResDto.Area> areaList = new ArrayList<>();
-
     for (AreaEntity areaEntity : areaEntities) {
-
       ProductResDto.Area areaDto = new ProductResDto.Area();
-      areaDto.setAreaId(areaEntity.getAreaId());
+      areaDto.setId(areaEntity.getAreaId());
+      areaDto.setName(areaEntity.getAreaName());
+
+      // 적절한 상태 값을 설정합니다.
+      if (areaEntity.getInUse()) {
+        areaDto.setStatus("in use(사용 중)");
+      } else {
+        areaDto.setStatus("available(사용 가능)");
+      }
+
 
       areaList.add(areaDto);
     }
 
-    return areaList;
+    ProductResDto.AreaResponse response = new ProductResDto.AreaResponse();
+    response.setArea(areaList);
+
+    return response;
   }
 
   public List<ProductResDto.Rack> rackList() {
@@ -393,6 +412,7 @@ public class ProductService {
 
     return rackList;
   }
+
   public List<ProductResDto.Floor> floorList() {
 
     List<FloorEntity> floorEntities = this.floorRepository.findAll();
@@ -410,18 +430,6 @@ public class ProductService {
     return rackDto;
   }
 
-  public CategoryList categoryList() {
-
-    List<CategoryEntity> categoryList = this.categoryRepository.findAll();
-
-    List<String> categoryIdList = categoryList.stream().map(CategoryEntity::getCategoryName)
-        .toList();
-
-    ProductResDto.CategoryList categoryListDto = new ProductResDto.CategoryList();
-    categoryListDto.setCategoryList(categoryIdList);
-
-    return categoryListDto;
-  }
 
   @Transactional
   public ResponseEntity<LocationResDto.Message> addArea(LocationReqDto body) {
@@ -435,40 +443,45 @@ public class ProductService {
     });
     this.areaRepository.save(area);
     return null;
-  };
-
-    public ResponseEntity<LocationResDto.Message> addRack (LocationReqDto body){
-      /**
-       * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
-       */
-      RackEntity rack = new RackEntity();
-      rack.setRackId(body.getRackId());
-
-      Optional<RackEntity> duplicatedRack = this.rackRepository.findByRackId(body.getRackId());
-      duplicatedRack.ifPresent(r -> {
-        throw new CustomException(ErrorMessage.DUPLICATE_RACK);
-      });
-      this.rackRepository.save(rack);
-
-      return null;
-    };
-    public ResponseEntity<LocationResDto.Message> addFloor(LocationReqDto body){
-      /**
-       * Floor중복 확인 후, 중복 아니라면 repo에 저장하기
-       */
-      FloorEntity floor = new FloorEntity();
-      floor.setFloor_id(body.getFloorId());
-      Optional<FloorEntity> duplicatedFloor = this.floorRepository.findByFloorId(body.getFloorId());
-      duplicatedFloor.ifPresent(f -> {
-        throw new CustomException(ErrorMessage.DUPLICATE_FLOOR);
-      });
-      this.floorRepository.save(floor);
-
-      // LocationResDto 객체 생성 및 값 설정
-      LocationResDto.Message locationResDto = new LocationResDto.Message();
-      locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
-
-      return ResponseEntity.ok(locationResDto);
-    }
   }
+
+  ;
+
+  public ResponseEntity<LocationResDto.Message> addRack(LocationReqDto body) {
+    /**
+     * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
+     */
+    RackEntity rack = new RackEntity();
+    rack.setRackId(body.getRackId());
+
+    Optional<RackEntity> duplicatedRack = this.rackRepository.findByRackId(body.getRackId());
+    duplicatedRack.ifPresent(r -> {
+      throw new CustomException(ErrorMessage.DUPLICATE_RACK);
+    });
+    this.rackRepository.save(rack);
+
+    return null;
+  }
+
+  ;
+
+  public ResponseEntity<LocationResDto.Message> addFloor(LocationReqDto body) {
+    /**
+     * Floor중복 확인 후, 중복 아니라면 repo에 저장하기
+     */
+    FloorEntity floor = new FloorEntity();
+    floor.setFloor_id(body.getFloorId());
+    Optional<FloorEntity> duplicatedFloor = this.floorRepository.findByFloorId(body.getFloorId());
+    duplicatedFloor.ifPresent(f -> {
+      throw new CustomException(ErrorMessage.DUPLICATE_FLOOR);
+    });
+    this.floorRepository.save(floor);
+
+    // LocationResDto 객체 생성 및 값 설정
+    LocationResDto.Message locationResDto = new LocationResDto.Message();
+    locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
+
+    return ResponseEntity.ok(locationResDto);
+  }
+}
 ;

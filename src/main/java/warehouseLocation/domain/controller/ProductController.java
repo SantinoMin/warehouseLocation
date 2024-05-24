@@ -74,7 +74,7 @@ public class ProductController {
 
   //2.2 (GET) /product/location/areaList : 구역 리스트
   @GetMapping("/location/areaList")
-  public List<ProductResDto.Area> areaList() {
+  public ProductResDto.AreaResponse areaList() {
     return this.productService.areaList();
   }
 
