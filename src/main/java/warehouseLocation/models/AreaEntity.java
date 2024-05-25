@@ -42,8 +42,4 @@ public class AreaEntity {
 
   @Column(name = "status", nullable = false)
   private String status;
-
-  @Column(name = "in_use")
-  private Boolean inUse;
-
 };

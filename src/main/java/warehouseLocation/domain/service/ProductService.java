@@ -333,7 +333,6 @@ public class ProductService {
 //    String categoryName = categoryList.get(0);
 
 //    CategoryEntity categoryList = this.categoryRepository.categoryList();
-
 //    Category category = new Category();
 //    category.setCategoryId(categoryId); (categoryId는 AI로 실행됨)
 //    category.setCategoryName(categoryName);
@@ -378,15 +377,6 @@ public class ProductService {
       ProductResDto.Area areaDto = new ProductResDto.Area();
       areaDto.setId(areaEntity.getAreaId());
       areaDto.setName(areaEntity.getAreaName());
-
-      // 적절한 상태 값을 설정합니다.
-      if (areaEntity.getInUse()) {
-        areaDto.setStatus("in use(사용 중)");
-      } else {
-        areaDto.setStatus("available(사용 가능)");
-      }
-
-
       areaList.add(areaDto);
     }
 
@@ -406,6 +396,7 @@ public class ProductService {
 
       ProductResDto.Rack rackDto = new ProductResDto.Rack();
       rackDto.setRackId(rackEntity.getRackId());
+      rackDto.setRackNumber(rackEntity.getRackNumber());
 
       rackList.add(rackDto);
     }
@@ -423,6 +414,7 @@ public class ProductService {
 
       ProductResDto.Floor floor = new ProductResDto.Floor();
       floor.setFloorId(floorEntity.getFloor_id());
+      floor.setFloorNumber(floorEntity.getFloor_number());
 
       rackDto.add(floor);
     }

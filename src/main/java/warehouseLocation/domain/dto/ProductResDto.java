@@ -157,12 +157,14 @@ public class ProductResDto {
   public static class Rack {
 
     Long rackId;
+    Long rackNumber;
   }
 
   @Data
   public static class Floor {
 
     Long floorId;
+    Long floorNumber;
   }
 
 };
