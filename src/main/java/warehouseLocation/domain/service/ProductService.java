@@ -180,6 +180,8 @@ public class ProductService {
     Long categoryId = findCategoryId.getCategoryId();
     System.out.println("categoryId = " + categoryId);
 
+    this.categoryRepository.findFirstByCategoryName();
+
     Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
         categoryId);
     CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
@@ -473,7 +475,11 @@ public class ProductService {
     LocationResDto.Message locationResDto = new LocationResDto.Message();
     locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
 
+
+
     return ResponseEntity.ok(locationResDto);
   }
 }
 ;
+
+
