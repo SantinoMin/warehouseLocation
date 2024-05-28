@@ -13,7 +13,8 @@ info:
          4) 랙의 수량은 필요할 때, “4.위치 관리" 페이지에서 추가하여 진행하고,
             “2.2 상품 관리 - 상품 조회/수정”에서 상품 등록 시, 옵션에서 선택하여 위치 지정.
             (사용자가 위치를 수기로 작성하는 일은 없도록 설정)
-         # 프로젝트 마감 기간 : 4/20일(토요일)까지 배포까지 완료하기.
+         # 프로젝트 마감 기간 : 5/31일(금요일)까지 배포까지 완료하기.
+
   termsOfService: http://swagger.io/terms/
   contact:
     email: santinomin0381@gmail.com
@@ -150,13 +151,9 @@ paths:
           content:
             application/json:
               schema:
-                # type: array
-                # items:
                 $ref: '#/components/schemas/edited'
             application/xml:
               schema:
-                #   type: array
-                # items:
                 $ref: '#/components/schemas/edited'
         '400':
           description: Invalid tag value
@@ -184,13 +181,9 @@ paths:
           content:
             application/json:
               schema:
-                # type: array
-                # items:
                 $ref: '#/components/schemas/delete'
             application/xml:
               schema:
-                # type: array
-                # items:
                 $ref: '#/components/schemas/delete'
         '400':
           description: Invalid tag value
@@ -206,13 +199,13 @@ paths:
         - location
       summary: 구역 리스트
       description: 사용 가능한 구역을 보여줍니다.
-      parameters:
-        - name: areaId
-          in: query
-          description: 구역 아이디
-          required: true
-          schema:
-            type: number
+        # parameters:
+        # - name: areaId
+        #   in: query
+        #   description: 구역 아이디
+        #   required: true
+        #   schema:
+      #     type: number
       responses:
         '200':
           description: 정상적인 접근입니다.
@@ -304,28 +297,15 @@ paths:
             schema:
               $ref: '#/components/schemas/register'
         required: true
-      #      parameters:
-      #        - name: productName
-      #          in: query
-      #          description: 등록하실 상품명을 입력 해주세요.
-      #          #          example: 예시) 오이 비누
-      #          required: true
-      #          schema:
-      #            type: string
-
       responses:
         '200':
           description: 등록 완료 되었습니다.
           content:
             application/json:
               schema:
-                # type: array
-                # items:
                 $ref: '#/components/schemas/registerOK'
             application/xml:
               schema:
-                # type: array
-                # items:
                 $ref: '#/components/schemas/registerOK'
         '400':
           description: Invalid tag value
@@ -340,13 +320,13 @@ paths:
         - product
       summary: 카테고리 리스트
       description: 등록된 모든 카테고리를 보여줍니다.
-      parameters:
-        - name: categoryId
-          in: query
-          description: 카테고리 아이디
-          required: true
-          schema:
-            type: number
+      # parameters:
+      #   - name: categoryId
+      #     in: query
+      #     description: 카테고리 아이디
+      #     required: true
+      #     schema:
+      #       type: number
       responses:
         '200':
           description: 정상적인 접근입니다.
@@ -362,7 +342,7 @@ paths:
         '404':
           description: Location not found
 
-  /manage/location/addArea:
+  /manage/location/area:
     post:
       tags:
         - location
@@ -397,7 +377,61 @@ paths:
         '404':
           description: location not found
 
-  /manage/location/addRack:
+    put:
+      tags:
+        - location
+      summary: 구역 정보 변경
+      description: 구역을 등록합니다.
+      requestBody:
+        description: 해당 상품을 등록합니다.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/setFloor'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/setFloor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/setFloor'
+        required: true
+
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/editFloorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/editFloorResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: location not found
+
+    delete:
+      tags:
+        - location
+      summary: 해당 구역 삭제
+      description: 구역을 등록합니다.
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setFloorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/setFloorResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: location not found
+
+  /manage/location/rack:
     post:
       tags:
         - location
@@ -432,77 +466,6 @@ paths:
         '404':
           description: location not found
 
-  /manage/location/addFloor:
-    post:
-      tags:
-        - location
-      summary: 구역 정보 변경
-      description: 구역을 등록합니다.
-      requestBody:
-        description: 해당 상품을 등록합니다.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/setFloor'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/setFloor'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/setFloor'
-        required: true
-
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/setFloorResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/setFloorResponse'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: location not found
-
-  /manage/location/editArea:
-    put:
-      tags:
-        - location
-      summary: 구역 정보 변경
-      description: 구역을 등록합니다.
-      requestBody:
-        description: 해당 상품을 등록합니다.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/setFloor'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/setFloor'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/setFloor'
-        required: true
-
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/editFloorResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/editFloorResponse'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: location not found
-
-  /manage/location/editRack:
     put:
       tags:
         - location
@@ -537,7 +500,61 @@ paths:
         '404':
           description: location not found
 
-  /manage/location/editFloor:
+    delete:
+      tags:
+        - location
+      summary: 해당 랙 삭제
+      description: 구역을 등록합니다.
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setFloorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/setFloorResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: location not found
+
+  /manage/location/floor:
+    post:
+      tags:
+        - location
+      summary: 구역 정보 변경
+      description: 구역을 등록합니다.
+      requestBody:
+        description: 해당 상품을 등록합니다.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/setFloor'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/setFloor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/setFloor'
+        required: true
+
+      responses:
+        '200':
+          description: 정상적인 접근입니다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setFloorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/setFloorResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: location not found
+
     put:
       tags:
         - location
@@ -572,96 +589,11 @@ paths:
         '404':
           description: location not found
 
-  /manage/location/deleteArea:
-    delete:
-      tags:
-        - location
-      summary: 해당 구역 삭제
-      description: 구역을 등록합니다.
-      # requestBody:
-      #   description: 해당 상품을 등록합니다.
-      #   content:
-      #     application/json:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #     application/xml:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #     application/x-www-form-urlencoded:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #   required: true
-
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/setFloorResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/setFloorResponse'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: location not found
-
-  /manage/location/deleteRack:
-    delete:
-      tags:
-        - location
-      summary: 해당 랙 삭제
-      description: 구역을 등록합니다.
-      # requestBody:
-      #   description: 해당 상품을 등록합니다.
-      #   content:
-      #     application/json:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #     application/xml:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #     application/x-www-form-urlencoded:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #   required: true
-
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/setFloorResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/setFloorResponse'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: location not found
-
-  /manage/location/deleteFloor:
     delete:
       tags:
         - location
       summary: 해당 층 삭제
       description: 구역을 등록합니다.
-      # requestBody:
-      #   description: 해당 상품을 등록합니다.
-      #   content:
-      #     application/json:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #     application/xml:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #     application/x-www-form-urlencoded:
-      #       schema:
-      #         $ref: '#/components/schemas/setFloor'
-      #   required: true
-
       responses:
         '200':
           description: 정상적인 접근입니다.
@@ -676,6 +608,8 @@ paths:
           description: Invalid ID supplied
         '404':
           description: location not found
+
+
 
 components:
   schemas:
@@ -685,40 +619,6 @@ components:
         productId:
           type: integer
           example: 6
-        productName:
-          type: string
-          example: 압타밀
-        category:
-          type: object
-          example:
-            categoryId: 9
-            categoryName: 유아 식품
-        expiredDate:
-          type: string
-          format: date-time
-          example: 2024-04-02
-        imageUrl:
-          type: array
-          items:
-            type: string
-          example:
-            - "https://www.google.com/babyProducts/image3.jpg"
-        price:
-          type: string
-          example: 18000
-          xml:
-            name: imageUrl
-
-        status:
-          type: string
-          description: 주문 상황
-          example: out of stock
-        location:
-          type: object
-          example:
-            Area: A12
-            Rack: R3
-            Floor: F1
 
     delete:
       type: object
@@ -726,25 +626,15 @@ components:
         productId:
           type: integer
           example: 6
-        # productName:
-        #   type: string
-        #   example: 압타밀 분유
-        # status:
-        #   type: string
-        #   example: "(삭제 완료) -> 상품명: 압타밀 분유"
 
     #//areaList schema
     areaList:
-      # items:
       type: object
       items:
         type: array
       properties:
         area:
           type: string
-          # items:
-          #   type: string
-          # example: C
         status:
           type: string
           description: 주문 상황
@@ -756,23 +646,17 @@ components:
       example:
         areaList:
           - id: 1
-            # name: A 구역
-            status: 사용 중
+            status: in-use
           - id: 2
-            # name: B 구역
-            status: 사용 가능
+            status: usable
           - id: 3
-            # name: C 구역
-            status: 사용 가능
+            status: usable
           - id: 4
-            # name: D 구역
-            status: 사용 가능
+            status: usable
           - id: 5
-            # name: E 구역
-            status: 사용 가능
+            status: usable
           - id: 6
-            # name: F 구역
-            status: 사용 중
+            status: in-use
 
     #//rackList schema
     rackList:
@@ -785,7 +669,6 @@ components:
           type: array
           items:
             type: integer
-            # example: 4
         status:
           type: string
           description: 주문 상황
@@ -797,27 +680,20 @@ components:
       example:
         rackList:
           - id: 1
-            # name: 1번 랙
-            status: 사용 중
+            status: in-use
           - id: 2
-            # name: 2번 랙
-            status: 사용 가능
+            status: usable
           - id: 3
-            # name: 3번 랙
-            status: 사용 가능
+            status: usable
           - id: 4
-            # name: 4번 랙
-            status: 사용 가능
+            status: usable
           - id: 5
-            # name: 5번 랙
-            status: 사용 가능
+            status: usable
           - id: 6
-            # name: 6번 랙
-            status: 사용 중
+            status: in-use
 
     #//floorList schema
     floorList:
-      # items:
       type: object
       items:
         type: array
@@ -826,7 +702,6 @@ components:
           type: array
           items:
             type: integer
-            # example: 2
         status:
           type: string
           description: 주문 상황
@@ -838,14 +713,11 @@ components:
       example:
         floorList:
           - id: 1
-            # name: 1층
-            status: 사용 중
+            status: in-use
           - id: 2
-            # name: 2층
-            status: 사용 가능
+            status: usable
           - id: 3
-            # name: 3층
-            status: 사용 가능
+            status: usable
 
     #//categoryList schema
     categoryList:
@@ -859,19 +731,19 @@ components:
       example:
         categoryList:
           - id: 5
-            name: 가구
+          # name: 가구
           - id: 4
-            name: 가전 제품
+          # name: 가전 제품
           - id: 12
-            name: 건강 식품
+          # name: 건강 식품
           - id: 17
-            name: 식품
+          # name: 식품
           - id: 24
-            name: 유아 식품
+          # name: 유아 식품
           - id: 60
-            name: 애견 용품
+          # name: 애견 용품
           - id: 44
-            name: 주방 용품
+              # name: 주방 용품
 
 
     searchProduct:
@@ -899,56 +771,66 @@ components:
             type: string
 
       example:
-        - productName: 하리보 캔디
-          productId: 12
-          category:
-            categoryId: 1
-            categoryName: 일반 식품
+        # - productName: 하리보 캔디
+        - productId: 12
+          categoryId: 1
+            # categoryId: 1
+          # categoryName: 일반 식품
           expiredDate: 2025-03-25
           imageUrl:
             - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX622_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX223_.jpg"
           price: 3500
           createdAt: 2023-12-24
           updatedAt: 2024-02-20
           status: on sale
           location:
-            areaName: string
-            rackName: string
-            FloorName: string
+            areaName: A5
+            rackName: R18
+            FloorName: F2
 
-        - productName: 비타민 캔디
+        -
+          # productName: 비타민 캔디
           productId: 13
-          category:
-            categoryId: 6
-            categoryName: 건강 식품
+          categoryId: 6
+          # category:
+          #   categoryId: 6
+          #   categoryName: 건강 식품
           expiredDate: 2025-03-25
           imageUrl:
-            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX991_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX988_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX483_.jpg"
           price: 40000
           createdAt: 2023-12-24
           updatedAt: 2024-02-20
           status: on sale
           location:
-            areaName: string
-            rackName: string
-            floorName: string
+            areaName: A12
+            rackName: R6
+            floorName: F3
 
-        - productName: 유아 캔디
+        -
+          # productName: 유아 캔디
           productId: 14
-          category:
-            categoryId: 9
-            categoryName: 유아 식품
+          categoryId: 9
+          # category:
+          #   categoryId: 9
+          #   categoryName: 유아 식품
           expiredDate: 2024-09-20
           imageUrl:
-            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX679_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX444_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX555_.jpg"
+            - "https://m.media-amazon.com/images/I/71EOeu0iuGL._AC_SX666_.jpg"
           price: 2000
           createdAt: 2023-12-24
           updatedAt: 2024-02-20
           status: in sale
           location:
-            areaName: string
-            rackName: string
-            floorName: string
+            areaName: A24
+            rackName: R27
+            floorName: F1
 
     productInfo:
       type: object
@@ -956,11 +838,13 @@ components:
         productId:
           type: integer
           example: 6
-        productName:
-          type: string
-          example: 힙 분유
-        category:
-          $ref: '#/components/schemas/CategoryKindermilch'
+        # productName:
+        #   type: string
+        #   example: 힙 분유
+        categoryId:
+          type: integer
+          example: 9
+          # $ref: '#/components/schemas/CategoryKindermilch'
         expiredDate:
           type: string
           format: date-time
@@ -985,10 +869,6 @@ components:
             Area: A10
             Rack: R5
             Floor: F2
-        # updatedDate:
-        #   type: string
-        #   format: date-time
-        #   example: 2024-06-25
 
     CategoryKindermilch:
       type: object
@@ -1012,10 +892,8 @@ components:
         #          example: 35
         categoryName:
           type: string
-        #          example: 출산/유아동
         sort:
           type: string
-          #          example: 분유/어린이 식품
           example:
             - categoryId: 1,2,3,4,5,6
             - categoryName: 출산/유아동 용품, 주류, 의류, 일반 식품, 건강 식품
@@ -1054,16 +932,6 @@ components:
           example: 1
       xml:
         name: user
-    #    Tag:
-    #      type: object
-    #      properties:
-    #        id:
-    #          type: integer
-    #          format: int64
-    #        name:
-    #          type: string
-    #      xml:
-    #        name: tag
 
     productId:
       type: object
@@ -1109,39 +977,33 @@ components:
           Floor: "F2"
 
 
-    beforePost:
-      type: object
-      properties:
-        productName:
-          type: string
-          example: 오이 비누
-        expiredDate:
-          type: string
-          format: date-time
-        imageUrl:
-          type: string
-          items:
-            type: string
-          example:
-            - "https://www.google.com/babyProducts/image5.jpg"
-        price:
-          type: string
-          example: 18000
-          xml:
-            name: imageUrl
+    # beforePost:
+    #   type: object
+    #   properties:
+    #     productName:
+    #       type: string
+    #       example: 오이 비누
+    #     expiredDate:
+    #       type: string
+    #       format: date-time
+    #     imageUrl:
+    #       type: string
+    #       items:
+    #         type: string
+    #       example:
+    #         - "https://www.google.com/babyProducts/image5.jpg"
+    #     price:
+    #       type: string
+    #       example: 18000
+    #       xml:
+    #         name: imageUrl
 
     setArea:
       type: object
       properties:
-        # id:
-        #   type: string
-        #   example: 27
         name:
           type: string
           example: A16
-        # status:
-        #   type: string
-        #   example: available
 
     setAreaResponse:
       type: object
@@ -1149,25 +1011,13 @@ components:
         id:
           type: string
           example: 27
-        # name:
-        #   type: string
-        #   example: A16
-        status:
-          type: string
-          example: 등록 완료
 
     setRack:
       type: object
       properties:
-        # id:
-        #   type: string
-        #   example: 8
         name:
           type: string
           example: R5
-        # status:
-        #   type: string
-        #   example: available
 
     setRackResponse:
       type: object
@@ -1175,25 +1025,13 @@ components:
         id:
           type: string
           example: 8
-        # name:
-        #   type: string
-        #   example: R5
-        status:
-          type: string
-          example: 등록 완료
 
     setFloor:
       type: object
       properties:
-        # id:
-        #   type: string
-        #   example: 14
         name:
           type: string
           example: F2
-        # status:
-        #   type: string
-        #   example: available
 
     setFloorResponse:
       type: object
@@ -1201,12 +1039,6 @@ components:
         id:
           type: string
           example: 14
-        # name:
-        #   type: string
-        #   example: F2
-        status:
-          type: string
-          example: 등록 완료
 
     editFloorResponse:
       type: object
@@ -1221,22 +1053,15 @@ components:
           type: string
           example:
 
-
-
     register:
       type: object
       properties:
         productName:
           type: string
           example: 다이슨 청소기
-        # productId:
-        #   type: string
-        #   example: 23
-        category:
-          type: object
-          example:
-            categoryId: 15
-            categoryName: 가전 제품
+        categoryId:
+          type: string
+          example: 15
         expiredDate:
           type: string
           format: date-time
@@ -1259,12 +1084,9 @@ components:
           items:
             type: string
           example:
-            AreaId: number
-            RackId: number
-            FloorId: number
-        # registeredDate:
-        #     type: string
-        #     example: 2024-06-24
+            areaId: A6
+            rackId: R14
+            floorId: F2
 
 
     registerOK:
