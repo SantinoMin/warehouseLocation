@@ -1088,7 +1088,6 @@ components:
             rackId: R14
             floorId: F2
 
-
     registerOK:
       type: object
       properties:
