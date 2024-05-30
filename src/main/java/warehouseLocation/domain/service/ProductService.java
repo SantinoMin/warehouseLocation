@@ -479,6 +479,78 @@ public class ProductService {
 
     return ResponseEntity.ok(locationResDto);
   }
+
+  public ResponseEntity<ProductResDto.Message> areaDelete(Long areaId) {
+
+    //1. productId로 해당 product 검색
+    //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
+    //3. productId repo에 저장
+    //4. ResponseEntity로 ok값 반환하기.
+//
+//    this.productRepository.deleteProductById(productId);
+//
+//    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(
+//        productId);
+//    ProductEntity ProductNameByProductId = OptProductNameByProductId.orElseThrow(
+//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+//    String productName = ProductNameByProductId.getProductName();
+//
+//    ProductResDto.Message success = new ProductResDto.Message();
+//    success.setProductId(productId);
+//    success.setProductName(productName);
+//    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
+
+    return ResponseEntity.ok(success);
+  }
+
+
+  public ResponseEntity<ProductResDto.Message> rackDelete(Long rackId) {
+
+    //1. productId로 해당 product 검색
+    //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
+    //3. productId repo에 저장
+    //4. ResponseEntity로 ok값 반환하기.
+
+//    this.productRepository.deleteProductById(productId);
+//
+//    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(
+//        productId);
+//    ProductEntity ProductNameByProductId = OptProductNameByProductId.orElseThrow(
+//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+//    String productName = ProductNameByProductId.getProductName();
+//
+//    ProductResDto.Message success = new ProductResDto.Message();
+//    success.setProductId(productId);
+//    success.setProductName(productName);
+//    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
+
+    return ResponseEntity.ok(success);
+  }
+
+
+  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
+
+    //1. productId로 해당 product 검색
+    //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
+    //3. productId repo에 저장
+    //4. ResponseEntity로 ok값 반환하기.
+
+//    this.productRepository.deleteProductById(productId);
+//
+//    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(
+//        productId);
+//    ProductEntity ProductNameByProductId = OptProductNameByProductId.orElseThrow(
+//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+//    String productName = ProductNameByProductId.getProductName();
+//
+//    ProductResDto.Message success = new ProductResDto.Message();
+//    success.setProductId(productId);
+//    success.setProductName(productName);
+//    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
+
+    return ResponseEntity.ok(success);
+  }
+
 }
 ;
 
