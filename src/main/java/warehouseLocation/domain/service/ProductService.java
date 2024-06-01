@@ -548,7 +548,12 @@ public class ProductService {
 //    success.setProductName(productName);
 //    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
 
-    return ResponseEntity.ok(success);
+    return null;
+  }
+
+  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId, Long areaId, Long floorId) {
+
+    return null;
   }
 
 }

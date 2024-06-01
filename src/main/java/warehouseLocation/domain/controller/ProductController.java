@@ -128,6 +128,12 @@ public class ProductController {
     return this.productService.floorDelete(floorId);
   }
 
+  //(PUT) /manage/product/{productId}/location : 상품의 위치 변경
+  @PutMapping("/product/{productId}/location")
+  public ResponseEntity<ProductResDto.Message> locationUpdate(@PathVariable Long productId, @RequestParam Long rackId, Long areaId, Long floorId) {
+    return this.productService.locationUpdate(productId, rackId, areaId, floorId);
+  }
+
 
 
 };
