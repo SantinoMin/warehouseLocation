@@ -120,7 +120,7 @@ paths:
     put:
       tags:
         - product
-      summary: 질문 --> 상품 정보 및 위치 변경
+      summary: 상품 정보 및 위치 변경
       description: 해당 상품의 정보 및 위치를 변경 합니다.
       requestBody:
         description: 세부 내용을 변경합니다.
@@ -145,24 +145,24 @@ paths:
           schema:
             type: integer
             example: "example: 6"
-        - name: rackId
-          in: query
-          description: 랙 아이디 (optional)
-          required: false
-          schema:
-            type: integer
-        - name: areaId
-          in: query
-          description: 구역 아이디 (optional)
-          required: false
-          schema:
-            type: integer
-        - name: floorId
-          in: query
-          description: 층 아이디 (optional)
-          required: false
-          schema:
-            type: integer
+        # - name: rackId
+        #   in: query
+        #   description: 랙 아이디 (optional)
+        #   required: false
+        #   schema:
+        #     type: integer
+        # - name: areaId
+        #   in: query
+        #   description: 구역 아이디 (optional)
+        #   required: false
+        #   schema:
+        #     type: integer
+        # - name: floorId
+        #   in: query
+        #   description: 층 아이디 (optional)
+        #   required: false
+        #   schema:
+        #     type: integer
 
       responses:
         '200':
@@ -182,52 +182,52 @@ paths:
           description: Validation exception
 
 
+    # 일단 patch대신 put 사용하기
+    # patch:
+    #   tags:
+    #     - product
+    #   summary: 질문 --> 상품 정보 변경(patch가 더 나을지 질문 // 효율성)
+    #   description: 질문) 해당 상품의 일부 정보를 변경 합니다. // 일부 정보만 변경하려면, PUT을 사용하여 업데이트 하지 않아도 되는 정보까지 업데이트 할 필요가 있을까?
+    #   requestBody:
+    #     description: 일부 내용을 변경합니다.
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/productInfoPatch'
+    #       application/xml:
+    #         schema:
+    #           $ref: '#/components/schemas/productInfoPatch'
+    #       application/x-www-form-urlencoded:
+    #         schema:
+    #           $ref: '#/components/schemas/productInfoPatch'
+    #     required: true
+    #   operationId: edit
 
-    patch:
-      tags:
-        - product
-      summary: 질문 --> 상품 정보 변경(patch가 더 나을지 질문 // 효율성)
-      description: 질문) 해당 상품의 일부 정보를 변경 합니다. // 일부 정보만 변경하려면, PUT을 사용하여 업데이트 하지 않아도 되는 정보까지 업데이트 할 필요가 있을까?
-      requestBody:
-        description: 일부 내용을 변경합니다.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/productInfoPatch'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/productInfoPatch'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/productInfoPatch'
-        required: true
-      operationId: edit
+    #   parameters:
+    #     - name: productId
+    #       in: path
+    #       description: productId
+    #       required: true
+    #       schema:
+    #         type: integer
+    #         example: "example: 6"
 
-      parameters:
-        - name: productId
-          in: path
-          description: productId
-          required: true
-          schema:
-            type: integer
-            example: "example: 6"
-
-      responses:
-        '200':
-          description: 수정 완료 되었습니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/edited'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/edited'
-        '400':
-          description: Invalid tag value
-        '404':
-          description: Product not found
-        '422':
-          description: Validation exception
+    #   responses:
+    #     '200':
+    #       description: 수정 완료 되었습니다.
+    #       content:
+    #         application/json:
+    #           schema:
+    #               $ref: '#/components/schemas/edited'
+    #         application/xml:
+    #           schema:
+    #               $ref: '#/components/schemas/edited'
+    #     '400':
+    #       description: Invalid tag value
+    #     '404':
+    #       description: Product not found
+    #     '422':
+    #       description: Validation exception
 
     delete:
       tags:
@@ -259,51 +259,51 @@ paths:
         '422':
           description: Validation exception
 
-  /manage/product/{productId}/기존:
-    put:
-      tags:
-        - product
-      summary: 상품 정보 변경
-      description: 해당 상품의 정보를 변경 합니다.
-      requestBody:
-        description: 세부 내용을 변경합니다.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/previousProductInfo'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/previousProductInfo'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/previousProductInfo'
-        required: true
-      # operationId: edit
-      parameters:
-        - name: productId
-          in: path
-          description: productId
-          required: true
-          schema:
-            type: integer
-            example: "example: 6"
+      # /manage/product/{productId}/기존:
+      #   put:
+      #     tags:
+      #       - product
+      #     summary: 상품 정보 변경
+      #     description: 해당 상품의 정보를 변경 합니다.
+      #     requestBody:
+      #       description: 세부 내용을 변경합니다.
+      #       content:
+      #         application/json:
+      #           schema:
+      #             $ref: '#/components/schemas/previousProductInfo'
+      #         application/xml:
+      #           schema:
+      #             $ref: '#/components/schemas/previousProductInfo'
+      #         application/x-www-form-urlencoded:
+      #           schema:
+      #             $ref: '#/components/schemas/previousProductInfo'
+      #       required: true
+      #     # operationId: edit
+      #     parameters:
+      #       - name: productId
+      #         in: path
+      #         description: productId
+      #         required: true
+      #         schema:
+      #           type: integer
+      #           example: "example: 6"
 
-      responses:
-        '200':
-          description: 수정 완료 되었습니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/previousEdit'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/previousEdit'
-        '400':
-          description: Invalid tag value
-        '404':
-          description: Product not found
-        '422':
-          description: Validation exception
+      #     responses:
+      #       '200':
+      #         description: 수정 완료 되었습니다.
+      #         content:
+      #           application/json:
+      #             schema:
+      #                 $ref: '#/components/schemas/previousEdit'
+      #           application/xml:
+      #             schema:
+      #                 $ref: '#/components/schemas/previousEdit'
+      #       '400':
+      #         description: Invalid tag value
+      #       '404':
+      #         description: Product not found
+      #       '422':
+      #         description: Validation exception
 
 
 
@@ -665,70 +665,70 @@ paths:
         '404':
           description: location not found
 
-  /manage/product/{productId}/location:
-    put:
-      tags:
-        - product-location
-      summary: 상품의 위치 변경
-      description: 상품의 랙, 구역 또는 층 위치를 변경합니다.
-      parameters:
-        - name: productId
-          in: path
-          description: 상품 아이디
-          required: true
-          explode: true
-          schema:
-            type: integer
-        - name: rackId
-          in: query
-          description: 랙 아이디 (optional)
-          required: false
-          schema:
-            type: integer
-        - name: areaId
-          in: query
-          description: 구역 아이디 (optional)
-          required: false
-          schema:
-            type: integer
-        - name: floorId
-          in: query
-          description: 층 아이디 (optional)
-          required: false
-          schema:
-            type: integer
+          # /manage/product/{productId}/location:
+          #   put:
+          #     tags:
+          #       - product-location
+          #     summary: 상품의 위치 변경
+          #     description: 상품의 랙, 구역 또는 층 위치를 변경합니다.
+          #     parameters:
+          #       - name: productId
+          #         in: path
+          #         description: 상품 아이디
+          #         required: true
+          #         explode: true
+          #         schema:
+          #           type: integer
+          #       - name: rackId
+          #         in: query
+          #         description: 랙 아이디 (optional)
+          #         required: false
+          #         schema:
+          #           type: integer
+          #       - name: areaId
+          #         in: query
+          #         description: 구역 아이디 (optional)
+          #         required: false
+          #         schema:
+          #           type: integer
+          #       - name: floorId
+          #         in: query
+          #         description: 층 아이디 (optional)
+          #         required: false
+          #         schema:
+          #           type: integer
 
-      requestBody:
-        description: 위치 변경 정보
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                rackId:
-                  type: integer
-                  nullable: true
-                  example: 5
-                areaId:
-                  type: integer
-                  nullable: true
-                  example: 14
-                floorId:
-                  type: integer
-                  nullable: true
-                  example: 2
-        required: true
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductLocationResponse'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Location not found
+          #     requestBody:
+          #       description: 위치 변경 정보
+          #       content:
+          #         application/json:
+          #           schema:
+          #             type: object
+          #             properties:
+          #               rackId:
+          #                 type: integer
+          #                 nullable: true
+          #                 example: 5
+          #               areaId:
+          #                 type: integer
+          #                 nullable: true
+          #                 example: 14
+          #               floorId:
+          #                 type: integer
+          #                 nullable: true
+          #                 example: 2
+          #       required: true
+          #     responses:
+          #       '200':
+          #         description: 정상적인 접근입니다.
+          #         content:
+          #           application/json:
+          #             schema:
+          #               $ref: '#/components/schemas/ProductLocationResponse'
+          #       '400':
+          #         description: Invalid ID supplied
+          #       '404':
+          #         description: Location not found
 
 
 
@@ -862,47 +862,47 @@ paths:
         '404':
           description: location not found
 
-  /manage/location:
-    delete:
-      tags:
-        - location
-      summary: 질문 --> 창고 위치 삭제(query parameters를 사용하는 게 어떨지? // 효율성)
-      description: 창고 위치 정보(area, rack, floor)를 삭제합니다.
-      parameters:
-        - name: rackId
-          in: query
-          description: 랙 아이디 (optional)
-          required: false
-          schema:
-            type: integer
-        - name: areaId
-          in: query
-          description: 구역 아이디 (optional)
-          required: false
-          schema:
-            type: integer
-        - name: floorId
-          in: query
-          description: 층 아이디 (optional)
-          required: false
-          schema:
-            type: integer
+          # /manage/location:
+          #   delete:
+          #     tags:
+          #       - location
+          #     summary: 질문 --> 창고 위치 삭제(query parameters를 사용하는 게 어떨지? // 효율성)
+          #     description: 창고 위치 정보(area, rack, floor)를 삭제합니다.
+          #     parameters:
+          #       - name: rackId
+          #         in: query
+          #         description: 랙 아이디 (optional)
+          #         required: false
+          #         schema:
+          #           type: integer
+          #       - name: areaId
+          #         in: query
+          #         description: 구역 아이디 (optional)
+          #         required: false
+          #         schema:
+          #           type: integer
+          #       - name: floorId
+          #         in: query
+          #         description: 층 아이디 (optional)
+          #         required: false
+          #         schema:
+          #           type: integer
 
 
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/deletedLocation'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/deletedLocation'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: location not found
+          #     responses:
+          #       '200':
+          #         description: 정상적인 접근입니다.
+          #         content:
+          #           application/json:
+          #             schema:
+          #               $ref: '#/components/schemas/deletedLocation'
+          #           application/xml:
+          #             schema:
+          #               $ref: '#/components/schemas/deletedLocation'
+          #       '400':
+          #         description: Invalid ID supplied
+          #       '404':
+          #         description: location not found
 
 
 
@@ -1156,9 +1156,9 @@ components:
     productInfo:
       type: object
       properties:
-        productId:
-          type: integer
-          example: 6
+        # productId:
+        #   type: integer
+        #   example: 6
         productName:
           type: string
           example: 힙 분유
@@ -1187,9 +1187,16 @@ components:
         location:
           type: object
           example:
-            areaName: A10
-            rackName: R5
-            floorName: F2
+            areaId: 4
+            rackId: 6
+            floorId: 2
+      required:
+        - productName
+        - categoryId
+        - expiredDate
+        - imageUrl
+        - price
+        - status
 
     previousProductInfo:
       type: object
@@ -1516,6 +1523,14 @@ components:
             areaName: A6
             rackName: R14
             floorName: F2
+
+      required:
+        - productName
+        - categoryId
+        - expiredDate
+        - imageUrl
+        - price
+        - status
 
     registerOK:
       type: object
