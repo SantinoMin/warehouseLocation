@@ -948,6 +948,7 @@ components:
           type: integer
           example: 6
 
+
     #//areaList schema
     areaList:
       type: object
@@ -1107,9 +1108,9 @@ components:
           updatedAt: 2024-02-20
           status: on sale
           location:
-            areaName: A5
-            rackName: R18
-            FloorName: F2
+            areaId: 1
+            rackId: 2
+            FloorId: 3
 
         -
           # productName: 비타민 캔디
@@ -1128,9 +1129,9 @@ components:
           updatedAt: 2024-02-20
           status: on sale
           location:
-            areaName: A12
-            rackName: R6
-            floorName: F3
+            areaId: 2
+            rackId: 3
+            FloorId: 3
 
         -
           # productName: 유아 캔디
@@ -1149,9 +1150,9 @@ components:
           updatedAt: 2024-02-20
           status: in sale
           location:
-            areaName: A24
-            rackName: R27
-            floorName: F1
+            areaId: 3
+            rackId: 4
+            FloorId: 3
 
     productInfo:
       type: object
@@ -1313,9 +1314,9 @@ components:
         updatedAt: "2024-04-04"
         status: available
         location:
-          areaName: "A9"
-          rackName: "R12"
-          floorName: "F2"
+          areaId: 5
+          rackId: 7
+          floorId: 3
 
 
     setArea:
@@ -1520,9 +1521,9 @@ components:
           items:
             type: string
           example:
-            areaName: A6
-            rackName: R14
-            floorName: F2
+            areaName: A5
+            rackName: R3
+            floorName: F3
 
       required:
         - productName
@@ -1547,11 +1548,4 @@ components:
         # createdAt:
         #   type: string
         #   example: "2024-06-24"
-
-
-
-
-
-
-
 
