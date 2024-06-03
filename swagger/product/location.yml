@@ -547,59 +547,6 @@ paths:
         '404':
           description: location not found
 
-  /manage/location1:
-    post:
-      tags:
-        - location
-      summary: 질문 --> 창고 위치(구역,랙,층) 생성
-      description: 창고에 추가 위치(구역,랙,층)를 생성합니다.
-      parameters:
-        - name: rackName
-          in: query
-          description: 랙 이름 (optional)
-          required: false
-          schema:
-            type: integer
-        - name: areaName
-          in: query
-          description: 구역 이름 (optional)
-          required: false
-          schema:
-            type: integer
-        - name: floorName
-          in: query
-          description: 층 이름 (optional)
-          required: false
-          schema:
-            type: integer
-      requestBody:
-        description: 창고에 해당 위치를 생성합니다.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/registerLocation'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/registerLocation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/registerLocation'
-        required: true
-
-      responses:
-        '200':
-          description: 정상적인 접근입니다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/registerLocationResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/registerLocationResponse'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: location not found
 
   /manage/location/{areaId}:
     delete:
@@ -656,10 +603,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/setFloorResponse'
+                $ref: '#/components/schemas/setRackResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/setFloorResponse'
+                $ref: '#/components/schemas/setRackResponse'
         '400':
           description: Invalid ID supplied
         '404':
@@ -1325,6 +1272,8 @@ components:
         areaName:
           type: string
           example: A16
+      required:
+        - areaName
 
     setAreaResponse:
       type: object
@@ -1370,6 +1319,8 @@ components:
         rackName:
           type: string
           example: R5
+      required:
+        - rackName
 
     setRackResponse:
       type: object
@@ -1402,6 +1353,8 @@ components:
         floorName:
           type: string
           example: F2
+      required:
+        - floorName
 
     registerLocation:
       type: object
@@ -1435,7 +1388,7 @@ components:
     setFloorResponse:
       type: object
       properties:
-        id:
+        floorId:
           type: string
           example: 14
 
@@ -1548,4 +1501,11 @@ components:
         # createdAt:
         #   type: string
         #   example: "2024-06-24"
+
+
+
+
+
+
+
 
