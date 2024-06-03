@@ -28,8 +28,8 @@ public class ProductResDto {
     private LocalDate expiredDate;
     private String imageUrl;
     private String price;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private String status;
     private Location location;
   }

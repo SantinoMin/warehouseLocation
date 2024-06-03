@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -70,13 +71,18 @@ public class ProductService {
     this.productLocationRepository = productLocationRepository;
   }
 
-  //2.1(Get) /product/manage/search : 상품 검색
+  //2.1(GET) /manage/product : 상품 검색
   public List<ProductResDto.ProductSearch> search(String productName) {
 
     /**
      * 1) (완료)상품명이 일부라도 포함되는 경우, 전부 검색 가능 (검색: 콜라 -> 펩시 콜라, 제로 콜라, 코카 콜라 검색 가능)
      * 2) (완료)이미지는 여러개 등록 가능
      */
+//    Optional<ProductEntity> optProduct = this.productRepository.ProductIdByproductName(productName);
+//    ProductEntity product = optProduct.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+
+
+
     //1-1.productName을 가지고, ProductEntity에서 categoryId 가져오기
     List<ProductEntity> productList = this.productRepository.ByProductName(
         productName);
@@ -87,69 +93,83 @@ public class ProductService {
       throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCTLIST);
     }
 
+    // ProductEntity를 ProductResDto.ProductSearch로 변환하는 작업을 수행합니다.
+    List<ProductResDto.ProductSearch> productSearchList = productList.stream()
+        .map(productEntity -> {
+          ProductResDto.ProductSearch productSearch = new ProductResDto.ProductSearch();
+          productSearch.setProductName(productName);
+          productSearch.setProductId(productEntity.getProductId());
+          // ProductEntity를 ProductResDto.ProductSearch로 매핑하는 코드를 작성하세요.
+          // 예: productSearch.setName(productEntity.getName());
+          return productSearch;
+        })
+        .toList();
+
+
     /**
      * (미완성) product에 맞는 categoryId와 categoryName을 보여주도록 설정 필요
      */
-    List<Long> productIdList = productList.stream().map(ProductEntity::getProductId).toList();
-    Optional<Long> optProductId = productIdList.stream().findFirst();
-    Long productId = optProductId.orElseThrow(
-        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+//    List<Long> productIdList = productList.stream().map(ProductEntity::getProductId).toList();
+//    Optional<Long> optProductId = productIdList.stream().findFirst();
+//    Long productId = optProductId.orElseThrow(
+//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
 
     //1-2 CategoryIdList를 productList에서 가져오기
-    List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
+//    List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
 
     //1-3 CategoryId를 CategoryIdList에서 가져오기
     //* findAny()도 Optional을 반환함 * // 이건 category가 같다는 가정하에 가능한데, 만약 카테고리가 다르다면? ("주방"으로 검색 -> 주방 세제, 주방 칼 카테고리 다를건데?)
-    Long categoryId = categoryIdList.stream().findAny().orElseThrow(() ->
-        new CustomException(ErrorMessage.NOT_FOUND_CATEGORY));
+//    Long categoryId = categoryIdList.stream().findAny().orElseThrow(() ->
+//        new CustomException(ErrorMessage.NOT_FOUND_CATEGORY));
 
     //1-4 categoryId로 categoryName을 가져오기
-    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
-        categoryId);
-    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
-        () -> new CustomException("no data"));
-
-    String categoryName = categoryNameEntity.getCategoryName();
-    System.out.println("categoryName = " + categoryName);
+//    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
+//        categoryId);
+//    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
+//        () -> new CustomException("no data"));
+//
+//    String categoryName = categoryNameEntity.getCategoryName();
+//    System.out.println("categoryName = " + categoryName);
 
     //2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
-    Category category = new Category();
-    category.setCategoryId(categoryId);
-    category.setCategoryName(categoryName);
+//    Category category = new Category();
+//    category.setCategoryId(categoryId);
+//    category.setCategoryName(categoryName);
+//
+//    Optional<ProductLocationEntity> optionalProductLocation = this.productLocationRepository.productLocation(
+//        productId);
+//    ProductLocationEntity productLocation = optionalProductLocation.orElseThrow(
+//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+//
+//    String area = productLocation.getArea();
+//    String rack = productLocation.getRack();
+//    String floor = productLocation.getFloor();
+//
+//    Location location = new Location();
+//    location.setArea(area + "번 구역");
+//    location.setRack(rack + "번 랙");
+//    location.setFloor(floor + "층");
+//
+//    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
+//    for (
+//        ProductEntity OneProduct : productList) {
+//      ProductResDto.ProductSearch productSearch = new ProductSearch();
+//      productSearch.setProductName(OneProduct.getProductName());
+//      productSearch.setProductId(OneProduct.getProductId());
+//      productSearch.setCategory(category);
+//      productSearch.setExpiredDate(OneProduct.getExpiredDate());
+//      //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
+//      productSearch.setImageUrl(OneProduct.getImageUrl());
+//      productSearch.setPrice(OneProduct.getPrice());
+//      productSearch.setCreatedAt(OneProduct.getCreatedAt());
+//      productSearch.setUpdatedAt(OneProduct.getUpdatedAt());
+//      productSearch.setStatus(OneProduct.getStatus());
+//      productSearch.setLocation(location);
 
-    Optional<ProductLocationEntity> optionalProductLocation = this.productLocationRepository.productLocation(
-        productId);
-    ProductLocationEntity productLocation = optionalProductLocation.orElseThrow(
-        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
-
-    String area = productLocation.getArea();
-    String rack = productLocation.getRack();
-    String floor = productLocation.getFloor();
-
-    Location location = new Location();
-    location.setArea(area + "번 구역");
-    location.setRack(rack + "번 랙");
-    location.setFloor(floor + "층");
-
-    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
-    for (
-        ProductEntity OneProduct : productList) {
-      ProductResDto.ProductSearch productSearch = new ProductSearch();
-      productSearch.setProductName(OneProduct.getProductName());
-      productSearch.setProductId(OneProduct.getProductId());
-      productSearch.setCategory(category);
-      productSearch.setExpiredDate(OneProduct.getExpiredDate());
-      //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
-      productSearch.setImageUrl(OneProduct.getImageUrl());
-      productSearch.setPrice(OneProduct.getPrice());
-      productSearch.setCreatedDate(OneProduct.getCreatedAt());
-      productSearch.setUpdatedDate(OneProduct.getUpdatedAt());
-      productSearch.setStatus(OneProduct.getStatus());
-      productSearch.setLocation(location);
-
-      productDto.add(productSearch);
-    }
-    return productDto;
+//      productDto.add(productSearch);
+//    }
+//    return productDto;
+  return productSearchList;
   }
 
   ;
@@ -180,7 +200,9 @@ public class ProductService {
     Long categoryId = findCategoryId.getCategoryId();
     System.out.println("categoryId = " + categoryId);
 
-    this.categoryRepository.findFirstByCategoryName();
+
+    //이거 사용하는 법 알아보기
+//    this.categoryRepository.findFirstByCategoryName();
 
     Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
         categoryId);
@@ -500,7 +522,7 @@ public class ProductService {
 //    success.setProductName(productName);
 //    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
 
-    return ResponseEntity.ok(success);
+    return null;
   }
 
 
@@ -524,7 +546,7 @@ public class ProductService {
 //    success.setProductName(productName);
 //    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
 
-    return ResponseEntity.ok(success);
+    return null;
   }
 
 

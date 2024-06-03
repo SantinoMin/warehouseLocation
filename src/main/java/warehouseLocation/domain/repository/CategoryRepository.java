@@ -17,7 +17,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Intege
   @Query("SELECT c.categoryName FROM CategoryEntity c")
   Page<String> findAllCategoryNames(Pageable pageable);
 
-  Optional<CategoryEntity> findFirstByCategoryName();
+//  Optional<CategoryEntity> findFirstByCategoryName();
 
   /**
    * 카테고리 리스트 검색하

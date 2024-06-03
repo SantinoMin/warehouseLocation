@@ -91,7 +91,7 @@ public class ProductController {
     return this.productService.floorList();
   }
 
-//4.1 (POST) /manage/location/area : 창고 구역 생성
+  //4.1 (POST) /manage/location/area : 창고 구역 생성
   @PostMapping("/location/area")
   public ResponseEntity<LocationResDto.Message> addArea(@RequestBody LocationReqDto body) {
     return this.productService.addArea(body);
@@ -130,10 +130,8 @@ public class ProductController {
 
   //(PUT) /manage/product/{productId}/location : 상품의 위치 변경
   @PutMapping("/product/{productId}/location")
-  public ResponseEntity<ProductResDto.Message> locationUpdate(@PathVariable Long productId, @RequestParam Long rackId, Long areaId, Long floorId) {
+  public ResponseEntity<ProductResDto.Message> locationUpdate(@PathVariable Long productId,
+      @RequestParam Long rackId, Long areaId, Long floorId) {
     return this.productService.locationUpdate(productId, rackId, areaId, floorId);
   }
-
-
-
 };
