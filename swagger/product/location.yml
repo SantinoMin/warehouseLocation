@@ -1486,6 +1486,7 @@ components:
         - price
         - status
 
+
     registerOK:
       type: object
       properties:
