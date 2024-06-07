@@ -14,7 +14,6 @@ import warehouseLocation.models.ProductEntity;
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
 
-
   /**
    * 상품 검색
    **/
