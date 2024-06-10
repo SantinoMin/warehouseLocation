@@ -349,25 +349,6 @@ public class ProductService {
     // 3. 사용자가 카테고리 리스트에서 카테고리 선택하기 -> 이건 좀 복잡해지네. api를 따로 둬서 카테고리를 선택하는 걸로 가야될듯.
 
     // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
-//    Pageable pageable = PageRequest.of(0, 10, Sort.by("categoryName").ascending());
-//    Page<String> categoryPage = categoryRepository.findAllCategoryNames(pageable);
-//    List<CategoryEntity> categoryEntityList = categoryPage.getContent();
-//    List<String> categoryList = categoryPage.stream().map(CategoryEntity::getCategoryName).toList();
-//    String categoryName = categoryList.get(0);
-
-//    CategoryEntity categoryList = this.categoryRepository.categoryList();
-//    Category category = new Category();
-//    category.setCategoryId(categoryId); (categoryId는 AI로 실행됨)
-//    category.setCategoryName(categoryName);
-
-//    List<AreaEntity> areaEntityList = this.areaRepository.findAll();
-//    List<String> areaList = areaEntityList.stream().map(AreaEntity::getAreaName).toList();
-//    String area = areaList.get(0);
-//
-//    Location location = new Location();
-//    location.setArea(area);
-////    location.setRack();
-////    location.setFloor();
 
     ProductResDto.Register toDto = new ProductResDto.Register();
     toDto.setProductName(product.getProductName());
