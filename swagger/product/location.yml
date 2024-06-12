@@ -1279,18 +1279,7 @@ components:
     registerOK:
       type: object
       properties:
-        # productName:
-        #   type: string
-        #   example: 다이슨 청소기
         productId:
           type: string
           example: 33
-        # status:
-        #   type: string
-        #   example: "등록 완료 되었습니다"
-        # createdAt:
-        #   type: string
-        #   example: "2024-06-24"
-
-
 
