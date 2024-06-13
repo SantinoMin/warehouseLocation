@@ -3,16 +3,9 @@ package warehouseLocation.domain.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import warehouseLocation.domain.dto.LocationReqDto;
 import warehouseLocation.domain.dto.LocationResDto;
-import warehouseLocation.domain.dto.LocationResDto.Area;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.dto.ProductResDto.Category;
 import warehouseLocation.domain.dto.ProductResDto.CategoryList;
 import warehouseLocation.domain.dto.ProductResDto.Location;
-import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
-import warehouseLocation.domain.dto.ProductResDto.Rack;
 import warehouseLocation.domain.repository.AreaRepository;
 import warehouseLocation.domain.repository.CategoryRepository;
 import warehouseLocation.domain.repository.FloorRepository;
@@ -53,7 +43,6 @@ public class ProductService {
   private final RackRepository rackRepository;
   private final FloorRepository floorRepository;
   private final CategoryRepository categoryRepository;
-  private final UserRepository userRepository;
   private ProductLocationRepository productLocationRepository;
 
 
@@ -67,7 +56,6 @@ public class ProductService {
     this.rackRepository = rackRepository;
     this.floorRepository = floorRepository;
     this.categoryRepository = categoryRepository;
-    this.userRepository = userRepository;
     this.productLocationRepository = productLocationRepository;
   }
 
