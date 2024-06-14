@@ -187,10 +187,6 @@ public class ProductService {
     Long categoryId = findCategoryId.getCategoryId();
     System.out.println("categoryId = " + categoryId);
 
-
-    //이거 사용하는 법 알아보기
-//    this.categoryRepository.findFirstByCategoryName();
-
     Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
         categoryId);
     CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
