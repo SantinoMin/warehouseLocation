@@ -211,9 +211,7 @@ public class ProductService {
 
     return info;
   }
-
   ;
-
   public ProductResDto.Edit productEdit(@PathVariable Long productId,
       @RequestBody ProductReqDto.Edit body) {
     //1. 일단 db에서 해당 productId에 대한 정보를 가져온 후
