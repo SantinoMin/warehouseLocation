@@ -297,8 +297,6 @@ public class ProductService {
 
     return ResponseEntity.ok(success);
   }
-
-
   public ProductResDto.Register productRegister(ProductReqDto body) {
 
     // 1. 상품 중복 확인
