@@ -66,9 +66,6 @@ public class ProductService {
      * 1) (완료)상품명이 일부라도 포함되는 경우, 전부 검색 가능 (검색: 콜라 -> 펩시 콜라, 제로 콜라, 코카 콜라 검색 가능)
      * 2) (완료)이미지는 여러개 등록 가능
      */
-//    Optional<ProductEntity> optProduct = this.productRepository.ProductIdByproductName(productName);
-//    ProductEntity product = optProduct.orElseThrow( () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
-
 
 
     //1-1.productName을 가지고, ProductEntity에서 categoryId 가져오기
@@ -487,24 +484,6 @@ public class ProductService {
 
 
   public ResponseEntity<ProductResDto.Message> rackDelete(Long rackId) {
-
-    //1. productId로 해당 product 검색
-    //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
-    //3. productId repo에 저장
-    //4. ResponseEntity로 ok값 반환하기.
-
-//    this.productRepository.deleteProductById(productId);
-//
-//    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(
-//        productId);
-//    ProductEntity ProductNameByProductId = OptProductNameByProductId.orElseThrow(
-//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
-//    String productName = ProductNameByProductId.getProductName();
-//
-//    ProductResDto.Message success = new ProductResDto.Message();
-//    success.setProductId(productId);
-//    success.setProductName(productName);
-//    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
 
     return null;
   }
