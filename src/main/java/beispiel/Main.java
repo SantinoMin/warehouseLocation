@@ -5,16 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 디버깅 예시
  */
-//@SpringBootApplication
 public class Main {
 
   public static void main(String[] args) {
     String name = "santino";
-//    String res = hello(name);
-
     System.out.println("name =" + name);
-
-//    System.out.println("res =" + res);
 
   }
 
