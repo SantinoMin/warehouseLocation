@@ -34,8 +34,7 @@ public class ProductController {
 
   //2.1(GET) /manage/product : 상품 검색
   @GetMapping("/product")
-  public List<ProductResDto.ProductSearch> search(
-      @RequestParam String productName) {
+  public List<ProductResDto.ProductSearch> search(@RequestParam String productName) {
     return this.productService.search(productName);
   }
 
