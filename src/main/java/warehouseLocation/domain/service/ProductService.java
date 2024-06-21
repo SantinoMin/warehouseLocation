@@ -456,8 +456,6 @@ public class ProductService {
     LocationResDto.Message locationResDto = new LocationResDto.Message();
     locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
 
-
-
     return ResponseEntity.ok(locationResDto);
   }
 
