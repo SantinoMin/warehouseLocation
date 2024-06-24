@@ -153,10 +153,10 @@ public class ProductService {
 //      productDto.add(productSearch);
 //    }
 //    return productDto;
-  return productSearchList;
+//  return productSearchList;
+    return null;
   }
 
-  ;
 
   /**
    * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
