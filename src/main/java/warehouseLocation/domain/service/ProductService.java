@@ -67,7 +67,6 @@ public class ProductService {
      * 2) (완료)이미지는 여러개 등록 가능
      */
 
-
     //1-1.productName을 가지고, ProductEntity에서 categoryId 가져오기
     List<ProductEntity> productList = this.productRepository.ByProductName(
         productName);
