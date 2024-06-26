@@ -462,7 +462,7 @@ public class ProductService {
     //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
     //3. productId repo에 저장
     //4. ResponseEntity로 ok값 반환하기.
-//
+
 //    this.productRepository.deleteProductById(productId);
 //
 //    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(
@@ -480,19 +480,19 @@ public class ProductService {
   }
 
 
-  public ResponseEntity<ProductResDto.Message> rackDelete(Long rackId) {
-
-    return null;
-  }
-  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
-
-    return null;
-  }
-
-  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId, Long areaId, Long floorId) {
-
-    return null;
-  }
+//  public ResponseEntity<ProductResDto.Message> rackDelete(Long rackId) {
+//
+//    return null;
+//  }
+//  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
+//
+//    return null;
+//  }
+//
+//  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId, Long areaId, Long floorId) {
+//
+//    return null;
+//  }
 
 }
 ;
