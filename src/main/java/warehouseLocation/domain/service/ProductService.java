@@ -480,19 +480,19 @@ public class ProductService {
   }
 
 
-  public ResponseEntity<ProductResDto.Message> rackDelete(Long rackId) {
-
-    return null;
-  }
-  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
-
-    return null;
-  }
-
-  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId, Long areaId, Long floorId) {
-
-    return null;
-  }
+//  public ResponseEntity<ProductResDto.Message> rackDelete(Long rackId) {
+//
+//    return null;
+//  }
+//  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
+//
+//    return null;
+//  }
+//
+//  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId, Long areaId, Long floorId) {
+//
+//    return null;
+//  }
 
 }
 ;
