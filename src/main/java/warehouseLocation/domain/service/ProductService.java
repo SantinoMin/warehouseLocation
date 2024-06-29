@@ -437,24 +437,24 @@ public class ProductService {
 
   ;
 
-  public ResponseEntity<LocationResDto.Message> addFloor(LocationReqDto body) {
-    /**
-     * Floor중복 확인 후, 중복 아니라면 repo에 저장하기
-     */
-    FloorEntity floor = new FloorEntity();
-    floor.setFloor_id(body.getFloorId());
-    Optional<FloorEntity> duplicatedFloor = this.floorRepository.findByFloorId(body.getFloorId());
-    duplicatedFloor.ifPresent(f -> {
-      throw new CustomException(ErrorMessage.DUPLICATE_FLOOR);
-    });
-    this.floorRepository.save(floor);
-
-    // LocationResDto 객체 생성 및 값 설정
-    LocationResDto.Message locationResDto = new LocationResDto.Message();
-    locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
-
-    return ResponseEntity.ok(locationResDto);
-  }
+//  public ResponseEntity<LocationResDto.Message> addFloor(LocationReqDto body) {
+//    /**
+//     * Floor중복 확인 후, 중복 아니라면 repo에 저장하기
+//     */
+//    FloorEntity floor = new FloorEntity();
+//    floor.setFloor_id(body.getFloorId());
+//    Optional<FloorEntity> duplicatedFloor = this.floorRepository.findByFloorId(body.getFloorId());
+//    duplicatedFloor.ifPresent(f -> {
+//      throw new CustomException(ErrorMessage.DUPLICATE_FLOOR);
+//    });
+//    this.floorRepository.save(floor);
+//
+//    // LocationResDto 객체 생성 및 값 설정
+//    LocationResDto.Message locationResDto = new LocationResDto.Message();
+//    locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
+//
+//    return ResponseEntity.ok(locationResDto);
+//  }
 
   public ResponseEntity<ProductResDto.Message> areaDelete(Long areaId) {
 
