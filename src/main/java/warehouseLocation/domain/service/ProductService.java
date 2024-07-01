@@ -77,18 +77,7 @@ public class ProductService {
       throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCTLIST);
     }
 
-    // ProductEntity를 ProductResDto.ProductSearch로 변환하는 작업을 수행합니다.
-//    List<ProductResDto.ProductSearch> productSearchList = productList.stream()
-//        .map(productEntity -> {
-//          ProductResDto.ProductSearch productSearch = new ProductResDto.ProductSearch();
-//          productSearch.setProductName(productName);
-//          productSearch.setProductId(productEntity.getProductId());
-//          // ProductEntity를 ProductResDto.ProductSearch로 매핑하는 코드를 작성하세요.
-//          // 예: productSearch.setName(productEntity.getName());
-//          return productSearch;
-//        })
-//        .toList();
-
+    // ProductEntity를/
     /**
      * (미완성) product에 맞는 categoryId와 categoryName을 보여주도록 설정 필요
      */
