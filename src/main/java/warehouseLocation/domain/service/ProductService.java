@@ -81,10 +81,10 @@ public class ProductService {
     /**
      * (미완성) product에 맞는 categoryId와 categoryName을 보여주도록 설정 필요
      */
-//    List<Long> productIdList = productList.stream().map(ProductEntity::getProductId).toList();
-//    Optional<Long> optProductId = productIdList.stream().findFirst();
-//    Long productId = optProductId.orElseThrow(
-//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+    List<Long> productIdList = productList.stream().map(ProductEntity::getProductId).toList();
+    Optional<Long> optProductId = productIdList.stream().findFirst();
+    Long productId = optProductId.orElseThrow(
+        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
 
     //1-2 CategoryIdList를 productList에서 가져오기
 //    List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
