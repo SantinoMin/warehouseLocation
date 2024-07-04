@@ -39,7 +39,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 
   //메서드 category
   @Query("SELECT p FROM ProductEntity p WHERE p.productName LIKE %:productName% OR :productName LIKE CONCAT('%', p.productName, '%')")
-  List<ProductEntity> ByProductName(@Param("productName") String productName);
+  List<ProductEntity> byProductName(@Param("productName") String productName);
 
   @Query("SELECT p FROM ProductEntity p WHERE p.productName LIKE %:productName% OR :productName LIKE CONCAT('%', p.productName, '%')")
   Optional<ProductEntity> ProductIdByproductName(@Param("productName") String productName);

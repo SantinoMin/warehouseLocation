@@ -67,24 +67,33 @@ public class ProductService {
      * 2) (완료)이미지는 여러개 등록 가능
      */
 
-    //1-1.productName을 가지고, ProductEntity에서 categoryId 가져오기
-    List<ProductEntity> productList = this.productRepository.ByProductName(
-        productName);
-    System.out.println("productList : " + productList);
+    //User가 상품명을 입력하면, 해당 상품명의 id를 찾아서 db에 정보를 요청하기
+
+    //1-1.productName을 ProductEntity에서 존재하는 상품명인지 확인 후, 있다면 필요한 정본들 넘겨주기.
+    List<ProductEntity> productList = this.productRepository.byProductName(productName);
 
     // 만약 product 값이 없을 시, 에러 띄우기.
     if (productList.isEmpty()) {
       throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCTLIST);
     }
+    System.out.println("productList " + productList);
 
-    // ProductEntity를/
+    // 존재한다면 코드 이어서 진행
+    // productName을 가지고 productId찾고, 찾은 productId가지고 return값으로 전달 해주기.
+    // productId 찾기
+
+    List<Long> productIdList =productList.stream().map(ProductEntity::getProductId).toList();
+    System.out.println("productIdList " + productIdList);
+
+    // 찾은 productId를 반환 타입에 맞는 인스턴스 객체에 넣고, 반환하기
+    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
+
+
+
     /**
-     * (미완성) product에 맞는 categoryId와 categoryName을 보여주도록 설정 필요
+     * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
      */
-    List<Long> productIdList = productList.stream().map(ProductEntity::getProductId).toList();
-    Optional<Long> optProductId = productIdList.stream().findFirst();
-    Long productId = optProductId.orElseThrow(
-        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+
 
     //1-2 CategoryIdList를 productList에서 가져오기
 //    List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
@@ -95,13 +104,13 @@ public class ProductService {
 //        new CustomException(ErrorMessage.NOT_FOUND_CATEGORY));
 
     //1-4 categoryId로 categoryName을 가져오기
-    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
-        categoryId);
-    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
-        () -> new CustomException("no data"));
-
-    String categoryName = categoryNameEntity.getCategoryName();
-    System.out.println("categoryName = " + categoryName);
+//    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
+//        categoryId);
+//    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
+//        () -> new CustomException("no data"));
+//
+//    String categoryName = categoryNameEntity.getCategoryName();
+//    System.out.println("categoryName = " + categoryName);
 
     //2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
 //    Category category = new Category();
@@ -140,9 +149,9 @@ public class ProductService {
 
 //      productDto.add(productSearch);
 //    }
-//    return productDto;
+    return productDto;
 //  return productSearchList;
-    return null;
+//    return null;
   }
 
 
@@ -196,7 +205,9 @@ public class ProductService {
 
     return info;
   }
+
   ;
+
   public ProductResDto.Edit productEdit(@PathVariable Long productId,
       @RequestBody ProductReqDto.Edit body) {
     //1. 일단 db에서 해당 productId에 대한 정보를 가져온 후
@@ -282,6 +293,7 @@ public class ProductService {
 
     return ResponseEntity.ok(success);
   }
+
   public ProductResDto.Register productRegister(ProductReqDto body) {
 
     // 1. 상품 중복 확인
@@ -473,12 +485,14 @@ public class ProductService {
 
     return null;
   }
+
   public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
 
     return null;
   }
 
-  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId, Long areaId, Long floorId) {
+  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId,
+      Long areaId, Long floorId) {
 
     return null;
   }
