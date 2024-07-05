@@ -104,13 +104,13 @@ public class ProductService {
 //        new CustomException(ErrorMessage.NOT_FOUND_CATEGORY));
 
     //1-4 categoryId로 categoryName을 가져오기
-//    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
-//        categoryId);
-//    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
-//        () -> new CustomException("no data"));
-//
-//    String categoryName = categoryNameEntity.getCategoryName();
-//    System.out.println("categoryName = " + categoryName);
+    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
+        categoryId);
+    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
+        () -> new CustomException("no data"));
+
+    String categoryName = categoryNameEntity.getCategoryName();
+    System.out.println("categoryName = " + categoryName);
 
     //2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
 //    Category category = new Category();
