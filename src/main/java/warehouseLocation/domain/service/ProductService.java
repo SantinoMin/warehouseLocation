@@ -113,32 +113,32 @@ public class ProductService {
     System.out.println("categoryName = " + categoryName);
 
     //2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
-//    Category category = new Category();
-//    category.setCategoryId(categoryId);
-//    category.setCategoryName(categoryName);
-//
-//    Optional<ProductLocationEntity> optionalProductLocation = this.productLocationRepository.productLocation(
-//        productId);
-//    ProductLocationEntity productLocation = optionalProductLocation.orElseThrow(
-//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
-//
-//    String area = productLocation.getArea();
-//    String rack = productLocation.getRack();
-//    String floor = productLocation.getFloor();
-//
-//    Location location = new Location();
-//    location.setArea(area + "번 구역");
-//    location.setRack(rack + "번 랙");
-//    location.setFloor(floor + "층");
-//
-//    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
-//    for (
-//        ProductEntity OneProduct : productList) {
-//      ProductResDto.ProductSearch productSearch = new ProductSearch();
-//      productSearch.setProductName(OneProduct.getProductName());
-//      productSearch.setProductId(OneProduct.getProductId());
-//      productSearch.setCategory(category);
-//      productSearch.setExpiredDate(OneProduct.getExpiredDate());
+    Category category = new Category();
+    category.setCategoryId(categoryId);
+    category.setCategoryName(categoryName);
+
+    Optional<ProductLocationEntity> optionalProductLocation = this.productLocationRepository.productLocation(
+        productId);
+    ProductLocationEntity productLocation = optionalProductLocation.orElseThrow(
+        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+
+    String area = productLocation.getArea();
+    String rack = productLocation.getRack();
+    String floor = productLocation.getFloor();
+
+    Location location = new Location();
+    location.setArea(area + "번 구역");
+    location.setRack(rack + "번 랙");
+    location.setFloor(floor + "층");
+
+    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
+    for (
+        ProductEntity OneProduct : productList) {
+      ProductResDto.ProductSearch productSearch = new ProductSearch();
+      productSearch.setProductName(OneProduct.getProductName());
+      productSearch.setProductId(OneProduct.getProductId());
+      productSearch.setCategory(category);
+      productSearch.setExpiredDate(OneProduct.getExpiredDate());
 //      //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
 //      productSearch.setImageUrl(OneProduct.getImageUrl());
 //      productSearch.setPrice(OneProduct.getPrice());
