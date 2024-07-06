@@ -140,15 +140,15 @@ public class ProductService {
       productSearch.setCategory(category);
       productSearch.setExpiredDate(OneProduct.getExpiredDate());
 //      //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
-//      productSearch.setImageUrl(OneProduct.getImageUrl());
-//      productSearch.setPrice(OneProduct.getPrice());
-//      productSearch.setCreatedAt(OneProduct.getCreatedAt());
-//      productSearch.setUpdatedAt(OneProduct.getUpdatedAt());
-//      productSearch.setStatus(OneProduct.getStatus());
-//      productSearch.setLocation(location);
+      productSearch.setImageUrl(OneProduct.getImageUrl());
+      productSearch.setPrice(OneProduct.getPrice());
+      productSearch.setCreatedAt(OneProduct.getCreatedAt());
+      productSearch.setUpdatedAt(OneProduct.getUpdatedAt());
+      productSearch.setStatus(OneProduct.getStatus());
+      productSearch.setLocation(location);
 
-//      productDto.add(productSearch);
-//    }
+      productDto.add(productSearch);
+    }
     return productDto;
 //  return productSearchList;
 //    return null;
