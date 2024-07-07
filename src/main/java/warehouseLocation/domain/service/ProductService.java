@@ -294,18 +294,18 @@ public class ProductService {
     return ResponseEntity.ok(success);
   }
 
-  public ProductResDto.Register productRegister(ProductReqDto body) {
-
-    // 1. 상품 중복 확인
-    Optional<ProductEntity> optRegister = this.productRepository.registerByProductName(
-        body.getProductName());
-    System.out.println("optRegister = " + optRegister);
-
-    optRegister.ifPresent(name -> {
-      if (name.getProductName().equals(body.getProductName())) {
-        throw new CustomException("해당 상품명은 이미 존재합니다.");
-      }
-    });
+//  public ProductResDto.Register productRegister(ProductReqDto body) {
+//
+//    // 1. 상품 중복 확인
+//    Optional<ProductEntity> optRegister = this.productRepository.registerByProductName(
+//        body.getProductName());
+//    System.out.println("optRegister = " + optRegister);
+//
+//    optRegister.ifPresent(name -> {
+//      if (name.getProductName().equals(body.getProductName())) {
+//        throw new CustomException("해당 상품명은 이미 존재합니다.");
+//      }
+//    });
 
     // 2. 상품 DB에 저장
     LocalDateTime createdAt = LocalDateTime.now();
