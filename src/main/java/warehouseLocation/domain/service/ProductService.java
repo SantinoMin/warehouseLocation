@@ -327,13 +327,13 @@ public class ProductService {
 
     // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
 
-    ProductResDto.Register toDto = new ProductResDto.Register();
-    toDto.setProductName(product.getProductName());
-    toDto.setProductId(product.getProductId());
-    toDto.setStatus("등록 완료 되었습니다");
-    toDto.setCreatedAt(createdAt);
-    return toDto;
-  }
+//    ProductResDto.Register toDto = new ProductResDto.Register();
+//    toDto.setProductName(product.getProductName());
+//    toDto.setProductId(product.getProductId());
+//    toDto.setStatus("등록 완료 되었습니다");
+//    toDto.setCreatedAt(createdAt);
+//    return toDto;
+//  }
 
   public CategoryList categoryList() {
 
