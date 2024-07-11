@@ -66,17 +66,17 @@ public class ProductController {
   }
 
   //3.1 (GET) /manage/product/categoryList : 카테고리 리스트
-  @GetMapping("/manage/categoryList")
-  public ProductResDto.CategoryList categoryList() {
-    return this.productService.categoryList();
-  }
+//  @GetMapping("/manage/categoryList")
+//  public ProductResDto.CategoryList categoryList() {
+//    return this.productService.categoryList();
+//  }
 
 
   //2.2 (GET) /manage/location/areaList : 구역 리스트
-  @GetMapping("/location/areaList")
-  public ProductResDto.AreaResponse areaList() {
-    return this.productService.areaList();
-  }
+//  @GetMapping("/location/areaList")
+//  public ProductResDto.AreaResponse areaList() {
+//    return this.productService.areaList();
+//  }
 
   //2.2 (GET) /manage/location/rackList : 랙 리스트
   @GetMapping("/location/rackList")

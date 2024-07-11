@@ -19,6 +19,7 @@ import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.dto.ProductResDto.Category;
 import warehouseLocation.domain.dto.ProductResDto.CategoryList;
 import warehouseLocation.domain.dto.ProductResDto.Location;
+import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
 import warehouseLocation.domain.repository.AreaRepository;
 import warehouseLocation.domain.repository.CategoryRepository;
 import warehouseLocation.domain.repository.FloorRepository;
@@ -86,7 +87,7 @@ public class ProductService {
     System.out.println("productIdList " + productIdList);
 
     // 찾은 productId를 반환 타입에 맞는 인스턴스 객체에 넣고, 반환하기
-    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
+//    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
 
 
 
@@ -96,12 +97,12 @@ public class ProductService {
 
 
     //1-2 CategoryIdList를 productList에서 가져오기
-//    List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
+    List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
 
     //1-3 CategoryId를 CategoryIdList에서 가져오기
     //* findAny()도 Optional을 반환함 * // 이건 category가 같다는 가정하에 가능한데, 만약 카테고리가 다르다면? ("주방"으로 검색 -> 주방 세제, 주방 칼 카테고리 다를건데?)
-//    Long categoryId = categoryIdList.stream().findAny().orElseThrow(() ->
-//        new CustomException(ErrorMessage.NOT_FOUND_CATEGORY));
+//    Long categoryId = categoryIdList.stream().filter(product)
+///여기부터 이어서 하기..
 
     //1-4 categoryId로 categoryName을 가져오기
     Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
@@ -116,6 +117,9 @@ public class ProductService {
     Category category = new Category();
     category.setCategoryId(categoryId);
     category.setCategoryName(categoryName);
+    Optional<ProductEntity> OptionalProductId = this.productRepository.productIdByProductName(productName);
+    ProductEntity productIdEntity = OptionalProductId.orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
+    Long productId = productIdEntity.getProductId();
 
     Optional<ProductLocationEntity> optionalProductLocation = this.productLocationRepository.productLocation(
         productId);
@@ -294,18 +298,18 @@ public class ProductService {
     return ResponseEntity.ok(success);
   }
 
-//  public ProductResDto.Register productRegister(ProductReqDto body) {
+  public ProductResDto.Register productRegister(ProductReqDto body) {
 //
 //    // 1. 상품 중복 확인
-//    Optional<ProductEntity> optRegister = this.productRepository.registerByProductName(
-//        body.getProductName());
-//    System.out.println("optRegister = " + optRegister);
-//
-//    optRegister.ifPresent(name -> {
-//      if (name.getProductName().equals(body.getProductName())) {
-//        throw new CustomException("해당 상품명은 이미 존재합니다.");
-//      }
-//    });
+    Optional<ProductEntity> optRegister = this.productRepository.registerByProductName(
+        body.getProductName());
+    System.out.println("optRegister = " + optRegister);
+
+    optRegister.ifPresent(name -> {
+      if (name.getProductName().equals(body.getProductName())) {
+        throw new CustomException("해당 상품명은 이미 존재합니다.");
+      }
+    });
 
     // 2. 상품 DB에 저장
     LocalDateTime createdAt = LocalDateTime.now();
@@ -327,44 +331,44 @@ public class ProductService {
 
     // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
 
-//    ProductResDto.Register toDto = new ProductResDto.Register();
-//    toDto.setProductName(product.getProductName());
-//    toDto.setProductId(product.getProductId());
-//    toDto.setStatus("등록 완료 되었습니다");
-//    toDto.setCreatedAt(createdAt);
-//    return toDto;
+    ProductResDto.Register toDto = new ProductResDto.Register();
+    toDto.setProductName(product.getProductName());
+    toDto.setProductId(product.getProductId());
+    toDto.setStatus("등록 완료 되었습니다");
+    toDto.setCreatedAt(createdAt);
+    return toDto;
 //  }
 
-  public CategoryList categoryList() {
+//  public CategoryList categoryList() {
+//
+//    List<CategoryEntity> categoryList = this.categoryRepository.findAll();
+//
+//    List<String> categoryNameList = categoryList.stream().map(CategoryEntity::getCategoryName)
+//        .toList();
+//
+//    ProductResDto.CategoryList categoryListDto = new ProductResDto.CategoryList();
+//    categoryListDto.setCategoryNameList(categoryNameList);
+//
+//    return categoryListDto;
+//  }
 
-    List<CategoryEntity> categoryList = this.categoryRepository.findAll();
 
-    List<String> categoryNameList = categoryList.stream().map(CategoryEntity::getCategoryName)
-        .toList();
+//  public ProductResDto.AreaResponse areaList() {
+//
+//    List<AreaEntity> areaEntities = this.areaRepository.findAll();
+//
+//    List<ProductResDto.Area> areaList = new ArrayList<>();
+//    for (AreaEntity areaEntity : areaEntities) {
+//      ProductResDto.Area areaDto = new ProductResDto.Area();
+//      areaDto.setId(areaEntity.getAreaId());
+//      areaDto.setName(areaEntity.getAreaName());
+//      areaList.add(areaDto);
+//    }
 
-    ProductResDto.CategoryList categoryListDto = new ProductResDto.CategoryList();
-    categoryListDto.setCategoryNameList(categoryNameList);
-
-    return categoryListDto;
-  }
-
-
-  public ProductResDto.AreaResponse areaList() {
-
-    List<AreaEntity> areaEntities = this.areaRepository.findAll();
-
-    List<ProductResDto.Area> areaList = new ArrayList<>();
-    for (AreaEntity areaEntity : areaEntities) {
-      ProductResDto.Area areaDto = new ProductResDto.Area();
-      areaDto.setId(areaEntity.getAreaId());
-      areaDto.setName(areaEntity.getAreaName());
-      areaList.add(areaDto);
-    }
-
-    ProductResDto.AreaResponse response = new ProductResDto.AreaResponse();
-    response.setArea(areaList);
-
-    return response;
+//    ProductResDto.AreaResponse response = new ProductResDto.AreaResponse();
+//    response.setArea(areaList);
+//
+//    return response;
   }
 
   public List<ProductResDto.Rack> rackList() {
