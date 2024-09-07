@@ -99,10 +99,10 @@ public class ProductService {
     //1-2 CategoryIdList를 productList에서 가져오기
     List<Long> categoryIdList = productList.stream().map(ProductEntity::getCategoryId).toList();
 
-    //1-3 CategoryId를 CategoryIdList에서 가져오기
-    //* findAny()도 Optional을 반환함 * // 이건 category가 같다는 가정하에 가능한데, 만약 카테고리가 다르다면? ("주방"으로 검색 -> 주방 세제, 주방 칼 카테고리 다를건데?)
-//    Long categoryId = categoryIdList.stream().filter(product)
-///여기부터 이어서 하기..
+    1-3 CategoryId를 CategoryIdList에서 가져오기
+    * findAny()도 Optional을 반환함 * // 이건 category가 같다는 가정하에 가능한데, 만약 카테고리가 다르다면? ("주방"으로 검색 -> 주방 세제, 주방 칼 카테고리 다를건데?)
+    Long categoryId = categoryIdList.stream().filter(product)
+/여기부터 이어서 하기..
 
     //1-4 categoryId로 categoryName을 가져오기
     Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
