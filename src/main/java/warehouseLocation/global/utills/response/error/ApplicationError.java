@@ -17,7 +17,7 @@ public class ApplicationError {
     this.message = message;
   }
 
-//  public void setProductName(String productName) {
-//    this.productName = productName;
-//  }
+  public void setProductName(String productName) {
+    this.productName = productName;
+  }
 }
