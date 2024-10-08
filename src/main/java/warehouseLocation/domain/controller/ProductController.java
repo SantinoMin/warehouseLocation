@@ -39,98 +39,98 @@ public class ProductController {
   }
 
   //2.2 (GET) /manage/product/{product_id} : 상품 정보
-  @GetMapping("/product/{productId}")
-  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
-    return this.productService.productInfo(productId);
-  }
-
-  //3.1 (PUT) /manage/product/{productId} : 상품 정보 변경
-  @PutMapping("/product/{productId}")
-  public ProductResDto.Edit productEdit(@PathVariable Long productId,
-      @RequestBody ProductReqDto.Edit body) {
-    return this.productService.productEdit(productId, body);
-  }
-
-  //3.1(DELETE) /manage/product/{productId} : 해당 상품 삭제 (완전 삭제 대신, 업데이트로 진행)
-  @DeleteMapping("/product/{productId}")
-  public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId,
-      @RequestBody ProductReqDto body) {
-    return this.productService.productDelete(productId, body);
-  }
-
-  //3.1 (POST) /manage/product/register : 상품 등록
-  @PostMapping("/product/register")
-  public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
-
-    return this.productService.productRegister(body);
-  }
-
-  //3.1 (GET) /manage/product/categoryList : 카테고리 리스트
-//  @GetMapping("/manage/categoryList")
-//  public ProductResDto.CategoryList categoryList() {
-//    return this.productService.categoryList();
+//  @GetMapping("/product/{productId}")
+//  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
+//    return this.productService.productInfo(productId);
 //  }
-
-
-  //2.2 (GET) /manage/location/areaList : 구역 리스트
-//  @GetMapping("/location/areaList")
-//  public ProductResDto.AreaResponse areaList() {
-//    return this.productService.areaList();
+//
+//  //3.1 (PUT) /manage/product/{productId} : 상품 정보 변경
+//  @PutMapping("/product/{productId}")
+//  public ProductResDto.Edit productEdit(@PathVariable Long productId,
+//      @RequestBody ProductReqDto.Edit body) {
+//    return this.productService.productEdit(productId, body);
 //  }
-
-  //2.2 (GET) /manage/location/rackList : 랙 리스트
-  @GetMapping("/location/rackList")
-  public List<ProductResDto.Rack> rackList() {
-    return this.productService.rackList();
-  }
-
-  //2.2 (GET) /manage/location/floorList : 층 리스트
-  @GetMapping("/location/floorList")
-  public List<ProductResDto.Floor> floorList() {
-    return this.productService.floorList();
-  }
-
-  //4.1 (POST) /manage/location/area : 창고 구역 생성
-  @PostMapping("/location/area")
-  public ResponseEntity<LocationResDto.Message> addArea(@RequestBody LocationReqDto body) {
-    return this.productService.addArea(body);
-  }
-
-  //4.1 (POST) /manage/location/rack : 창고 랙 생성
-  @PostMapping("/location/rack")
-  public ResponseEntity<LocationResDto.Message> addRack(@RequestBody LocationReqDto body) {
-    return this.productService.addRack(body);
-  }
-
-  //4.1 (POST) /manage/location/floor : 창고 층 생성
-  @PostMapping("/location/floor")
-  public ResponseEntity<LocationResDto.Message> addFloor(@RequestBody LocationReqDto body) {
-    return this.productService.addFloor(body);
-  }
-
-
-  //(DELETE) /manage/location/{areaId} : 창고 구역 삭제 (완전 삭제 대신, 업데이트로 진행)
-  @DeleteMapping("/location/{areaId}")
-  public ResponseEntity<ProductResDto.Message> areaDelete(@PathVariable Long areaId) {
-    return this.productService.areaDelete(areaId);
-  }
-
-  //(DELETE) /manage/location/{rackId} : 창고 랙 삭제 (완전 삭제 대신, 업데이트로 진행)
-  @DeleteMapping("/location/{rackId}")
-  public ResponseEntity<ProductResDto.Message> rackDelete(@PathVariable Long rackId) {
-    return this.productService.rackDelete(rackId);
-  }
-
-  //(DELETE) /manage/location/{floorId} : 창고 층 삭제 (완전 삭제 대신, 업데이트로 진행)
-  @DeleteMapping("/location/{floorId}")
-  public ResponseEntity<ProductResDto.Message> floorDelete(@PathVariable Long floorId) {
-    return this.productService.floorDelete(floorId);
-  }
-
-  //(PUT) /manage/product/{productId}/location : 상품의 위치 변경
-  @PutMapping("/product/{productId}/location")
-  public ResponseEntity<ProductResDto.Message> locationUpdate(@PathVariable Long productId,
-      @RequestParam Long rackId, Long areaId, Long floorId) {
-    return this.productService.locationUpdate(productId, rackId, areaId, floorId);
-  }
+//
+//  //3.1(DELETE) /manage/product/{productId} : 해당 상품 삭제 (완전 삭제 대신, 업데이트로 진행)
+//  @DeleteMapping("/product/{productId}")
+//  public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId,
+//      @RequestBody ProductReqDto body) {
+//    return this.productService.productDelete(productId, body);
+//  }
+//
+//  //3.1 (POST) /manage/product/register : 상품 등록
+//  @PostMapping("/product/register")
+//  public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
+//
+//    return this.productService.productRegister(body);
+//  }
+//
+//  //3.1 (GET) /manage/product/categoryList : 카테고리 리스트
+////  @GetMapping("/manage/categoryList")
+////  public ProductResDto.CategoryList categoryList() {
+////    return this.productService.categoryList();
+////  }
+//
+//
+//  //2.2 (GET) /manage/location/areaList : 구역 리스트
+////  @GetMapping("/location/areaList")
+////  public ProductResDto.AreaResponse areaList() {
+////    return this.productService.areaList();
+////  }
+//
+//  //2.2 (GET) /manage/location/rackList : 랙 리스트
+//  @GetMapping("/location/rackList")
+//  public List<ProductResDto.Rack> rackList() {
+//    return this.productService.rackList();
+//  }
+//
+//  //2.2 (GET) /manage/location/floorList : 층 리스트
+//  @GetMapping("/location/floorList")
+//  public List<ProductResDto.Floor> floorList() {
+//    return this.productService.floorList();
+//  }
+//
+//  //4.1 (POST) /manage/location/area : 창고 구역 생성
+//  @PostMapping("/location/area")
+//  public ResponseEntity<LocationResDto.Message> addArea(@RequestBody LocationReqDto body) {
+//    return this.productService.addArea(body);
+//  }
+//
+//  //4.1 (POST) /manage/location/rack : 창고 랙 생성
+//  @PostMapping("/location/rack")
+//  public ResponseEntity<LocationResDto.Message> addRack(@RequestBody LocationReqDto body) {
+//    return this.productService.addRack(body);
+//  }
+//
+//  //4.1 (POST) /manage/location/floor : 창고 층 생성
+//  @PostMapping("/location/floor")
+//  public ResponseEntity<LocationResDto.Message> addFloor(@RequestBody LocationReqDto body) {
+//    return this.productService.addFloor(body);
+//  }
+//
+//
+//  //(DELETE) /manage/location/{areaId} : 창고 구역 삭제 (완전 삭제 대신, 업데이트로 진행)
+//  @DeleteMapping("/location/{areaId}")
+//  public ResponseEntity<ProductResDto.Message> areaDelete(@PathVariable Long areaId) {
+//    return this.productService.areaDelete(areaId);
+//  }
+//
+//  //(DELETE) /manage/location/{rackId} : 창고 랙 삭제 (완전 삭제 대신, 업데이트로 진행)
+//  @DeleteMapping("/location/{rackId}")
+//  public ResponseEntity<ProductResDto.Message> rackDelete(@PathVariable Long rackId) {
+//    return this.productService.rackDelete(rackId);
+//  }
+//
+//  //(DELETE) /manage/location/{floorId} : 창고 층 삭제 (완전 삭제 대신, 업데이트로 진행)
+//  @DeleteMapping("/location/{floorId}")
+//  public ResponseEntity<ProductResDto.Message> floorDelete(@PathVariable Long floorId) {
+//    return this.productService.floorDelete(floorId);
+//  }
+//
+//  //(PUT) /manage/product/{productId}/location : 상품의 위치 변경
+//  @PutMapping("/product/{productId}/location")
+//  public ResponseEntity<ProductResDto.Message> locationUpdate(@PathVariable Long productId,
+//      @RequestParam Long rackId, Long areaId, Long floorId) {
+//    return this.productService.locationUpdate(productId, rackId, areaId, floorId);
+//  }
 };
