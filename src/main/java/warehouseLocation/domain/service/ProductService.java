@@ -1,102 +1,157 @@
 package warehouseLocation.domain.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import warehouseLocation.domain.dto.ProductResDto;
-import warehouseLocation.domain.dto.ProductResDto.Category;
 import warehouseLocation.domain.dto.ProductResDto.Location;
-import warehouseLocation.domain.dto.ProductResDto.ProductSearch;
-import warehouseLocation.domain.repository.AreaRepository;
-import warehouseLocation.domain.repository.CategoryRepository;
-import warehouseLocation.domain.repository.FloorRepository;
-import warehouseLocation.domain.repository.ProductLocationRepository;
-import warehouseLocation.domain.repository.ProductRepository;
-import warehouseLocation.domain.repository.RackRepository;
-import warehouseLocation.domain.repository.UserRepository;
+import warehouseLocation.domain.repository.*;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
-import warehouseLocation.models.CategoryEntity;
 import warehouseLocation.models.ProductEntity;
+import warehouseLocation.models.ProductLocationEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ProductService {
 
-  private final ProductRepository productRepository;
-  private final AreaRepository areaRepository;
-  private final RackRepository rackRepository;
-  private final FloorRepository floorRepository;
-  private final CategoryRepository categoryRepository;
-  private ProductLocationRepository productLocationRepository;
+    private final ProductRepository productRepository;
+    private final AreaRepository areaRepository;
+    private final RackRepository rackRepository;
+    private final FloorRepository floorRepository;
+    private final CategoryRepository categoryRepository;
+    private ProductLocationRepository productLocationRepository;
 
 
-  @Autowired
-  ProductService(ProductRepository productRepository, AreaRepository areaRepository,
-      RackRepository rackRepository, FloorRepository floorRepository,
-      CategoryRepository categoryRepository, UserRepository userRepository,
-      ProductLocationRepository productLocationRepository) {
-    this.productRepository = productRepository;
-    this.areaRepository = areaRepository;
-    this.rackRepository = rackRepository;
-    this.floorRepository = floorRepository;
-    this.categoryRepository = categoryRepository;
-    this.productLocationRepository = productLocationRepository;
-  }
-
-  //2.1(GET) /manage/product : 상품 검색
-  public List<ProductResDto.ProductSearch> search(String productName) {
-
-    /**
-     * 1) (완료)상품명이 일부라도 포함되는 경우, 전부 검색 가능 (검색: 콜라 -> 펩시 콜라, 제로 콜라, 코카 콜라 검색 가능)
-     * 2) (완료)이미지는 여러개 등록 가능
-     */
-
-    //1-1.productName을 ProductEntity에서 존재하는 상품명인지 확인 후, 있다면 필요한 정본들 넘겨주기.
-    List<ProductEntity> productIdList = this.productRepository.byProductName(productName);
-
-    // 만약 product 값이 없을 시, 에러 띄우기.
-    if (productIdList == null || productIdList.isEmpty()) {
-      throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCTLIST);
+    @Autowired
+    ProductService(ProductRepository productRepository, AreaRepository areaRepository,
+                   RackRepository rackRepository, FloorRepository floorRepository,
+                   CategoryRepository categoryRepository, UserRepository userRepository,
+                   ProductLocationRepository productLocationRepository) {
+        this.productRepository = productRepository;
+        this.areaRepository = areaRepository;
+        this.rackRepository = rackRepository;
+        this.floorRepository = floorRepository;
+        this.categoryRepository = categoryRepository;
+        this.productLocationRepository = productLocationRepository;
     }
-    System.out.println("productIdList " + productIdList);
 
-    //하나 또는 여러개 검색되는 경우
-    if (productIdList.size() == 1) {
-      ProductEntity singleProduct = productIdList.get(0);
-      Long productId = singleProduct.getProductId();
-      System.out.println("single productId: " + singleProduct);
+    //2.1(GET) /manage/product : 상품 검색
+    public List<ProductResDto.ProductSearch> search(String productName) {
+
+        /**
+         * 1) (완료)상품명이 일부라도 포함되는 경우, 전부 검색 가능 (검색: 콜라 -> 펩시 콜라, 제로 콜라, 코카 콜라 검색 가능)
+         * 2) (완료)이미지는 여러개 등록 가능
+         */
+
+        //1-1.productName을 ProductEntity에서 존재하는 상품명인지 확인 후, 있다면 필요한 정본들 넘겨주기.
+        List<ProductEntity> productNameList = this.productRepository.byProductName(productName);
+
+
+        //1-2 productEntity의 정보들 가져오기
+//    List<ProductEntity> productList = this.productRepository.findAll();
+
+        // 만약 product 값이 없을 시, 에러 띄우기.
+        if (productNameList.isEmpty()) {
+            throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCTLIST);
+        }
+        System.out.println("productNameList " + productNameList);
+
+//  List<Long> categoryIdList = productNameList.stream().map(ProductEntity::getCategoryId).toList();
+
+        //상품 아이디 찾기
+
+
+
+
+        List<ProductResDto.ProductSearch> productAdd = new ArrayList<>();
+
+        for (ProductEntity prod : productNameList) {
+            ProductResDto.ProductSearch product = new ProductResDto.ProductSearch();
+
+            //productLocationId 찾기
+            ProductLocationEntity productLocation = this.productLocationRepository.getProductLocationIdByProductId(prod.getProductId());
+
+            //여기 productLocationId가 아니라, List에서 가져와야 될듯 또는 테이블에서.
+            ProductResDto.Location location = new ProductResDto.Location();
+            location.setArea(productLocation.getArea());
+            location.setRack(productLocation.getRack());
+            location.setFloor(productLocation.getFloor());
+
+
+            product.setProductName(productName);
+            product.setProductId(prod.getProductId());
+//       product.setCategory(prod.getCategoryId());
+            product.setPrice(prod.getPrice());
+            product.setStatus(prod.getStatus());
+            product.setImageUrl(prod.getImageUrl());
+            product.setLocation(location);
+            product.setExpiredDate(prod.getExpiredDate());
+            product.setCreatedAt(prod.getCreatedAt());
+            product.setUpdatedAt(prod.getUpdatedAt());
+
+
+            productAdd.add(product);
+        }
+        return productAdd;
+    }
+};
+
+
+/**
+ * 하나 또는 여러개로 나눌 필요 없이, 값 있으면 값들 보여주는 걸로 진행해보기
+ * <p>
+ * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
+ * <p>
+ * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+ * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
+ */
+
+//    1) categoryId필요
+//    2)
+
+//고민 중 -> categoryId를 구해야되는데, 위에서 productIdList가 1개 또는 여러개 일수 있어서, 어떻게 진행해야 될지?
+//productIdList에서 1개 또는 여러개의 entity값을 가져온 상태 -> 그래도 list를 반환타입으로 정하기
+
+//    List<ProductEntity> product
+
+
+//    if (productIdList.size() == 1) {
+//      ProductEntity singleProduct = productIdList.get(0);
+//      Long productId = singleProduct.getProductId();
+//      System.out.println("single productId: " + singleProduct);
 
 //      !!질문 -> 반환할 때 categoryId로 반환해도 되는건지? 일단 categoryId로 반환가능하다고 생각하고 진행하기
-      //productId가 하나만 검색이 된 경우의 카테고리
+//productId가 하나만 검색이 된 경우의 카테고리
 
-      Long categoryId = this.productRepository.categoryIdByProductId(productId);
-      Optional<CategoryEntity> categoryOptional = this.categoryRepository.categoryNameByCategoryId(
-          categoryId);
 
-      Category category = new Category();
-      category.setCategoryId(categoryId);
+//      Long categoryId = this.productRepository.categoryIdByProductId(productId);
+//      Optional<CategoryEntity> categoryOptional = this.categoryRepository.categoryNameByCategoryId(
+//          categoryId);
+//
+//      Category category = new Category();
+//      category.setCategoryId(categoryId);
+//
+//      ProductResDto.ProductSearch productDto = new ProductSearch();
+//      productDto.setProductName(singleProduct.getProductName());
+//      productDto.setCategory(category);
+//      productDto.setExpiredDate(singleProduct.getExpiredDate());
+//      productDto.setImageUrl(singleProduct.getImageUrl());
+//      productDto.setPrice(singleProduct.getPrice());
+//      productDto.setStatus(singleProduct.getStatus());
+////      productDto.setLocation((Location) singleProduct.getLocation());
+//    } else {
+//      List<Long> LProductIdList = productIdList.stream().map(ProductEntity::getProductId).toList();
+//      System.out.println("Multiple productIdList: " + LProductIdList);
+//
+//      List<Long> categoryIdList = this.productRepository.categoryIdListByProductIdList(
+//          LProductIdList);
+//    }
 
-      ProductResDto.ProductSearch productDto = new ProductSearch();
-      productDto.setProductName(singleProduct.getProductName());
-      productDto.setCategory(category);
-      productDto.setExpiredDate(singleProduct.getExpiredDate());
-      productDto.setImageUrl(singleProduct.getImageUrl());
-      productDto.setPrice(singleProduct.getPrice());
-      productDto.setStatus(singleProduct.getStatus());
-//      productDto.setLocation((Location) singleProduct.getLocation());
-    } else {
-      List<Long> LProductIdList = productIdList.stream().map(ProductEntity::getProductId).toList();
-      System.out.println("Multiple productIdList: " + LProductIdList);
-
-      List<Long> categoryIdList = this.productRepository.categoryIdListByProductIdList(
-          LProductIdList);
-    }
-
-    /**
-     * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
-     */
+/**
+ * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
+ */
 
 //
 //    //1-4 categoryId로 categoryName을 가져오기
@@ -108,7 +163,7 @@ public class ProductService {
 //    String categoryName = categoryNameEntity.getCategoryName();
 //    System.out.println("categoryName = " + categoryName);
 
-    //2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
+//2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
 //    Category category = new Category();
 //    category.setCategoryId(categoryId);
 //    category.setCategoryName(categoryName);
@@ -130,27 +185,27 @@ public class ProductService {
 //    location.setRack(rack + "번 랙");
 //    location.setFloor(floor + "층");
 //
-    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
-    for (
-        ProductEntity OneProduct : productIdList) {
-      ProductResDto.ProductSearch productSearch = new ProductSearch();
-      productSearch.setProductName(OneProduct.getProductName());
-      productSearch.setProductId(OneProduct.getProductId());
-//      productSearch.setCategory(category);
-      productSearch.setExpiredDate(OneProduct.getExpiredDate());
-//      //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
-      productSearch.setImageUrl(OneProduct.getImageUrl());
-      productSearch.setPrice(OneProduct.getPrice());
-      productSearch.setCreatedAt(OneProduct.getCreatedAt());
-      productSearch.setUpdatedAt(OneProduct.getUpdatedAt());
-      productSearch.setStatus(OneProduct.getStatus());
-//      productSearch.setLocation(location);
-//
-      productDto.add(productSearch);
-    }
-    return productDto;
-  }
-};
+//    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
+//    for (
+//        ProductEntity OneProduct : productIdList) {
+//      ProductResDto.ProductSearch productSearch = new ProductSearch();
+//      productSearch.setProductName(OneProduct.getProductName());
+//      productSearch.setProductId(OneProduct.getProductId());
+////      productSearch.setCategory(category);
+//      productSearch.setExpiredDate(OneProduct.getExpiredDate());
+////      //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
+//      productSearch.setImageUrl(OneProduct.getImageUrl());
+//      productSearch.setPrice(OneProduct.getPrice());
+//      productSearch.setCreatedAt(OneProduct.getCreatedAt());
+//      productSearch.setUpdatedAt(OneProduct.getUpdatedAt());
+//      productSearch.setStatus(OneProduct.getStatus());
+////      productSearch.setLocation(location);
+////
+//      productDto.add(productSearch);
+//    }
+//    return productDto;
+//  }
+//};
 
 //  return productSearchList;
 //    return null;
