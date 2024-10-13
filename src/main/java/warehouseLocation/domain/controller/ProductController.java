@@ -38,11 +38,11 @@ public class ProductController {
     return this.productService.search(productName);
   }
 
-  //2.2 (GET) /manage/product/{product_id} : 상품 정보
-//  @GetMapping("/product/{productId}")
-//  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
-//    return this.productService.productInfo(productId);
-//  }
+//  2.2 (GET) /manage/product/{product_id} : 상품 정보
+  @GetMapping("/product/{productId}")
+  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
+    return this.productService.productInfo(productId);
+  }
 //
 //  //3.1 (PUT) /manage/product/{productId} : 상품 정보 변경
 //  @PutMapping("/product/{productId}")
