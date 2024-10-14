@@ -21,7 +21,7 @@ public interface ProductLocationRepository extends JpaRepository<ProductLocation
   @Query("SELECT pl FROM ProductLocationEntity pl WHERE pl.productId = :productId")
   Optional<ProductLocationEntity> productLocation(@Param("productId") Long productId);
 
-@Query("SELECt")
-  getProductLocationIdByProductId
+@Query("SELECT pl FROM ProductLocationEntity  pl WHERE pl.productId = :productId")
+  Optional<ProductLocationEntity> ProductLocationIdByProductId(@Param("productId") Long productId);
 
 }

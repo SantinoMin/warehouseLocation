@@ -22,7 +22,9 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Intege
   /**
    * 카테고리 리스트 검색하
    **/
-  @Query("SELECT c FROM CategoryEntity c WHERE c.categoryId = :categoryId")
+
+  //카테고리 이름 찾기
+  @Query("SELECT c.categoryName FROM CategoryEntity c WHERE c.categoryId = :categoryId")
   Optional<CategoryEntity> categoryNameByCategoryId(@Param("categoryId") Long categoryId);
 
 }

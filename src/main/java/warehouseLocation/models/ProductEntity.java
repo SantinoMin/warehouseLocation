@@ -38,8 +38,8 @@ public class ProductEntity {
   @Column(name = "product_name", nullable = false)
   private String productName;
 
-  @Column(name = "category_name", nullable = false)
-  private String categoryName;
+//  @Column(name = "category_name", nullable = false)
+//  private String categoryName;
 
   @Column(name = "expired_date", nullable = false)
   private LocalDate expiredDate;

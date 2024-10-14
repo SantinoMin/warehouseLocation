@@ -1,23 +1,14 @@
 package warehouseLocation.domain.controller;
 
-import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import warehouseLocation.domain.dto.LocationReqDto;
-import warehouseLocation.domain.dto.LocationResDto;
-import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.service.ProductService;
+
+import java.util.List;
 
 @RestController
 //@Slf4j // 응답을 기록하는 데 도움이 되며 주로 디버깅 목적
@@ -34,15 +25,16 @@ public class ProductController {
 
   //2.1(GET) /manage/product : 상품 검색
   @GetMapping("/product")
-  public List<ProductResDto.ProductSearch> search(@RequestParam String productName) {
+  public List<ProductResDto.ProductSearch> search(@RequestParam String productName) throws Exception {
     return this.productService.search(productName);
   }
 
 //  2.2 (GET) /manage/product/{product_id} : 상품 정보
-  @GetMapping("/product/{productId}")
-  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
-    return this.productService.productInfo(productId);
-  }
+//  @GetMapping("/product/{productId}")
+//  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
+//    return this.productService.productInfo(productId);
+//  }
+
 //
 //  //3.1 (PUT) /manage/product/{productId} : 상품 정보 변경
 //  @PutMapping("/product/{productId}")

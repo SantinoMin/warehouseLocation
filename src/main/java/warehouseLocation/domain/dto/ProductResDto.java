@@ -24,7 +24,7 @@ public class ProductResDto {
 
     private String productName;
     private Long productId;
-    private Category category;
+    private String categoryName;
     private LocalDate expiredDate;
     private String imageUrl;
     private String price;
@@ -88,7 +88,7 @@ public class ProductResDto {
 
     private Long productId;
     private String productName;
-    private Category category;
+    private String categoryName;
     private LocalDate expiredDate;
     private String imageUrl;
     private String price;

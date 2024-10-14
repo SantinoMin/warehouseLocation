@@ -7,11 +7,13 @@ import warehouseLocation.domain.dto.ProductResDto.Location;
 import warehouseLocation.domain.repository.*;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
+import warehouseLocation.models.CategoryEntity;
 import warehouseLocation.models.ProductEntity;
 import warehouseLocation.models.ProductLocationEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -38,7 +40,7 @@ public class ProductService {
     }
 
     //2.1(GET) /manage/product : 상품 검색
-    public List<ProductResDto.ProductSearch> search(String productName) {
+    public List<ProductResDto.ProductSearch> search(String productName) throws Exception {
 
         /**
          * 1) (완료)상품명이 일부라도 포함되는 경우, 전부 검색 가능 (검색: 콜라 -> 펩시 콜라, 제로 콜라, 코카 콜라 검색 가능)
@@ -46,11 +48,10 @@ public class ProductService {
          */
 
         //1-1.productName을 ProductEntity에서 존재하는 상품명인지 확인 후, 있다면 필요한 정본들 넘겨주기.
+        //상품명 리스트 가져오기
         List<ProductEntity> productNameList = this.productRepository.byProductName(productName);
 
-
         //1-2 productEntity의 정보들 가져오기
-//    List<ProductEntity> productList = this.productRepository.findAll();
 
         // 만약 product 값이 없을 시, 에러 띄우기.
         if (productNameList.isEmpty()) {
@@ -58,45 +59,40 @@ public class ProductService {
         }
         System.out.println("productNameList " + productNameList);
 
-//  List<Long> categoryIdList = productNameList.stream().map(ProductEntity::getCategoryId).toList();
-
-        //상품 아이디 찾기
-
-
-
 
         List<ProductResDto.ProductSearch> productAdd = new ArrayList<>();
 
         for (ProductEntity prod : productNameList) {
+
+            //객체 생성
             ProductResDto.ProductSearch product = new ProductResDto.ProductSearch();
-
-            //productLocationId 찾기
-            ProductLocationEntity productLocation = this.productLocationRepository.getProductLocationIdByProductId(prod.getProductId());
-
-            //여기 productLocationId가 아니라, List에서 가져와야 될듯 또는 테이블에서.
-            ProductResDto.Location location = new ProductResDto.Location();
-            location.setArea(productLocation.getArea());
-            location.setRack(productLocation.getRack());
-            location.setFloor(productLocation.getFloor());
-
 
             product.setProductName(productName);
             product.setProductId(prod.getProductId());
-//       product.setCategory(prod.getCategoryId());
             product.setPrice(prod.getPrice());
             product.setStatus(prod.getStatus());
             product.setImageUrl(prod.getImageUrl());
-            product.setLocation(location);
-            product.setExpiredDate(prod.getExpiredDate());
-            product.setCreatedAt(prod.getCreatedAt());
             product.setUpdatedAt(prod.getUpdatedAt());
+            product.setCreatedAt(prod.getCreatedAt());
+            product.setExpiredDate(prod.getExpiredDate());
+
+            //카테고리 이름이랑 상품 위치 정보 보여줘야함.
+            // 1)카테고리 이름
+            CategoryEntity cateogoryName = this.categoryRepository.categoryNameByCategoryId()
+
+
 
 
             productAdd.add(product);
         }
         return productAdd;
     }
+
+
 };
+
+
+
 
 
 /**
@@ -106,110 +102,32 @@ public class ProductService {
  * <p>
  * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
  * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
- */
-
-//    1) categoryId필요
-//    2)
-
-//고민 중 -> categoryId를 구해야되는데, 위에서 productIdList가 1개 또는 여러개 일수 있어서, 어떻게 진행해야 될지?
-//productIdList에서 1개 또는 여러개의 entity값을 가져온 상태 -> 그래도 list를 반환타입으로 정하기
-
-//    List<ProductEntity> product
-
-
-//    if (productIdList.size() == 1) {
-//      ProductEntity singleProduct = productIdList.get(0);
-//      Long productId = singleProduct.getProductId();
-//      System.out.println("single productId: " + singleProduct);
-
-//      !!질문 -> 반환할 때 categoryId로 반환해도 되는건지? 일단 categoryId로 반환가능하다고 생각하고 진행하기
-//productId가 하나만 검색이 된 경우의 카테고리
-
-
-//      Long categoryId = this.productRepository.categoryIdByProductId(productId);
-//      Optional<CategoryEntity> categoryOptional = this.categoryRepository.categoryNameByCategoryId(
-//          categoryId);
-//
-//      Category category = new Category();
-//      category.setCategoryId(categoryId);
-//
-//      ProductResDto.ProductSearch productDto = new ProductSearch();
-//      productDto.setProductName(singleProduct.getProductName());
-//      productDto.setCategory(category);
-//      productDto.setExpiredDate(singleProduct.getExpiredDate());
-//      productDto.setImageUrl(singleProduct.getImageUrl());
-//      productDto.setPrice(singleProduct.getPrice());
-//      productDto.setStatus(singleProduct.getStatus());
-////      productDto.setLocation((Location) singleProduct.getLocation());
-//    } else {
-//      List<Long> LProductIdList = productIdList.stream().map(ProductEntity::getProductId).toList();
-//      System.out.println("Multiple productIdList: " + LProductIdList);
-//
-//      List<Long> categoryIdList = this.productRepository.categoryIdListByProductIdList(
-//          LProductIdList);
-//    }
-
-/**
+ * <p>
  * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
+ * <p>
+ * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+ * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
+ * <p>
+ * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
+ * <p>
+ * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+ * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
+ * <p>
+ * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
+ * <p>
+ * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+ * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
+ * <p>
+ * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
+ * <p>
+ * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+ * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
+ * <p>
+ * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
+ * <p>
+ * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+ * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
  */
-
-//
-//    //1-4 categoryId로 categoryName을 가져오기
-//    Optional<CategoryEntity> optCategoryNameEntity = this.categoryRepository.categoryNameByCategoryId(
-//        categoryId);
-//    CategoryEntity categoryNameEntity = optCategoryNameEntity.orElseThrow(
-//        () -> new CustomException("no data"));
-//
-//    String categoryName = categoryNameEntity.getCategoryName();
-//    System.out.println("categoryName = " + categoryName);
-
-//2-1 검색한 상품명을 새로운 인스턴스 객체에 저장하고, 타입에 맞게 반환.
-//    Category category = new Category();
-//    category.setCategoryId(categoryId);
-//    category.setCategoryName(categoryName);
-//    Optional<ProductEntity> OptionalProductId = this.productRepository.productIdByProductName(productName);
-//    ProductEntity productIdEntity = OptionalProductId.orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
-//    Long productId = productIdEntity.getProductId();
-//
-//    Optional<ProductLocationEntity> optionalProductLocation = this.productLocationRepository.productLocation(
-//        productId);
-//    ProductLocationEntity productLocation = optionalProductLocation.orElseThrow(
-//        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
-//
-//    String area = productLocation.getArea();
-//    String rack = productLocation.getRack();
-//    String floor = productLocation.getFloor();
-//
-//    Location location = new Location();
-//    location.setArea(area + "번 구역");
-//    location.setRack(rack + "번 랙");
-//    location.setFloor(floor + "층");
-//
-//    List<ProductResDto.ProductSearch> productDto = new ArrayList<>();
-//    for (
-//        ProductEntity OneProduct : productIdList) {
-//      ProductResDto.ProductSearch productSearch = new ProductSearch();
-//      productSearch.setProductName(OneProduct.getProductName());
-//      productSearch.setProductId(OneProduct.getProductId());
-////      productSearch.setCategory(category);
-//      productSearch.setExpiredDate(OneProduct.getExpiredDate());
-////      //imageUrl을 List로 나타내는 게, db에서 ,콤마로 나누는 게 맞는건가?
-//      productSearch.setImageUrl(OneProduct.getImageUrl());
-//      productSearch.setPrice(OneProduct.getPrice());
-//      productSearch.setCreatedAt(OneProduct.getCreatedAt());
-//      productSearch.setUpdatedAt(OneProduct.getUpdatedAt());
-//      productSearch.setStatus(OneProduct.getStatus());
-////      productSearch.setLocation(location);
-////
-//      productDto.add(productSearch);
-//    }
-//    return productDto;
-//  }
-//};
-
-//  return productSearchList;
-//    return null;
-//  }
 
 /**
  * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
