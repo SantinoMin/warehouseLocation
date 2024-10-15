@@ -2,14 +2,13 @@ package warehouseLocation.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import warehouseLocation.domain.dto.LocationResDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.dto.ProductResDto.Location;
 import warehouseLocation.domain.repository.*;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
-import warehouseLocation.models.CategoryEntity;
-import warehouseLocation.models.ProductEntity;
-import warehouseLocation.models.ProductLocationEntity;
+import warehouseLocation.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,12 +52,13 @@ public class ProductService {
 
         //1-2 productEntity의 정보들 가져오기
 
+        System.out.println("productNameList " + productNameList);
+
+
         // 만약 product 값이 없을 시, 에러 띄우기.
         if (productNameList.isEmpty()) {
             throw new CustomException(ErrorMessage.NOT_FOUND_PRODUCTLIST);
         }
-        System.out.println("productNameList " + productNameList);
-
 
         List<ProductResDto.ProductSearch> productAdd = new ArrayList<>();
 
@@ -76,23 +76,62 @@ public class ProductService {
             product.setCreatedAt(prod.getCreatedAt());
             product.setExpiredDate(prod.getExpiredDate());
 
-            //카테고리 이름이랑 상품 위치 정보 보여줘야함.
-            // 1)카테고리 이름
-            CategoryEntity cateogoryName = this.categoryRepository.categoryNameByCategoryId()
+            // 2-1)카테고리 이름 저장
+            Optional<CategoryEntity> categoryNameOpt = this.categoryRepository.categoryNameByCategoryId(prod.getCategoryId());
+            String categoryName = categoryNameOpt.map(CategoryEntity::getCategoryName).orElseGet(() -> "카테고리가 비어있습니다.");
+            System.out.println(categoryName);
+
+            product.setCategoryName(categoryName);
+
+            //3-1)위치 저장
+            Optional<ProductLocationEntity> productLocationOpt = this.productLocationRepository.productLocationIdByProductId(prod.getProductId());
+
+            //productLocationId만 가져옴
+            Long pproductLocationId = productLocationOpt
+                    .map(ProductLocationEntity::getProductLocationId)
+                    .orElseGet(() -> 0L);
+
+            System.out.println("pproductLocationId = " + pproductLocationId);
 
 
+            // productLocationEntity에서 areaId 찾기
+            ProductLocationEntity area = this.productLocationRepository.getAreaIdByProductLocationId(pproductLocationId);
+            Long areaId = area.getAreaId();
+
+            // productLocationEntity에서 rackId 찾기
+            ProductLocationEntity rack = this.productLocationRepository.getRackIdByProductLocationId(pproductLocationId);
+            Long rackId = rack.getRackId();
+
+            // productLocationEntity에서 floorId 찾기
+            ProductLocationEntity floor = this.productLocationRepository.getFloorIdByProductLocationId(pproductLocationId);
+            Long floorId = floor.getFloorId();
+
+            Optional<AreaEntity> areaNameOpt = this.areaRepository.findAreaNameByAreaId(areaId);
+            String areaName = areaNameOpt.map(AreaEntity::getAreaName).orElseGet(() -> "areaName이 없습니다.");
+
+            Optional<RackEntity> rackNum = this.rackRepository.findRackNumByRackId(rackId);
+            Long rackNumber = rackNum.map(RackEntity::getRackNumber).orElseGet(() -> 0L);
+
+            Optional<FloorEntity> floorNameOpt = this.floorRepository.findFloorNumByFloorId(floorId);
+            Long floorName = floorNameOpt.map(FloorEntity::getFloor_number).orElseGet(() -> 0L);
+
+
+            //여기부터 이어서
+            LocationResDto location = new LocationResDto();
+            location.setAreaId(areaName);
+
+
+            product.setLocation()
 
 
             productAdd.add(product);
         }
+
         return productAdd;
     }
 
 
 };
-
-
-
 
 
 /**
@@ -124,6 +163,12 @@ public class ProductService {
  * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
  * <p>
  * (미완성) product에 맞는 categoryId 보여주도록 설정 필요
+ * <p>
+ * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+ * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
+ * <p>
+ * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
+ * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
  * <p>
  * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
  * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?

@@ -12,7 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class LocationReqDto {
 
-//  @NotBlank(message = "LocationId is required.")
+  @NotBlank(message = "LocationId is required.")
   private Long locationId;
 
   @NotBlank(message = "area is required.")

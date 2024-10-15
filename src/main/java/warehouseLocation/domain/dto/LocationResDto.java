@@ -11,13 +11,30 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Data
 @ToString
 @AllArgsConstructor
 public class LocationResDto {
 
-  @NotBlank(message = "locationId is required.")
-  private Long locationId;
+//  @NotBlank(message = "locationId is required.")
+//  private Long locationId;
+
+//  @NotBlank(message = "LocationId is required.")
+//  private Long locationId;
+
+  @NotBlank(message = "area is required.")
+  private String areaName;
+
+  @NotBlank(message = "rack is required.")
+  private Long rackNumber;
+
+  @NotBlank(message = "floor is required.")
+  private Long floorNumber;
+
+//  @NotBlank(message = "createdAt is required.")
+//  LocalDateTime createdAt;
 
   @Data
   public static class Message {

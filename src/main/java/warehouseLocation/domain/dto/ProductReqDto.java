@@ -4,14 +4,14 @@ package warehouseLocation.domain.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import warehouseLocation.models.Location;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @ToString
@@ -26,7 +26,7 @@ public class ProductReqDto {
 //  private Long productId;
 
   @NotNull(message = "category is required.")
-  private ProductResDto.Category category;
+  private Category category;
 
   @NotNull(message = "expiredDate is required.")
   private LocalDate expiredDate;
@@ -43,6 +43,11 @@ public class ProductReqDto {
   @NotNull(message = "location is required.")
   private Location location;
 
+
+  public static class Category {
+    private Integer categoryId;
+    private String categoryName;
+  }
 
   @Data
   @NoArgsConstructor

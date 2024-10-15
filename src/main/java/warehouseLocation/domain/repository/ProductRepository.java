@@ -17,10 +17,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
    * 상품 검색
    **/
 
-  //
-
-
-
   @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
   Optional<ProductEntity> productNameByProductId(@Param("productId") Long productId);
 
