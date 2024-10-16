@@ -62,6 +62,10 @@ public class ProductReqDto {
     @NotBlank(message = "productName is required.")
     private String imageUrl;
 
+    @NotBlank(message = "category is required.")
+    private Category category;
+
+
     @NotBlank(message = "price is required.")
     private String price;
 

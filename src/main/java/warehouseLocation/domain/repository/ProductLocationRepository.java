@@ -32,14 +32,14 @@ public interface ProductLocationRepository extends JpaRepository<ProductLocation
 
     //getAreaIdByProductLocationId
     @Query("SELECT ple from ProductLocationEntity ple WHERE ple.areaId = :areaId")
-    ProductLocationEntity getAreaIdByProductLocationId(@Param("areaId")Long areaId);
+    Optional<ProductLocationEntity> getAreaIdByProductLocationId(@Param("areaId")Long areaId);
 
     //getRackIdByProductLocationId
     @Query("SELECT ple from ProductLocationEntity ple WHERE ple.rackId = :rackId")
-    ProductLocationEntity getRackIdByProductLocationId(@Param("rackId")Long rackId);
+    Optional<ProductLocationEntity> getRackIdByProductLocationId(@Param("rackId")Long rackId);
 
     //getFloorIdByProductLocationId
     @Query("SELECT ple from ProductLocationEntity ple WHERE ple.floorId = :floorId")
-    ProductLocationEntity getFloorIdByProductLocationId(@Param("floorId")Long floorId);
+    Optional<ProductLocationEntity> getFloorIdByProductLocationId(@Param("floorId")Long floorId);
 
 }

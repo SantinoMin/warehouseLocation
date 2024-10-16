@@ -61,7 +61,7 @@ public class ProductEntity {
 
   // Location 타입으로 변경
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "location_id", referencedColumnName = "product_id")
+  @JoinColumn(name = "product_id", referencedColumnName = "product_id")
   private List<Location> location;
 
   @Column(name = "category_id", nullable = true, unique = true)

@@ -1,12 +1,11 @@
 package warehouseLocation.domain.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.service.ProductService;
+
 
 import java.util.List;
 
@@ -30,19 +29,20 @@ public class ProductController {
   }
 
 //  2.2 (GET) /manage/product/{product_id} : 상품 정보
-//  @GetMapping("/product/{productId}")
-//  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) {
-//    return this.productService.productInfo(productId);
-//  }
+  @GetMapping("/product/{productId}")
+  public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) throws Exception {
+    return this.productService.productInfo(productId);
+  }
 
-//
-//  //3.1 (PUT) /manage/product/{productId} : 상품 정보 변경
-//  @PutMapping("/product/{productId}")
-//  public ProductResDto.Edit productEdit(@PathVariable Long productId,
-//      @RequestBody ProductReqDto.Edit body) {
-//    return this.productService.productEdit(productId, body);
-//  }
-//
+
+  //3.1 (PUT) /manage/product/{productId} : 상품 정보 변경
+  @PutMapping("/product/{productId}")
+  public ProductResDto.Edit productEdit(@PathVariable Long productId,
+      @RequestBody ProductReqDto.Edit body) {
+    return this.productService.productEdit(productId, body);
+  }
+
+
 //  //3.1(DELETE) /manage/product/{productId} : 해당 상품 삭제 (완전 삭제 대신, 업데이트로 진행)
 //  @DeleteMapping("/product/{productId}")
 //  public ResponseEntity<ProductResDto.Message> productDelete(@PathVariable Long productId,

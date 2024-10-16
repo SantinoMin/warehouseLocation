@@ -31,7 +31,7 @@ public class ProductResDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String status;
-    private Location location;
+    private LocationResDto location;
   }
 
   @Data
@@ -47,7 +47,7 @@ public class ProductResDto {
 
     private Long productId;
     private String productName;
-    private Category category;
+    private Long category;
     private String imageUrl;
     private String price;
     private LocalDateTime createdDate;
@@ -61,9 +61,9 @@ public class ProductResDto {
   @Setter
   public static class Location {
 
-    private String area;
-    private String rack;
-    private String floor;
+    private String areaName;
+    private Long rackNumber;
+    private Long floorNumber;
   }
 
   @Data

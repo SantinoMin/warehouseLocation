@@ -18,6 +18,6 @@ public interface FloorRepository extends JpaRepository<FloorEntity, Integer> {
 
   //(floorName 찾기) findFloorNameByFloorId
   @Query("SELECT f.floor_number FROM FloorEntity f WHERE f.floor_id =:floorId")
-  Optional<FloorEntity> findFloorNumByFloorId(@Param("floorId") Long floorId);
+  Long findFloorNumByFloorId(@Param("floorId") Long floorId);
 
 }

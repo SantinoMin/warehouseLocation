@@ -17,7 +17,7 @@ public interface RackRepository extends JpaRepository<RackEntity, Integer> {
 
   //(rackNum찾기) findRackNameByRackId
   @Query("SELECT r.rackNumber FROM RackEntity r WHERE r.rackId =:rackId")
-  Optional<RackEntity> findRackNumByRackId(@Param("areaId") Long areaId);
+  Long findRackNumByRackId(@Param("rackId") Long rackId);
 
 
 }

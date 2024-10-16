@@ -26,9 +26,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   @Query("SELECT p FROM ProductEntity p WHERE p.productName = :productName")
   Optional<ProductEntity> productIdByProductName(@Param("productName") String productName);
 
-  //to find categoryId -> categoryName
+  // productId로 categoryId 찾기
   @Query("SELECT p.categoryId FROM ProductEntity p WHERE p.productId = :productId")
-  Long categoryIdByProductId(@Param("productId") Long productId);
+  Optional<Long> categoryIdByProductId(@Param("productId") Long productId);
 
   //to find categoryIdList
   @Query("SELECT p.categoryId FROM ProductEntity p WHERE p.productId IN :productIdList")
@@ -40,7 +40,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 
   //상품 업데이트
   @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
-  ProductEntity findById(@Param("productId") Long productId);
+  ProductEntity ProductInfoByProductId(@Param("productId") Long productId);
 
   //메서드 category
   @Query("SELECT p FROM ProductEntity p WHERE p.productName LIKE %:productName% OR :productName LIKE CONCAT('%', p.productName, '%')")

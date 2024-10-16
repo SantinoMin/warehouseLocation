@@ -33,6 +33,10 @@ public class LocationResDto {
   @NotBlank(message = "floor is required.")
   private Long floorNumber;
 
+  public LocationResDto() {
+
+  }
+
 //  @NotBlank(message = "createdAt is required.")
 //  LocalDateTime createdAt;
 
