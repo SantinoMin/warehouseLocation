@@ -88,7 +88,7 @@ public class ProductController {
 
 //  //4.1 (POST) /manage/location/area : 창고 구역 생성
   @PostMapping("/location/area")
-  public ResponseEntity<LocationResDto.Message> addArea(@RequestBody LocationReqDto body) {
+  public ResponseEntity<LocationResDto.Message> addArea(@RequestBody LocationReqDto body) throws Exception {
     return this.productService.addArea(body);
   }
 

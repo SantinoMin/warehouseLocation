@@ -360,25 +360,25 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity<LocationResDto.Message> addArea(LocationReqDto body) {
+    public ResponseEntity<LocationResDto.Message> addArea(LocationReqDto body) throws Exception {
 
         // 우선 이미 사용 중인 areaName인지 확인하고, 사용가능한 area만 Return하기
         LocalDateTime createdAt = LocalDateTime.now();
 
-        if (areaRepository.existsByAreaName(body.getAreaName())) {
-            return ResponseEntity.badRequest().body(new LocationResDto.Message());
-        } else {
+        String areaName = body.getAreaName();
+
+        if (areaRepository.findIdByAreaName(areaName) == null) {
             AreaEntity addArea = new AreaEntity();
             addArea.setAreaName(body.getAreaName());
             addArea.setCreatedAt(createdAt);
             addArea.setStatus(1);
-
-            areaRepository.save(addArea);
-
-            return ResponseEntity.badRequest().body(new LocationResDto.Message());
+            return ResponseEntity.badRequest().body(new LocationResDto.Message("등록 완료"));
+        } else {
+            return ResponseEntity.badRequest().body(new LocationResDto.Message("이미 등록되어 있는 area입니다."));
+//            throw new Exception("이미 등록되어 있는 area입니다.");
         }
-    }
 
+    }
 };
 
 

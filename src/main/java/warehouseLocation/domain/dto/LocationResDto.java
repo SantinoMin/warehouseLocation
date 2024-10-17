@@ -44,6 +44,10 @@ public class LocationResDto {
   public static class Message {
 
     String message;
+
+    public Message(String message) {
+      this.message = message;
+    }
   }
 
   @Data

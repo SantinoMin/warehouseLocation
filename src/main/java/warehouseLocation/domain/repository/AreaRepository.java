@@ -1,5 +1,6 @@
 package warehouseLocation.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,7 @@ public interface AreaRepository extends JpaRepository<AreaEntity, Long> {
   Optional<AreaEntity> findByAreaId(@Param("areaId") Long areaId);
 
   @Query("SELECT a FROM AreaEntity a WHERE a.areaName = :areaName")
-  boolean existsByAreaName(@Param("areaName") String areaName);
+  List<AreaEntity> findIdByAreaName(@Param("areaName") String areaName);
 
 
   // areaId 찾기
