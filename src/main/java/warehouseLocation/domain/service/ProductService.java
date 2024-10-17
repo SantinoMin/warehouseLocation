@@ -1,27 +1,27 @@
 package warehouseLocation.domain.service;
 
+import jakarta.transaction.Transactional;
 import jdk.jfr.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import warehouseLocation.domain.dto.LocationReqDto;
 import warehouseLocation.domain.dto.LocationResDto;
 import warehouseLocation.domain.dto.ProductReqDto;
 import warehouseLocation.domain.dto.ProductResDto;
 import warehouseLocation.domain.repository.*;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
-import warehouseLocation.models.CategoryEntity;
-import warehouseLocation.models.Location;
-import warehouseLocation.models.ProductEntity;
-import warehouseLocation.models.ProductLocationEntity;
+import warehouseLocation.models.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -243,160 +243,157 @@ public class ProductService {
         updateProduct.setUpdatedAt(updatedAt);
 
 
-            return updateProduct;
+        return updateProduct;
     }
 
-//    !! productDelete에서 body 부분이 필요한지? productId만 있으면 되는거 아닌지?
-  public ResponseEntity<ProductResDto.Message> productDelete(Long productId, ProductReqDto body) {
+    //    !! productDelete에서 body 부분이 필요한지? productId만 있으면 되는거 아닌지?
+    public ResponseEntity<ProductResDto.Message> softDeleteProduct(Long productId) {
 
 //    //1. productId로 해당 product 검색
 //    //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
 //    //3. productId repo에 저장
 //    //4. ResponseEntity로 ok값 반환하기.
 
-      //메시지 정보 넣을 객체
-      ProductResDto.Message success = new ProductResDto.Message();
+        //메시지 정보 넣을 객체
+        ProductResDto.Message success = new ProductResDto.Message();
 
-      //찾기만 하고, repository에서 update 하는 작업 안되어있음 --> 여기서부터 10/17(목) 이어서
+        //찾기만 하고, repository에서 update 하는 작업 안되어있음 --> 여기서부터 10/17(목) 이어서
 
-      Optional<ProductEntity> productInfo = this.productRepository.productNameByProductId(productId);
-      productInfo.ifPresent( p -> {
-              success.setProductId(productId);
-              success.setProductName(p.getProductName());
-              success.setStatus("(삭제 완료) ->  " + "상품명: " + p.getProductName());
-              });
+        //productName를 찾기 (message에 상품명도 보여주기 위해)
+        Optional<ProductEntity> productInfo = this.productRepository.productNameByProductId(productId);
 
-    return ResponseEntity.ok(success);
-  }
-}
+        // 업데이트로 진행
+        this.productRepository.softDeleteProductByProductId(productId);
+
+        productInfo.ifPresent(p -> {
+            success.setProductId(productId);
+            success.setProductName(p.getProductName());
+            success.setStatus("(비활성화 완료) ->  " + "상품명: " + p.getProductName());
+        });
+
+        return ResponseEntity.ok(success);
+    }
 
 
-//
-//  public ProductResDto.Register productRegister(ProductReqDto body) {
-////
-////    // 1. 상품 중복 확인
-//    Optional<ProductEntity> optRegister = this.productRepository.registerByProductName(
-//        body.getProductName());
-//    System.out.println("optRegister = " + optRegister);
-//
-//    optRegister.ifPresent(name -> {
-//      if (name.getProductName().equals(body.getProductName())) {
-//        throw new CustomException("해당 상품명은 이미 존재합니다.");
-//      }
-//    });
-//
-//    // 2. 상품 DB에 저장
-//    LocalDateTime createdAt = LocalDateTime.now();
-//    LocalDateTime updatedAt = LocalDateTime.now();
-//
-//    ProductEntity product = new ProductEntity();
-//    product.setProductName(body.getProductName());
-////      product.setProductId();
-//    product.setExpiredDate(body.getExpiredDate());
-//    product.setImageUrl(body.getImageUrl());
-//    product.setPrice(body.getPrice());
-//    product.setCreatedAt(createdAt);
-//    product.setUpdatedAt(updatedAt);
-////      product.setValid(body.isValid());
-//    this.productRepository.save(product);
-//    System.out.println("product = " + product);
-//
-//    // 3. 사용자가 카테고리 리스트에서 카테고리 선택하기 -> 이건 좀 복잡해지네. api를 따로 둬서 카테고리를 선택하는 걸로 가야될듯.
-//
-//    // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
-//
-//    ProductResDto.Register toDto = new ProductResDto.Register();
-//    toDto.setProductName(product.getProductName());
-//    toDto.setProductId(product.getProductId());
-//    toDto.setStatus("등록 완료 되었습니다");
-//    toDto.setCreatedAt(createdAt);
-//    return toDto;
-//  }
+    public ProductResDto.Register productRegister(ProductReqDto body) {
 
-//  public CategoryList categoryList() {
-//
-//    List<CategoryEntity> categoryList = this.categoryRepository.findAll();
-//
-//    List<String> categoryNameList = categoryList.stream().map(CategoryEntity::getCategoryName)
-//        .toList();
-//
-//    ProductResDto.CategoryList categoryListDto = new ProductResDto.CategoryList();
-//    categoryListDto.setCategoryNameList(categoryNameList);
-//
-//    return categoryListDto;
-//  }
+        // 1. 상품 중복 확인
+        Optional<ProductEntity> duplicateProductOpt = this.productRepository.duplicateProductByProductName(
+                body.getProductName());
 
-//  public ProductResDto.AreaResponse areaList() {
-//
-//    List<AreaEntity> areaEntities = this.areaRepository.findAll();
-//
-//    List<ProductResDto.Area> areaList = new ArrayList<>();
-//    for (AreaEntity areaEntity : areaEntities) {
-//      ProductResDto.Area areaDto = new ProductResDto.Area();
-//      areaDto.setId(areaEntity.getAreaId());
-//      areaDto.setName(areaEntity.getAreaName());
-//      areaList.add(areaDto);
+        duplicateProductOpt.ifPresent(p -> {
+            throw new CustomException("해당 상품명은 이미 존재합니다.");
+        });
+
+        // 2. 상품 DB에 저장
+        LocalDateTime createdAt = LocalDateTime.now();
+        LocalDateTime updatedAt = LocalDateTime.now();
+
+        ProductEntity product = new ProductEntity();
+        product.setProductName(body.getProductName());
+        product.setExpiredDate(body.getExpiredDate());
+        product.setImageUrl(body.getImageUrl());
+        product.setPrice(body.getPrice());
+        product.setCreatedAt(createdAt);
+        product.setUpdatedAt(updatedAt);
+        product.setValid(true);
+        product.setCategoryId(body.getCategoryId());
+
+        this.productRepository.save(product);
+
+        System.out.println("product = " + product);
+
+        // 3. 사용자가 카테고리 리스트에서 카테고리 선택하기
+
+        // 4. 등록 완료 시, 등록 요청 상품 내역 반환.
+
+        ProductResDto.Register toDto = new ProductResDto.Register();
+        toDto.setProductName(product.getProductName());
+        toDto.setProductId(product.getProductId());
+        toDto.setStatus("등록 완료 되었습니다");
+        toDto.setCreatedAt(createdAt);
+
+        return toDto;
+    }
+
+
+    public ProductResDto.CategoryList categoryList() {
+
+
+        List<CategoryEntity> categoryList = this.categoryRepository.findAll();
+
+        List<String> categoryNameList = categoryList.stream().map(CategoryEntity::getCategoryName)
+                .toList();
+
+        return ProductResDto.CategoryList.builder().categoryNameList(categoryNameList).build();
+    }
+
+    public List<ProductResDto.Area> areaList() {
+
+        List<AreaEntity> areaEntityList = this.areaRepository.findAll();
+
+        List<ProductResDto.Area> areaList = areaEntityList.stream()
+                .map(areaInfo -> new ProductResDto.Area(areaInfo.getAreaId(), areaInfo.getAreaName(), areaInfo.getStatus()))
+                .toList();
+
+        return areaList;
+    }
+
+    public List<ProductResDto.Rack> rackList() {
+
+
+        List<RackEntity> rackEntityList = this.rackRepository.findAll();
+
+        List<ProductResDto.Rack> rackList = rackEntityList.stream().map(r -> new ProductResDto.Rack(r.getRackId(), r.getRackNumber(), r.getStatus())).toList();
+
+        return rackList;
+    }
+
+
+    public List<ProductResDto.Floor> floorList() {
+
+        List<FloorEntity> floorEntity = this.floorRepository.findAll();
+
+        List<ProductResDto.Floor> floorList = floorEntity.stream().map(f -> new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getStatus())).toList();
+
+        return floorList;
+    }
+
+    @Transactional
+    public ResponseEntity<LocationResDto.Message> addArea(LocationReqDto body) {
+
+        // 우선 이미 사용 중인 areaName인지 확인하고, 사용가능한 area만 Return하기
+        LocalDateTime createdAt = LocalDateTime.now();
+
+        if (areaRepository.existsByAreaName(body.getAreaName())) {
+            return ResponseEntity.badRequest().body(new LocationResDto.Message());
+        } else {
+            AreaEntity addArea = new AreaEntity();
+            addArea.setAreaName(body.getAreaName());
+            addArea.setCreatedAt(createdAt);
+            addArea.setStatus(1);
+
+            areaRepository.save(addArea);
+
+            return ResponseEntity.badRequest().body(new LocationResDto.Message());
+        }
+    }
+
+};
+
+
+// +등록하기
+
+
+//        Optional<AreaEntity> duplicatedArea = this.areaRepository.findByAreaId(body.getAreaId());
+//        duplicatedArea.ifPresent(a -> {
+//            throw new CustomException(ErrorMessage.DUPLICATE_AREA);
+//        });
+//        this.areaRepository.save(area);
+//        return null;
 //    }
+//};
 
-//    ProductResDto.AreaResponse response = new ProductResDto.AreaResponse();
-//    response.setArea(areaList);
-//
-//    return response;
-//  }
-//
-//  public List<ProductResDto.Rack> rackList() {
-//
-//    List<RackEntity> rackEntities = this.rackRepository.findAll();
-//
-//    List<ProductResDto.Rack> rackList = new ArrayList<>();
-//
-//    for (RackEntity rackEntity : rackEntities) {
-//
-//      ProductResDto.Rack rackDto = new ProductResDto.Rack();
-//      rackDto.setRackId(rackEntity.getRackId());
-//      rackDto.setRackNumber(rackEntity.getRackNumber());
-//
-//      rackList.add(rackDto);
-//    }
-//
-//    return rackList;
-//  }
-//
-//  public List<ProductResDto.Floor> floorList() {
-//
-//    List<FloorEntity> floorEntities = this.floorRepository.findAll();
-//
-//    List<ProductResDto.Floor> rackDto = new ArrayList<>();
-//
-//    for (FloorEntity floorEntity : floorEntities) {
-//
-//      ProductResDto.Floor floor = new ProductResDto.Floor();
-//      floor.setFloorId(floorEntity.getFloor_id());
-//      floor.setFloorNumber(floorEntity.getFloor_number());
-//
-//      rackDto.add(floor);
-//    }
-//
-//    return rackDto;
-//  }
-//
-//
-//  @Transactional
-//  public ResponseEntity<LocationResDto.Message> addArea(LocationReqDto body) {
-//
-//    AreaEntity area = new AreaEntity();
-//    area.setAreaId(body.getAreaId());
-//
-//    Optional<AreaEntity> duplicatedArea = this.areaRepository.findByAreaId(body.getAreaId());
-//    duplicatedArea.ifPresent(a -> {
-//      throw new CustomException(ErrorMessage.DUPLICATE_AREA);
-//    });
-//    this.areaRepository.save(area);
-//    return null;
-//  }
-//
-//  ;
-//
 //  public ResponseEntity<LocationResDto.Message> addRack(LocationReqDto body) {
 //    /**
 //     * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기

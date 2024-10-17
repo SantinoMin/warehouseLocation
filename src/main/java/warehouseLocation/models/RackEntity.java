@@ -41,5 +41,5 @@ public class RackEntity {
   private LocalDateTime deletedAt;
 
   @Column(name = "status", nullable = false)
-  private String status;
+  private int status;
   };

@@ -26,7 +26,7 @@ public class ProductReqDto {
 //  private Long productId;
 
   @NotNull(message = "category is required.")
-  private Category category;
+  private Long categoryId;
 
   @NotNull(message = "expiredDate is required.")
   private LocalDate expiredDate;

@@ -35,8 +35,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
    List<Long> categoryIdListByProductIdList(@Param("productIdList")List<Long> productIdList);
 
 
-  @Query("SELECT p FROM ProductEntity p WHERE p.productName = :productName")
-  Optional<ProductEntity> registerByProductName(@Param("productName") String productName);
+  @Query("SELECT p.productName FROM ProductEntity p WHERE p.productName = :productName")
+  Optional<ProductEntity> duplicateProductByProductName(@Param("productName") String productName);
 
   //상품 업데이트
   @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
@@ -54,6 +54,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   @Transactional
   @Modifying
   @Query("UPDATE ProductEntity p SET p.isValid = false WHERE p.productId = :productId")
-  void deleteProductById(@Param("productId") Long productId);
+  void softDeleteProductByProductId(@Param("productId") Long productId);
 
 }

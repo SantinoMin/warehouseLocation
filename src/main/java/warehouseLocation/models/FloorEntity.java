@@ -41,5 +41,5 @@ public class FloorEntity {
   private LocalDateTime deleted_at;
 
   @Column(name = "status", nullable = false)
-  private String status;
+  private int status;
   };

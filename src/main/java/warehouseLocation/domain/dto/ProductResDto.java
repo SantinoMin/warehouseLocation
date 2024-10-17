@@ -2,7 +2,6 @@ package warehouseLocation.domain.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -125,6 +124,7 @@ public class ProductResDto {
   }
 
   @Data
+  @Builder
   public static class CategoryList {
 
     private List<String> categoryNameList;
@@ -145,19 +145,32 @@ public class ProductResDto {
 
     Long id;
     String name;
-    String status;
+    int status;
+
+    public Area(Long id, String name, int status) {
+      this.id = id;
+      this.name = name;
+      this.status = status;
+    }
   }
 
-  @Data
-  public static class AreaResponse {
-    List<Area> area;
-  }
+//  @Data
+//  public static class AreaResponse {
+//    List<Area> area;
+//  }
 
   @Data
   public static class Rack {
 
     Long rackId;
     Long rackNumber;
+    int status;
+
+    public Rack(Long rackId, Long rackNumber, int status) {
+      this.rackId = rackId;
+      this.rackNumber = rackNumber;
+      this.status = status;
+    }
   }
 
   @Data
@@ -165,6 +178,13 @@ public class ProductResDto {
 
     Long floorId;
     Long floorNumber;
+    int status;
+
+    public Floor(Long floorId, Long floorNumber, int status) {
+      this.floorId = floorId;
+      this.floorNumber = floorNumber;
+      this.status = status;
+    }
   }
 
 };

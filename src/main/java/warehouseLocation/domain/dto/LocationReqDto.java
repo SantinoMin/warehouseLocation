@@ -16,7 +16,7 @@ public class LocationReqDto {
   private Long locationId;
 
   @NotBlank(message = "area is required.")
-  private Long areaId;
+  private String areaName;
 
   @NotBlank(message = "rack is required.")
   private Long rackId;
