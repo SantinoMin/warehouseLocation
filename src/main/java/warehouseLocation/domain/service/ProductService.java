@@ -1,16 +1,12 @@
 package warehouseLocation.domain.service;
 
 import jakarta.transaction.Transactional;
-import jdk.jfr.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import warehouseLocation.domain.dto.LocationReqDto;
-import warehouseLocation.domain.dto.LocationResDto;
-import warehouseLocation.domain.dto.ProductReqDto;
-import warehouseLocation.domain.dto.ProductResDto;
+import warehouseLocation.domain.dto.*;
 import warehouseLocation.domain.repository.*;
 import warehouseLocation.global.utills.response.error.CustomException;
 import warehouseLocation.global.utills.response.error.ErrorMessage;
@@ -21,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -275,6 +270,7 @@ public class ProductService {
     }
 
 
+    //    !! 상품 중복 등록시, 에러 안뜨고 바로 500 서버 뜨는데?
     public ProductResDto.Register productRegister(ProductReqDto body) {
 
         // 1. 상품 중복 확인
@@ -360,77 +356,70 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity<LocationResDto.Message> addArea(LocationReqDto body) throws Exception {
+    public ResponseEntity<Message> addArea(AreaReqDto body) {
 
         // 우선 이미 사용 중인 areaName인지 확인하고, 사용가능한 area만 Return하기
-        LocalDateTime createdAt = LocalDateTime.now();
+        Optional<AreaEntity> checkDuplicateArea = areaRepository.findAreaByAreaName(body.getAreaName());
 
-        String areaName = body.getAreaName();
+        if (checkDuplicateArea.isPresent()) {
 
-        if (areaRepository.findIdByAreaName(areaName) == null) {
-            AreaEntity addArea = new AreaEntity();
-            addArea.setAreaName(body.getAreaName());
-            addArea.setCreatedAt(createdAt);
-            addArea.setStatus(1);
-            return ResponseEntity.badRequest().body(new LocationResDto.Message("등록 완료"));
-        } else {
-            return ResponseEntity.badRequest().body(new LocationResDto.Message("이미 등록되어 있는 area입니다."));
-//            throw new Exception("이미 등록되어 있는 area입니다.");
+            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 area입니다."));
         }
 
+        AreaEntity addArea = new AreaEntity();
+        addArea.setAreaName(body.getAreaName());
+        addArea.setCreatedAt(LocalDateTime.now());
+        addArea.setStatus(1);
+        this.areaRepository.save(addArea);
+
+        return ResponseEntity.ok(new Message("등록 완료"));
+    }
+
+    // TODO Rack이 숫자형이 아니라, 문자형일 경우에 에러 띄우는 법
+    // 현재 숫자로는 등록 가능
+    public ResponseEntity<Message> addRack(RackReqDto body) {
+        /**
+         * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
+         */
+
+        Optional<RackEntity> checkDuplicateRack = rackRepository.findRackByRackNumber(body.getRackNumber());
+
+        if (checkDuplicateRack.isPresent()) {
+
+            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 rackNumber 입니다."));
+        }
+
+        RackEntity addRack = new RackEntity();
+        addRack.setRackNumber(body.getRackNumber());
+        addRack.setCreatedAt(LocalDateTime.now());
+        addRack.setStatus(1);
+        this.rackRepository.save(addRack);
+
+        return ResponseEntity.ok(new Message("등록 완료"));
+    }
+
+
+    public ResponseEntity<Message> addFloor(FloorReqDto body) {
+
+
+        Optional<FloorEntity> checkDuplicateFloor = floorRepository.findFloorByFloorNumber(body.getFloorNumber());
+
+        if (checkDuplicateFloor.isPresent()) {
+
+            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 floorNumber 입니다."));
+        }
+
+        FloorEntity addFloor = new FloorEntity();
+        addFloor.setFloor_number(body.getFloorNumber());
+        addFloor.setCreated_at(LocalDateTime.now());
+        addFloor.setStatus(1);
+        this.floorRepository.save(addFloor);
+
+        return ResponseEntity.ok(new Message("등록 완료"));
     }
 };
 
 
-// +등록하기
-
-
-//        Optional<AreaEntity> duplicatedArea = this.areaRepository.findByAreaId(body.getAreaId());
-//        duplicatedArea.ifPresent(a -> {
-//            throw new CustomException(ErrorMessage.DUPLICATE_AREA);
-//        });
-//        this.areaRepository.save(area);
-//        return null;
-//    }
-//};
-
-//  public ResponseEntity<LocationResDto.Message> addRack(LocationReqDto body) {
-//    /**
-//     * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
-//     */
-//    RackEntity rack = new RackEntity();
-//    rack.setRackId(body.getRackId());
-//
-//    Optional<RackEntity> duplicatedRack = this.rackRepository.findByRackId(body.getRackId());
-//    duplicatedRack.ifPresent(r -> {
-//      throw new CustomException(ErrorMessage.DUPLICATE_RACK);
-//    });
-//    this.rackRepository.save(rack);
-//
-//    return null;
-//  }
-//
-//  ;
-//
-//  public ResponseEntity<LocationResDto.Message> addFloor(LocationReqDto body) {
-////    /**
-////     * Floor중복 확인 후, 중복 아니라면 repo에 저장하기
-////     */
-//    FloorEntity floor = new FloorEntity();
-//    floor.setFloor_id(body.getFloorId());
-//    Optional<FloorEntity> duplicatedFloor = this.floorRepository.findByFloorId(body.getFloorId());
-//    duplicatedFloor.ifPresent(f -> {
-//      throw new CustomException(ErrorMessage.DUPLICATE_FLOOR);
-//    });
-//    this.floorRepository.save(floor);
-//
-//    // LocationResDto 객체 생성 및 값 설정
-//    LocationResDto.Message locationResDto = new LocationResDto.Message();
-//    locationResDto.setMessage("로케이션 : " + body.getLocationId() + " -> 등록 완료");
-//
-//    return ResponseEntity.ok(locationResDto);
-//  }
-//
 //  public ResponseEntity<ProductResDto.Message> areaDelete(Long areaId) {
 //
 //    //1. productId로 해당 product 검색

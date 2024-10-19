@@ -31,13 +31,13 @@ public class FloorEntity {
   @Column(name = "floor_number", nullable = false)
   private Long floor_number;
 
-  @Column(name = "created_at", nullable = false)
+  @Column(name = "created_at", nullable = true)
   private LocalDateTime created_at;
 
-  @Column(name = "updated_at", nullable = false)
+  @Column(name = "updated_at", nullable = true)
   private LocalDateTime updated_at;
 
-  @Column(name = "deleted_at", nullable = false)
+  @Column(name = "deleted_at", nullable = true)
   private LocalDateTime deleted_at;
 
   @Column(name = "status", nullable = false)

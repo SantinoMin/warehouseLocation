@@ -11,13 +11,11 @@ import warehouseLocation.models.RackEntity;
 @Repository
 public interface RackRepository extends JpaRepository<RackEntity, Integer> {
 
-  //rack(랙) 검색
-  @Query("SELECT r FROM RackEntity r WHERE r.rackId = :rackId")
-  Optional<RackEntity> findByRackId(@Param("rackId") Long rackId);
-
-  //(rackNum찾기) findRackNameByRackId
   @Query("SELECT r.rackNumber FROM RackEntity r WHERE r.rackId =:rackId")
   Long findRackNumByRackId(@Param("rackId") Long rackId);
+
+  @Query("SELECT r FROM RackEntity r WHERE r.rackNumber = :rackNumber")
+  Optional<RackEntity> findRackByRackNumber(@Param("rackNumber") Long rackNumber);
 
 
 }

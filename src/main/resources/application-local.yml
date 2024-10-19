@@ -21,3 +21,11 @@ spring:
         ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+#        //사진 업로드 경우에 해당 코드 작성
+#// spring.servlet.multipart.max-file-size=1000MB
+#// spring.servlet.multipart.max-request-size=1000MB
+
+#// upload.path=c:/hyj/....upload path라는 내가원하는 곳에 path라는 이름으로 사용 가능.
+

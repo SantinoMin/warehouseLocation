@@ -31,13 +31,13 @@ public class RackEntity {
   @Column(name = "rack_number", nullable = false)
   private Long rackNumber;
 
-  @Column(name = "created_at", nullable = false)
+  @Column(name = "created_at", nullable = true)
   private LocalDateTime createdAt;
 
-  @Column(name = "updated_at", nullable = false)
+  @Column(name = "updated_at", nullable = true)
   private LocalDateTime updatedAt;
 
-  @Column(name = "deleted_at", nullable = false)
+  @Column(name = "deleted_at", nullable = true)
   private LocalDateTime deletedAt;
 
   @Column(name = "status", nullable = false)

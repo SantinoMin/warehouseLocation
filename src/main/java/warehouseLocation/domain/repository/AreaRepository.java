@@ -16,7 +16,7 @@ public interface AreaRepository extends JpaRepository<AreaEntity, Long> {
   Optional<AreaEntity> findByAreaId(@Param("areaId") Long areaId);
 
   @Query("SELECT a FROM AreaEntity a WHERE a.areaName = :areaName")
-  List<AreaEntity> findIdByAreaName(@Param("areaName") String areaName);
+  Optional<AreaEntity> findAreaByAreaName(@Param("areaName") String areaName);
 
 
   // areaId 찾기

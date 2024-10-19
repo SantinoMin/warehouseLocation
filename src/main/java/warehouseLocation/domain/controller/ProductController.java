@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import warehouseLocation.domain.dto.LocationReqDto;
-import warehouseLocation.domain.dto.LocationResDto;
-import warehouseLocation.domain.dto.ProductReqDto;
-import warehouseLocation.domain.dto.ProductResDto;
+import warehouseLocation.domain.dto.*;
 import warehouseLocation.domain.service.ProductService;
 
 
@@ -54,55 +51,56 @@ public class ProductController {
     }
 
 
-//  //3.1 (POST) /manage/product/register : 상품 등록
-  @PostMapping("/product/register")
-  public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
+    //  //3.1 (POST) /manage/product/register : 상품 등록
+    @PostMapping("/product/register")
+    public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
 
-    return this.productService.productRegister(body);
+        return this.productService.productRegister(body);
+    }
+
+    //  3.1 (GET) /manage/product/categoryList : 카테고리 리스트
+    @GetMapping("/product/categoryList")
+    public ProductResDto.CategoryList categoryList() {
+        return this.productService.categoryList();
+    }
+
+
+    //2.2 (GET) /manage/location/areaList : 구역 리스트
+    @GetMapping("/location/areaList")
+    public List<ProductResDto.Area> areaList() {
+        return this.productService.areaList();
+    }
+
+    //2.2 (GET) /manage/location/rackList : 랙 리스트
+    @GetMapping("/location/rackList")
+    public List<ProductResDto.Rack> rackList() {
+        return this.productService.rackList();
+    }
+
+    //  //2.2 (GET) /manage/location/floorList : 층 리스트
+    @GetMapping("/location/floorList")
+    public List<ProductResDto.Floor> floorList() {
+        return this.productService.floorList();
+    }
+
+    //  //4.1 (POST) /manage/location/area : 창고 구역 생성
+    @PostMapping("/location/area")
+    public ResponseEntity<Message> addArea(@Valid @RequestBody AreaReqDto body) {
+        return this.productService.addArea(body);
+    }
+
+
+  //4.1 (POST) /manage/location/rack : 창고 랙 생성
+  @PostMapping("/location/rack")
+  public ResponseEntity<Message> addRack(@Valid @RequestBody RackReqDto body) {
+    return this.productService.addRack(body);
   }
 
-//  3.1 (GET) /manage/product/categoryList : 카테고리 리스트
-  @GetMapping("/product/categoryList")
-  public ProductResDto.CategoryList categoryList() {
-    return this.productService.categoryList();
-  }
-
-
-  //2.2 (GET) /manage/location/areaList : 구역 리스트
-  @GetMapping("/location/areaList")
-  public List<ProductResDto.Area> areaList() {
-    return this.productService.areaList();
-  }
-
-  //2.2 (GET) /manage/location/rackList : 랙 리스트
-  @GetMapping("/location/rackList")
-  public List<ProductResDto.Rack> rackList() {
-    return this.productService.rackList();
-  }
-
-//  //2.2 (GET) /manage/location/floorList : 층 리스트
-  @GetMapping("/location/floorList")
-  public List<ProductResDto.Floor> floorList() {
-    return this.productService.floorList();
-  }
-
-//  //4.1 (POST) /manage/location/area : 창고 구역 생성
-  @PostMapping("/location/area")
-  public ResponseEntity<LocationResDto.Message> addArea(@RequestBody LocationReqDto body) throws Exception {
-    return this.productService.addArea(body);
-  }
-
-//  //4.1 (POST) /manage/location/rack : 창고 랙 생성
-//  @PostMapping("/location/rack")
-//  public ResponseEntity<LocationResDto.Message> addRack(@RequestBody LocationReqDto body) {
-//    return this.productService.addRack(body);
-//  }
-//
 //  //4.1 (POST) /manage/location/floor : 창고 층 생성
-//  @PostMapping("/location/floor")
-//  public ResponseEntity<LocationResDto.Message> addFloor(@RequestBody LocationReqDto body) {
-//    return this.productService.addFloor(body);
-//  }
+  @PostMapping("/location/floor")
+  public ResponseEntity<Message> addFloor(@RequestBody FloorReqDto body) {
+    return this.productService.addFloor(body);
+  }
 //
 //
 //  //(DELETE) /manage/location/{areaId} : 창고 구역 삭제 (완전 삭제 대신, 업데이트로 진행)

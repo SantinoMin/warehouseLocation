@@ -31,13 +31,13 @@ public class AreaEntity {
   @Column(name = "area_name", nullable = false)
   private String areaName;
 
-  @Column(name = "created_at", nullable = false)
+  @Column(name = "created_at", nullable = true)
   private LocalDateTime createdAt;
 
-  @Column(name = "updated_at", nullable = false)
+  @Column(name = "updated_at", nullable = true)
   private LocalDateTime updatedAt;
 
-  @Column(name = "deleted_at", nullable = false)
+  @Column(name = "deleted_at", nullable = true)
   private LocalDateTime deletedAt;
 
   @Column(name = "status", nullable = false)
