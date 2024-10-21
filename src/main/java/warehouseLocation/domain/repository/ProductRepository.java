@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import warehouseLocation.models.AreaEntity;
 import warehouseLocation.models.ProductEntity;
 
 @Repository
@@ -50,10 +51,12 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   @Query("SELECT p FROM ProductEntity p WHERE p.productName LIKE %:productName% OR :productName LIKE CONCAT('%', p.productName, '%')")
   Optional<ProductEntity> ProductIdByproductName(@Param("productName") String productName);
 
-  //상품 삭제(업데이트로 진행)
+
+  // area(구역) 삭제(업데이트로 진행)
   @Transactional
   @Modifying
   @Query("UPDATE ProductEntity p SET p.isValid = false WHERE p.productId = :productId")
-  void softDeleteProductByProductId(@Param("productId") Long productId);
+  Optional<ProductEntity> softDeleteProductByProductId(@Param("productId") Long productId);
+
 
 }

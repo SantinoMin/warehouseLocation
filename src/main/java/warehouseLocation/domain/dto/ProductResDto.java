@@ -145,12 +145,12 @@ public class ProductResDto {
 
     Long id;
     String name;
-    int status;
+    boolean isValid;
 
-    public Area(Long id, String name, int status) {
+    public Area(Long id, String name, boolean isValid) {
       this.id = id;
       this.name = name;
-      this.status = status;
+      this.isValid = isValid;
     }
   }
 
@@ -164,12 +164,12 @@ public class ProductResDto {
 
     Long rackId;
     Long rackNumber;
-    int status;
+    Boolean isValid;
 
-    public Rack(Long rackId, Long rackNumber, int status) {
+    public Rack(Long rackId, Long rackNumber, Boolean isValid) {
       this.rackId = rackId;
       this.rackNumber = rackNumber;
-      this.status = status;
+      this.isValid = isValid;
     }
   }
 

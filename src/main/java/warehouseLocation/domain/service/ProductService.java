@@ -329,7 +329,7 @@ public class ProductService {
         List<AreaEntity> areaEntityList = this.areaRepository.findAll();
 
         List<ProductResDto.Area> areaList = areaEntityList.stream()
-                .map(areaInfo -> new ProductResDto.Area(areaInfo.getAreaId(), areaInfo.getAreaName(), areaInfo.getStatus()))
+                .map(areaInfo -> new ProductResDto.Area(areaInfo.getAreaId(), areaInfo.getAreaName(), areaInfo.getIsValid()))
                 .toList();
 
         return areaList;
@@ -340,7 +340,7 @@ public class ProductService {
 
         List<RackEntity> rackEntityList = this.rackRepository.findAll();
 
-        List<ProductResDto.Rack> rackList = rackEntityList.stream().map(r -> new ProductResDto.Rack(r.getRackId(), r.getRackNumber(), r.getStatus())).toList();
+        List<ProductResDto.Rack> rackList = rackEntityList.stream().map(r -> new ProductResDto.Rack(r.getRackId(), r.getRackNumber(), r.getIsValid())).toList();
 
         return rackList;
     }
@@ -369,7 +369,7 @@ public class ProductService {
         AreaEntity addArea = new AreaEntity();
         addArea.setAreaName(body.getAreaName());
         addArea.setCreatedAt(LocalDateTime.now());
-        addArea.setStatus(1);
+        addArea.setIsValid(true);
         this.areaRepository.save(addArea);
 
         return ResponseEntity.ok(new Message("등록 완료"));
@@ -392,7 +392,7 @@ public class ProductService {
         RackEntity addRack = new RackEntity();
         addRack.setRackNumber(body.getRackNumber());
         addRack.setCreatedAt(LocalDateTime.now());
-        addRack.setStatus(1);
+        addRack.setIsValid(true);
         this.rackRepository.save(addRack);
 
         return ResponseEntity.ok(new Message("등록 완료"));
@@ -417,38 +417,54 @@ public class ProductService {
 
         return ResponseEntity.ok(new Message("등록 완료"));
     }
+
+
+    //사용자가 입력한 area인지? 아니면 리스트에서 보는건지 --> rackList에서 찾아서 해당 areaId를 삭제하는 걸로 이해.
+    //만약에 이미 삭제된 area라면, "이미 삭제된 area입니다" 라는 메시지 필요
+    public ResponseEntity<Message> areaDelete(Long areaId) {
+
+        //1. productId로 해당 product 검색
+        //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
+        //3. productId repo에 저장
+        //4. ResponseEntity로 ok값 반환하기.
+
+        int areaInfo = this.areaRepository.softDeleteAreaByAreaId(
+                areaId);
+
+        //areaName구하기
+        String areaName = this.areaRepository.findAreaNameByAreaId(areaId);
+
+
+        Message success = new Message();
+        success.setAreaId(areaId);
+        success.setAreaName(areaName);
+        success.setIsValid(0L);
+        success.setMessage("삭제 완료되었습니다.");
+
+        return ResponseEntity.ok(success);
+    }
+
+    public ResponseEntity<Message> rackDelete(Long rackId) {
+
+        int rackInfo = this.rackRepository.softDeleteRackByRackId(
+                rackId);
+
+        //areaName구하기
+        String rackNumber = this.rackRepository.findRackNumberByRackId(rackId);
+
+
+        Message success = new Message();
+        success.setAreaId(rackId);
+        success.setRackNumber(Long.valueOf(rackNumber));
+        success.setIsValid(0L);
+        success.setMessage("삭제 완료되었습니다.");
+
+        return ResponseEntity.ok(success);
+
+
+    }
 };
 
-
-//  public ResponseEntity<ProductResDto.Message> areaDelete(Long areaId) {
-//
-//    //1. productId로 해당 product 검색
-//    //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
-//    //3. productId repo에 저장
-//    //4. ResponseEntity로 ok값 반환하기.
-//
-////    this.productRepository.deleteProductById(productId);
-////
-////    Optional<ProductEntity> OptProductNameByProductId = this.productRepository.productNameByProductId(
-////        productId);
-////    ProductEntity ProductNameByProductId = OptProductNameByProductId.orElseThrow(
-////        () -> new CustomException(ErrorMessage.NOT_FOUND_PRODUCT));
-////    String productName = ProductNameByProductId.getProductName();
-////
-////    ProductResDto.Message success = new ProductResDto.Message();
-////    success.setProductId(productId);
-////    success.setProductName(productName);
-////    success.setStatus("(삭제 완료) ->" + " 상품명: " + productName);
-//
-//    return null;
-//  }
-//
-//
-//  public ResponseEntity<ProductResDto.Message> rackDelete(Long rackId) {
-//
-//    return null;
-//  }
-//
 //  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
 //
 //    return null;

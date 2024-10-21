@@ -101,20 +101,20 @@ public class ProductController {
   public ResponseEntity<Message> addFloor(@RequestBody FloorReqDto body) {
     return this.productService.addFloor(body);
   }
-//
-//
-//  //(DELETE) /manage/location/{areaId} : 창고 구역 삭제 (완전 삭제 대신, 업데이트로 진행)
-//  @DeleteMapping("/location/{areaId}")
-//  public ResponseEntity<ProductResDto.Message> areaDelete(@PathVariable Long areaId) {
-//    return this.productService.areaDelete(areaId);
-//  }
-//
+
+
+  //(DELETE) /manage/location/{areaId} : 창고 구역 삭제 (완전 삭제 대신, 업데이트로 진행)
+  @DeleteMapping("/location/{areaId}")
+  public ResponseEntity<Message> areaDelete(@PathVariable Long areaId) {
+    return this.productService.areaDelete(areaId);
+  }
+
 //  //(DELETE) /manage/location/{rackId} : 창고 랙 삭제 (완전 삭제 대신, 업데이트로 진행)
-//  @DeleteMapping("/location/{rackId}")
-//  public ResponseEntity<ProductResDto.Message> rackDelete(@PathVariable Long rackId) {
-//    return this.productService.rackDelete(rackId);
-//  }
-//
+  @DeleteMapping("/location/{rackId}")
+  public ResponseEntity<Message> rackDelete(@PathVariable Long rackId) {
+    return this.productService.rackDelete(rackId);
+  }
+
 //  //(DELETE) /manage/location/{floorId} : 창고 층 삭제 (완전 삭제 대신, 업데이트로 진행)
 //  @DeleteMapping("/location/{floorId}")
 //  public ResponseEntity<ProductResDto.Message> floorDelete(@PathVariable Long floorId) {
