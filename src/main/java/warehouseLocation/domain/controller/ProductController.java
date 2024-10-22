@@ -52,6 +52,7 @@ public class ProductController {
 
 
     //  //3.1 (POST) /manage/product/register : 상품 등록
+    //todo !!해당부분 postman 테스트 필요
     @PostMapping("/product/register")
     public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
 
@@ -78,12 +79,14 @@ public class ProductController {
     }
 
     //  //2.2 (GET) /manage/location/floorList : 층 리스트
+    // todo !! floorList postman 테스트 필요
     @GetMapping("/location/floorList")
     public List<ProductResDto.Floor> floorList() {
         return this.productService.floorList();
     }
 
     //  //4.1 (POST) /manage/location/area : 창고 구역 생성
+    // todo !! postman 등록 시, 필드값 안 보임
     @PostMapping("/location/area")
     public ResponseEntity<Message> addArea(@Valid @RequestBody AreaReqDto body) {
         return this.productService.addArea(body);
@@ -91,12 +94,14 @@ public class ProductController {
 
 
   //4.1 (POST) /manage/location/rack : 창고 랙 생성
+    // todo !! postman 등록 시, 필드값 안 보임
   @PostMapping("/location/rack")
   public ResponseEntity<Message> addRack(@Valid @RequestBody RackReqDto body) {
     return this.productService.addRack(body);
   }
 
 //  //4.1 (POST) /manage/location/floor : 창고 층 생성
+    // todo !! 동작 시, 에러
   @PostMapping("/location/floor")
   public ResponseEntity<Message> addFloor(@RequestBody FloorReqDto body) {
     return this.productService.addFloor(body);
@@ -104,12 +109,14 @@ public class ProductController {
 
 
   //(DELETE) /manage/location/{areaId} : 창고 구역 삭제 (완전 삭제 대신, 업데이트로 진행)
+    // todo !! 정보없는 로케이션의 경우 에러 나옴
   @DeleteMapping("/location/{areaId}")
   public ResponseEntity<Message> areaDelete(@PathVariable Long areaId) {
     return this.productService.areaDelete(areaId);
   }
 
 //  //(DELETE) /manage/location/{rackId} : 창고 랙 삭제 (완전 삭제 대신, 업데이트로 진행)
+// todo !! 정보없는 로케이션의 경우 에러 나옴
   @DeleteMapping("/location/{rackId}")
   public ResponseEntity<Message> rackDelete(@PathVariable Long rackId) {
     return this.productService.rackDelete(rackId);
