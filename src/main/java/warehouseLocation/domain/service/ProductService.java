@@ -119,7 +119,7 @@ public class ProductService {
     ;
 
     // 2.2 상품 정보
-    public ProductResDto.ProductInfo productInfo(Long productId) throws Exception {
+    public ProductResDto.ProductInfo productInfo(Integer productId) throws Exception {
         ProductEntity productEntity = this.productRepository.productInfoByProductId(productId);
 
         ProductResDto.ProductInfo productInfo = new ProductResDto.ProductInfo();
@@ -242,7 +242,7 @@ public class ProductService {
     }
 
     //    !! productDelete에서 body 부분이 필요한지? productId만 있으면 되는거 아닌지?
-    public ResponseEntity<ProductResDto.Message> softDeleteProduct(Long productId) {
+    public ResponseEntity<ProductResDto.Message> softDeleteProduct(Integer productId) {
 
 //    //1. productId로 해당 product 검색
 //    //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행

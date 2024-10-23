@@ -19,17 +19,17 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
    **/
 
   @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
-  Optional<ProductEntity> productNameByProductId(@Param("productId") Long productId);
+  Optional<ProductEntity> productNameByProductId(@Param("productId") Integer productId);
 
   @Query("SELECT p FROM ProductEntity p WHERE p.productId = :productId")
-  ProductEntity productInfoByProductId(@Param("productId") Long productId);
+  ProductEntity productInfoByProductId(@Param("productId") Integer productId);
 
   @Query("SELECT p FROM ProductEntity p WHERE p.productName = :productName")
   Optional<ProductEntity> productIdByProductName(@Param("productName") String productName);
 
   // productId로 categoryId 찾기
   @Query("SELECT p.categoryId FROM ProductEntity p WHERE p.productId = :productId")
-  Optional<Long> categoryIdByProductId(@Param("productId") Long productId);
+  Optional<Long> categoryIdByProductId(@Param("productId") Integer productId);
 
   //to find categoryIdList
   @Query("SELECT p.categoryId FROM ProductEntity p WHERE p.productId IN :productIdList")
@@ -56,7 +56,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   @Transactional
   @Modifying
   @Query("UPDATE ProductEntity p SET p.isValid = false WHERE p.productId = :productId")
-  Optional<ProductEntity> softDeleteProductByProductId(@Param("productId") Long productId);
+  Optional<ProductEntity> softDeleteProductByProductId(@Param("productId") Integer productId);
 
 
 }

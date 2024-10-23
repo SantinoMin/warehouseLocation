@@ -22,7 +22,7 @@ public class ProductResDto {
   public static class ProductSearch {
 
     private String productName;
-    private Long productId;
+    private Integer productId;
     private String categoryName;
     private LocalDate expiredDate;
     private String imageUrl;
@@ -44,7 +44,7 @@ public class ProductResDto {
   @Data
   public static class ProductInfo {
 
-    private Long productId;
+    private Integer productId;
     private String productName;
     private Long category;
     private String imageUrl;
@@ -135,7 +135,7 @@ public class ProductResDto {
   @Data
   public static class Message {
 
-    Long productId;
+    Integer productId;
     String productName;
     String status;
   }

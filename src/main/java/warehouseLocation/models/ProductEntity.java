@@ -31,7 +31,7 @@ public class ProductEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "product_id", nullable = false, unique = true)
-  private Long productId;
+  private Integer productId;
 
 //  @Column(name = "product_location_id", nullable = true, unique = true)
 //  private Long ProductLocationId;
