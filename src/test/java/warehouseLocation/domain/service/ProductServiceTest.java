@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductService {
+public class ProductServiceTest {
 
     private final ProductRepository productRepository;
     private final AreaRepository areaRepository;
@@ -30,10 +30,10 @@ public class ProductService {
 
 
     @Autowired
-    ProductService(ProductRepository productRepository, AreaRepository areaRepository,
-                   RackRepository rackRepository, FloorRepository floorRepository,
-                   CategoryRepository categoryRepository, UserRepository userRepository,
-                   ProductLocationRepository productLocationRepository) {
+    ProductServiceTest(ProductRepository productRepository, AreaRepository areaRepository,
+                       RackRepository rackRepository, FloorRepository floorRepository,
+                       CategoryRepository categoryRepository, UserRepository userRepository,
+                       ProductLocationRepository productLocationRepository) {
         this.productRepository = productRepository;
         this.areaRepository = areaRepository;
         this.rackRepository = rackRepository;

@@ -42,4 +42,6 @@ public class Location {
   @Column(name = "floor_height")
   private Long floorHeight;
 
+  public Location(String d, int i, int i1) {
+  }
 }

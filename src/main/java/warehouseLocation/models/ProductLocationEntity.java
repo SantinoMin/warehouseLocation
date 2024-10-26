@@ -29,7 +29,7 @@ public class ProductLocationEntity {
   private Long productLocationId;
 
   @Column(name = "product_id", nullable = false)
-  private Integer productId;
+  private Long productId;
 
   @Column(name = "area_id", nullable = false)
   private Long areaId;

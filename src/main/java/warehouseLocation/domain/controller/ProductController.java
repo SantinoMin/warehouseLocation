@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import warehouseLocation.domain.dto.*;
+import warehouseLocation.domain.repository.ProductRepository;
 import warehouseLocation.domain.service.ProductService;
 
 
@@ -16,6 +17,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
+    ProductController productController = new ProductController();
 
     @Autowired
     ProductController(ProductService productService) {
@@ -31,7 +34,7 @@ public class ProductController {
 
     //  2.2 (GET) /manage/product/{product_id} : 상품 정보
     @GetMapping("/product/{productId}")
-    public ProductResDto.ProductInfo productInfo(@PathVariable Integer productId) throws Exception {
+    public ProductResDto.ProductInfo productInfo(@PathVariable Long productId) throws Exception {
         return this.productService.productInfo(productId);
     }
 
@@ -46,7 +49,7 @@ public class ProductController {
 
     //  //3.1(DELETE) /manage/product/{productId} : 해당 상품 삭제 (완전 삭제 대신, 업데이트로 진행)
     @DeleteMapping("/product/{productId}")
-    public ResponseEntity<ProductResDto.Message> softDeleteProduct(@PathVariable Integer productId) {
+    public ResponseEntity<ProductResDto.Message> softDeleteProduct(@PathVariable Long productId) {
         return this.productService.softDeleteProduct(productId);
     }
 
