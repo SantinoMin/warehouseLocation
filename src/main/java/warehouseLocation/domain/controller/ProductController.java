@@ -40,18 +40,18 @@ public class ProductController {
 
 
     //3.1 (PUT) /manage/product/{productId} : 상품 정보 변경
-    @PutMapping("/product/{productId}")
-    public ProductResDto.Edit productEdit(@PathVariable Long productId,
-                                          @RequestBody ProductReqDto.Edit body) {
-        return this.productService.productEdit(productId, body);
-    }
-
-
-    //  //3.1(DELETE) /manage/product/{productId} : 해당 상품 삭제 (완전 삭제 대신, 업데이트로 진행)
-    @DeleteMapping("/product/{productId}")
-    public ResponseEntity<ProductResDto.Message> softDeleteProduct(@PathVariable Long productId) {
-        return this.productService.softDeleteProduct(productId);
-    }
+//    @PutMapping("/product/{productId}")
+//    public ProductResDto.Edit productEdit(@PathVariable Long productId,
+//                                          @RequestBody ProductReqDto.Edit body) {
+//        return this.productService.productEdit(productId, body);
+//    }
+//
+//
+//    //  //3.1(DELETE) /manage/product/{productId} : 해당 상품 삭제 (완전 삭제 대신, 업데이트로 진행)
+//    @DeleteMapping("/product/{productId}")
+//    public ResponseEntity<ProductResDto.Message> softDeleteProduct(@PathVariable Long productId) {
+//        return this.productService.softDeleteProduct(productId);
+//    }
 
 
     //  //3.1 (POST) /manage/product/register : 상품 등록
