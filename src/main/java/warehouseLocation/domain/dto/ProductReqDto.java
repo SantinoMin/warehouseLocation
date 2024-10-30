@@ -44,10 +44,10 @@ public class ProductReqDto {
   private Location location;
 
 
-  public static class Category {
-    private Integer categoryId;
-    private String categoryName;
-  }
+//  public static class Category {
+//    private Integer categoryId;
+//    private String categoryName;
+//  }
 
   @Data
   @NoArgsConstructor
@@ -63,7 +63,7 @@ public class ProductReqDto {
     private String imageUrl;
 
     @NotBlank(message = "category is required.")
-    private Category category;
+    private String categoryName;
 
 
     @NotBlank(message = "price is required.")

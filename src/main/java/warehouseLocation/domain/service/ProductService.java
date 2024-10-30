@@ -179,6 +179,8 @@ public class ProductService {
      * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
      */
 
+
+    // todo categoryName이 db에 안들어감, 그 외 정보들도 response는 받지만, db에는 안 들어감
     public ProductResDto.Edit productEdit(@PathVariable Long productId, @RequestBody ProductReqDto.Edit body) {
 
 
@@ -187,30 +189,28 @@ public class ProductService {
 
         //   LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime updatedAt = LocalDateTime.now();
-        LocalDate expiredDate = LocalDate.now();
 
         // db에서 productId로 변경할 상품 검색
         ProductEntity productInfo = this.productRepository.ProductInfoByProductId(productId);
 
         //categoryName 구하기
-        Optional<CategoryEntity> categoryNameOpt = this.categoryRepository.categoryNameByCategoryId(productInfo.getCategoryId());
-//        CategoryEntity category = categoryNameOpt.orElseThrow();
+//        Optional<CategoryEntity> categoryNameOpt = this.categoryRepository.categoryNameByCategoryId(productInfo.getCategoryId());
+//        String categoryName = categoryNameOpt.map(CategoryEntity::getCategoryName).orElse(null);
 
-        CategoryEntity categoryInfo = new CategoryEntity();
-        categoryNameOpt.ifPresent(c -> {
-            categoryInfo.setCategoryName(c.getCategoryName());
-        });
+//        CategoryEntity categoryInfo = new CategoryEntity();
+//        categoryNameOpt.ifPresent(c -> {
+//            categoryInfo.setCategoryName(c.getCategoryName());
+//        });
+
+        String categoryName = body.getCategoryName();
+
 
         // Location 정보 구하기
         Optional<ProductLocationEntity> productLocationOpt = this.productLocationRepository.productLocationIdByProductId(productId);
 
-        ProductLocationEntity ple = new ProductLocationEntity();
+        // todo ???
+        ProductLocationEntity ple = productLocationOpt.orElse(new ProductLocationEntity());
 
-        productLocationOpt.ifPresent(p -> {
-            ple.setAreaId(p.getAreaId());
-            ple.setRackId(p.getRackId());
-            ple.setFloorId(p.getFloorId());
-        });
 
         String areaName = this.areaRepository.findAreaNameByAreaId(ple.getAreaId());
         Long rackNumber = this.rackRepository.findRackNumByRackId(ple.getRackId());
@@ -221,12 +221,24 @@ public class ProductService {
         locationRD.setRackNumber(rackNumber);
         locationRD.setFloorNumber(floorNumber);
 
+        // body에서 입력한 값으로 productInfo 업데이트
+        productInfo.setProductName(body.getProductName());
+        productInfo.setCategoryName(categoryName);
+        productInfo.setImageUrl(body.getImageUrl());
+        productInfo.setExpiredDate(body.getExpiredDate());
+        productInfo.setPrice(body.getPrice());
+        productInfo.setStatus(body.getStatus());
+        productInfo.setUpdatedAt(updatedAt);
 
-        // 변경 값 저장할 entity 생성
+        // db에 저장
+        this.productRepository.save(productInfo);
+
+
+        // 변경 값 저장할 객체 생성
         ProductResDto.Edit updateProduct = new ProductResDto.Edit();
         updateProduct.setProductName(body.getProductName());
 
-        updateProduct.setCategoryName(categoryInfo.getCategoryName());
+        updateProduct.setCategoryName(categoryName);
 
         updateProduct.setProductId(productId);
         updateProduct.setExpiredDate(body.getExpiredDate());
@@ -237,6 +249,9 @@ public class ProductService {
         updateProduct.setLocation(locationRD);
 
         updateProduct.setUpdatedAt(updatedAt);
+
+
+
 
 
         return updateProduct;

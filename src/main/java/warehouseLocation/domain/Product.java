@@ -27,8 +27,3 @@ public class Product {
     void a() {}
     void a(String aa) {}
 }
-
-Product p1 = new Product(1L, "dd", 123L);
-
-Product p2 = new Product();
-
