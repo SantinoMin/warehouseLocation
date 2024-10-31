@@ -94,7 +94,11 @@ public class ProductResDto {
     private String imageUrl;
     private String price;
     private String status;
-    private Location location;
+//    private Location location;
+    private String areaName;
+    private Long rackNumber;
+    private Long floorNumber;
+
     private LocalDateTime updatedAt;
 
 //    @Builder

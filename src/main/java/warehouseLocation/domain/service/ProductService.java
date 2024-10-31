@@ -180,7 +180,9 @@ public class ProductService {
      */
 
 
-    // todo categoryName이 db에 안들어감, 그 외 정보들도 response는 받지만, db에는 안 들어감
+    // todo location 정보 업데이트 필요
+    // todo Location의 정보 3개가 하나로 묶어져야 돼서, 하나씩 구하면 안됨, 테이블에서 변경하도록 해야함
+
     public ProductResDto.Edit productEdit(@PathVariable Long productId, @RequestBody ProductReqDto.Edit body) {
 
 
@@ -209,7 +211,7 @@ public class ProductService {
         Optional<ProductLocationEntity> productLocationOpt = this.productLocationRepository.productLocationIdByProductId(productId);
 
         // todo ???
-//        ProductLocationEntity ple = productLocationOpt.orElse(new ProductLocationEntity());
+        ProductLocationEntity ple = productLocationOpt.orElse(new ProductLocationEntity());
 
 
         String areaName = this.areaRepository.findAreaNameByAreaId(ple.getAreaId());
@@ -220,6 +222,9 @@ public class ProductService {
         locationRD.setAreaName(areaName);
         locationRD.setRackNumber(rackNumber);
         locationRD.setFloorNumber(floorNumber);
+
+        // todo !!
+        // 필드에 location을 넣었다면 해당 값으로 수정하고, 빈값으로 넣었다면 기존 값대로 유지.
 
         // body에서 입력한 값으로 productInfo 업데이트
         productInfo.setProductName(body.getProductName());
@@ -246,7 +251,9 @@ public class ProductService {
         updateProduct.setPrice(body.getPrice());
         updateProduct.setStatus(body.getStatus());
 
-        updateProduct.setLocation(locationRD);
+        updateProduct.setAreaName(areaName);
+        updateProduct.setFloorNumber(floorNumber);
+        updateProduct.setRackNumber(rackNumber);
 
         updateProduct.setUpdatedAt(updatedAt);
 
@@ -257,7 +264,7 @@ public class ProductService {
         return updateProduct;
     }
 
-    //    !! productDelete에서 body 부분이 필요한지? productId만 있으면 되는거 아닌지?
+    // 완료 : is_valid = false 변경됨.
     public ResponseEntity<ProductResDto.Message> softDeleteProduct(Long productId) {
 
 //    //1. productId로 해당 product 검색
@@ -285,6 +292,8 @@ public class ProductService {
         return ResponseEntity.ok(success);
     }
 
+
+    // todo 10/31(목) 윗 부분까지 완료 ,, 이어서 아래부터 시작하기.
 
     //    !! 상품 중복 등록시, 에러 안뜨고 바로 500 서버 뜨는데?
     public ProductResDto.Register productRegister(ProductReqDto body) {

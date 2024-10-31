@@ -51,7 +51,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
   @Transactional
   @Modifying
   @Query("UPDATE ProductEntity p SET p.isValid = false WHERE p.productId = :productId")
-  Optional<ProductEntity> softDeleteProductByProductId(@Param("productId") Long productId);
+  void softDeleteProductByProductId(@Param("productId") Long productId);
 
 
 }
