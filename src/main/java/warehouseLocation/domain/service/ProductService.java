@@ -209,7 +209,7 @@ public class ProductService {
         Optional<ProductLocationEntity> productLocationOpt = this.productLocationRepository.productLocationIdByProductId(productId);
 
         // todo ???
-        ProductLocationEntity ple = productLocationOpt.orElse(new ProductLocationEntity());
+//        ProductLocationEntity ple = productLocationOpt.orElse(new ProductLocationEntity());
 
 
         String areaName = this.areaRepository.findAreaNameByAreaId(ple.getAreaId());
