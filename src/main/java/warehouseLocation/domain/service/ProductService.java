@@ -280,17 +280,17 @@ public class ProductService {
         //productName를 찾기 (message에 상품명도 보여주기 위해)
         Optional<ProductEntity> productInfo = this.productRepository.productNameByProductId(productId);
 
-        // 업데이트로 진행
-        this.productRepository.softDeleteProductByProductId(productId);
-
-        productInfo.ifPresent(p -> {
-            success.setProductId(productId);
-            success.setProductName(p.getProductName());
-            success.setStatus("(비활성화 완료) ->  " + "상품명: " + p.getProductName());
-        });
-
-        return ResponseEntity.ok(success);
-    }
+//        // 업데이트로 진행
+//        this.productRepository.softDeleteProductByProductId(productId);
+//
+//        productInfo.ifPresent(p -> {
+//            success.setProductId(productId);
+//            success.setProductName(p.getProductName());
+//            success.setStatus("(비활성화 완료) ->  " + "상품명: " + p.getProductName());
+//        });
+//
+//        return ResponseEntity.ok(success);
+//    }
 
 
     // todo 10/31(목) 윗 부분까지 완료 ,, 이어서 아래부터 시작하기.
