@@ -36,7 +36,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
    List<Long> categoryIdListByProductIdList(@Param("productIdList")List<Long> productIdList);
 
 
-  @Query("SELECT p.productName FROM ProductEntity p WHERE p.productName = :productName")
+  @Query("SELECT p FROM ProductEntity p WHERE p.productName = :productName")
   Optional<ProductEntity> duplicateProductByProductName(@Param("productName") String productName);
 
   //상품 업데이트

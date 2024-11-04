@@ -9,5 +9,7 @@ public class ErrorMessage {
   public static final String NOT_FOUND_PRODUCTLIST = "미등록 상품 입니다. 상품명을 확인 해주세요.";
   public static final String NOT_FOUND_CATEGORY = "해당 카테고리가 없습니다.";
 
+  public static final String DUPLICATE_NAME = "상품이 이미 등록되어 있습니다.";
+
 
 }

@@ -52,10 +52,13 @@ public class ProductController {
     }
 
 
+
     //  //3.1 (POST) /manage/product/register : 상품 등록
-    //todo !!해당부분 postman 테스트 필요
+    // todo !!해당부분 postman 테스트 필요
+    // todo !! userId는 로그인에서 가져와야 되는데, 해당 부분 해결 필요->우선 임의로 넣어서 테스트
     @PostMapping("/product/register")
     public ProductResDto.Register ProductRegister(@Valid @RequestBody ProductReqDto body) {
+
 
         return this.productService.productRegister(body);
     }

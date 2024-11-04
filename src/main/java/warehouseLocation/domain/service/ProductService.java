@@ -280,32 +280,32 @@ public class ProductService {
         //productName를 찾기 (message에 상품명도 보여주기 위해)
         Optional<ProductEntity> productInfo = this.productRepository.productNameByProductId(productId);
 
-//        // 업데이트로 진행
-//        this.productRepository.softDeleteProductByProductId(productId);
-//
-//        productInfo.ifPresent(p -> {
-//            success.setProductId(productId);
-//            success.setProductName(p.getProductName());
-//            success.setStatus("(비활성화 완료) ->  " + "상품명: " + p.getProductName());
-//        });
-//
-//        return ResponseEntity.ok(success);
-//    }
+        // 업데이트로 진행
+        this.productRepository.softDeleteProductByProductId(productId);
 
+        productInfo.ifPresent(p -> {
+            success.setProductId(productId);
+            success.setProductName(p.getProductName());
+            success.setStatus("(비활성화 완료) ->  " + "상품명: " + p.getProductName());
+        });
 
-    // todo 10/31(목) 윗 부분까지 완료 ,, 이어서 아래부터 시작하기.
+        return ResponseEntity.ok(success);
+    }
 
-    //    !! 상품 중복 등록시, 에러 안뜨고 바로 500 서버 뜨는데?
     public ProductResDto.Register productRegister(ProductReqDto body) {
 
         // 1. 상품 중복 확인
         Optional<ProductEntity> duplicateProductOpt = this.productRepository.duplicateProductByProductName(
                 body.getProductName());
 
+        System.out.println("duplicateProductOpt = " + duplicateProductOpt);
+
         duplicateProductOpt.ifPresent(p -> {
-            throw new CustomException("해당 상품명은 이미 존재합니다.");
+            System.out.println("중복 상품이 있습니다."); // 예외 발생 전에 확인 메시지 출력
+            throw new CustomException(ErrorMessage.DUPLICATE_NAME);
         });
 
+        // !! todo 로그인해서 userId 넣도록 설정 필요
         // 2. 상품 DB에 저장
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime updatedAt = LocalDateTime.now();
@@ -318,7 +318,9 @@ public class ProductService {
         product.setCreatedAt(createdAt);
         product.setUpdatedAt(updatedAt);
         product.setValid(true);
+        product.setStatus(body.getStatus());
         product.setCategoryId(body.getCategoryId());
+        // !! todo location 정보 추가 필요
 
         this.productRepository.save(product);
 
@@ -337,7 +339,7 @@ public class ProductService {
         return toDto;
     }
 
-
+    // todo 11/4(월) 윗 부분까지 완료 ,, 이어서 아래부터 시작하기.
     public ProductResDto.CategoryList categoryList() {
 
 
