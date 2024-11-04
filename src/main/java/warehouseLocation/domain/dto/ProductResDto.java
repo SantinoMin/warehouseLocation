@@ -185,12 +185,13 @@ public class ProductResDto {
 
     Long floorId;
     Long floorNumber;
-    int status;
+    Boolean isValid;
 
-    public Floor(Long floorId, Long floorNumber, int status) {
+    public Floor(Long floorId, Long floorNumber, Boolean isValid) {
       this.floorId = floorId;
       this.floorNumber = floorNumber;
-      this.status = status;
+      this.isValid = isValid;
+
     }
   }
 

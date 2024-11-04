@@ -182,7 +182,6 @@ public class ProductService {
 
     // todo location 정보 업데이트 필요
     // todo Location의 정보 3개가 하나로 묶어져야 돼서, 하나씩 구하면 안됨, 테이블에서 변경하도록 해야함
-
     public ProductResDto.Edit productEdit(@PathVariable Long productId, @RequestBody ProductReqDto.Edit body) {
 
 
@@ -256,9 +255,6 @@ public class ProductService {
         updateProduct.setRackNumber(rackNumber);
 
         updateProduct.setUpdatedAt(updatedAt);
-
-
-
 
 
         return updateProduct;
@@ -339,7 +335,7 @@ public class ProductService {
         return toDto;
     }
 
-    // todo 11/4(월) 윗 부분까지 완료 ,, 이어서 아래부터 시작하기.
+
     public ProductResDto.CategoryList categoryList() {
 
 
@@ -350,6 +346,7 @@ public class ProductService {
 
         return ProductResDto.CategoryList.builder().categoryNameList(categoryNameList).build();
     }
+
 
     public List<ProductResDto.Area> areaList() {
 
@@ -362,6 +359,7 @@ public class ProductService {
         return areaList;
     }
 
+
     public List<ProductResDto.Rack> rackList() {
 
 
@@ -373,14 +371,28 @@ public class ProductService {
     }
 
 
+    // todo 11/4(월) 윗 부분까지 완료 ,, 이어서 아래부터 시작하기.
+
     public List<ProductResDto.Floor> floorList() {
 
+        List<ProductResDto.Floor> space = new ArrayList<>();
         List<FloorEntity> floorEntity = this.floorRepository.findAll();
 
-        List<ProductResDto.Floor> floorList = floorEntity.stream().map(f -> new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getStatus())).toList();
+//        List<ProductResDto.Floor> floorList = floorEntity.stream().map(f -> new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()));
 
-        return floorList;
+        for (FloorEntity value : floorEntity) {
+            ProductResDto.Floor floor = new ProductResDto.Floor(value.getFloor_id(), value.getFloor_number(), value.getIsValid());
+        }
+        space.add(floor);
+
     }
+
+    return space;
+};
+
+//                new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
+
+//        return floorList;
 
     @Transactional
     public ResponseEntity<Message> addArea(AreaReqDto body) {
@@ -439,7 +451,7 @@ public class ProductService {
         FloorEntity addFloor = new FloorEntity();
         addFloor.setFloor_number(body.getFloorNumber());
         addFloor.setCreated_at(LocalDateTime.now());
-        addFloor.setStatus(1);
+        addFloor.setIsValid(true);
         this.floorRepository.save(addFloor);
 
         return ResponseEntity.ok(new Message("등록 완료"));

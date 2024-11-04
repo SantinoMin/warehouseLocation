@@ -40,6 +40,6 @@ public class FloorEntity {
   @Column(name = "deleted_at", nullable = true)
   private LocalDateTime deleted_at;
 
-  @Column(name = "status", nullable = false)
-  private int status;
+  @Column(name = "is_valid", nullable = false)
+  private Boolean isValid;
   };
