@@ -390,9 +390,9 @@ public class ProductService {
     return space;
 };
 
-//                new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
+                new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
 
-//        return floorList;
+        return floorList;
 
     @Transactional
     public ResponseEntity<Message> addArea(AreaReqDto body) {
@@ -504,18 +504,18 @@ public class ProductService {
     }
 };
 
-//  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
-//
-//    return null;
-//  }
-//
-//  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId,
-//      Long areaId, Long floorId) {
-//
-//    return null;
-//  }
+  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
 
-//}
-//;
+    return null;
+  }
+
+  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId,
+      Long areaId, Long floorId) {
+
+    return null;
+  }
+
+}
+;
 
 
