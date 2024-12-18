@@ -370,9 +370,6 @@ public class ProductService {
         return rackList;
     }
 
-
-    // todo 11/4(월) 윗 부분까지 완료 ,, 이어서 아래부터 시작하기.
-//
     public List<ProductResDto.Floor> floorList() {
 
         List<ProductResDto.Floor> space = new ArrayList<>();
@@ -389,8 +386,7 @@ public class ProductService {
 
     return space;
 };
-
-                new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
+        new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
 
         return floorList;
 
