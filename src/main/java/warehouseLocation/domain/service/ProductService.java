@@ -40,6 +40,7 @@ public class ProductService {
         this.floorRepository = floorRepository;
         this.categoryRepository = categoryRepository;
         this.productLocationRepository = productLocationRepository;
+
     }
 
     //2.1(GET) /manage/product : 상품 검색
@@ -370,148 +371,149 @@ public class ProductService {
         return rackList;
     }
 
-    public List<ProductResDto.Floor> floorList() {
-
-        List<ProductResDto.Floor> space = new ArrayList<>();
-        List<FloorEntity> floorEntity = this.floorRepository.findAll();
-
-//        List<ProductResDto.Floor> floorList = floorEntity.stream().map(f -> new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()));
-
-        for (FloorEntity value : floorEntity) {
-            ProductResDto.Floor floor = new ProductResDto.Floor(value.getFloor_id(), value.getFloor_number(), value.getIsValid());
-        }
-        space.add(floor);
-
-    }
-
-    return space;
-};
-        new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
-
-        return floorList;
-
-    @Transactional
-    public ResponseEntity<Message> addArea(AreaReqDto body) {
-
-        // 우선 이미 사용 중인 areaName인지 확인하고, 사용가능한 area만 Return하기
-        Optional<AreaEntity> checkDuplicateArea = areaRepository.findAreaByAreaName(body.getAreaName());
-
-        if (checkDuplicateArea.isPresent()) {
-
-            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 area입니다."));
-        }
-
-        AreaEntity addArea = new AreaEntity();
-        addArea.setAreaName(body.getAreaName());
-        addArea.setCreatedAt(LocalDateTime.now());
-        addArea.setIsValid(true);
-        this.areaRepository.save(addArea);
-
-        return ResponseEntity.ok(new Message("등록 완료"));
-    }
-
-    // TODO Rack이 숫자형이 아니라, 문자형일 경우에 에러 띄우는 법
-    // 현재 숫자로는 등록 가능
-    public ResponseEntity<Message> addRack(RackReqDto body) {
-        /**
-         * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
-         */
-
-        Optional<RackEntity> checkDuplicateRack = rackRepository.findRackByRackNumber(body.getRackNumber());
-
-        if (checkDuplicateRack.isPresent()) {
-
-            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 rackNumber 입니다."));
-        }
-
-        RackEntity addRack = new RackEntity();
-        addRack.setRackNumber(body.getRackNumber());
-        addRack.setCreatedAt(LocalDateTime.now());
-        addRack.setIsValid(true);
-        this.rackRepository.save(addRack);
-
-        return ResponseEntity.ok(new Message("등록 완료"));
-    }
-
-
-    public ResponseEntity<Message> addFloor(FloorReqDto body) {
-
-
-        Optional<FloorEntity> checkDuplicateFloor = floorRepository.findFloorByFloorNumber(body.getFloorNumber());
-
-        if (checkDuplicateFloor.isPresent()) {
-
-            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 floorNumber 입니다."));
-        }
-
-        FloorEntity addFloor = new FloorEntity();
-        addFloor.setFloor_number(body.getFloorNumber());
-        addFloor.setCreated_at(LocalDateTime.now());
-        addFloor.setIsValid(true);
-        this.floorRepository.save(addFloor);
-
-        return ResponseEntity.ok(new Message("등록 완료"));
-    }
-
-
-    //사용자가 입력한 area인지? 아니면 리스트에서 보는건지 --> rackList에서 찾아서 해당 areaId를 삭제하는 걸로 이해.
-    //만약에 이미 삭제된 area라면, "이미 삭제된 area입니다" 라는 메시지 필요
-    public ResponseEntity<Message> areaDelete(Long areaId) {
-
-        //1. productId로 해당 product 검색
-        //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
-        //3. productId repo에 저장
-        //4. ResponseEntity로 ok값 반환하기.
-
-        int areaInfo = this.areaRepository.softDeleteAreaByAreaId(
-                areaId);
-
-        //areaName구하기
-        String areaName = this.areaRepository.findAreaNameByAreaId(areaId);
-
-
-        Message success = new Message();
-        success.setAreaId(areaId);
-        success.setAreaName(areaName);
-        success.setIsValid(0L);
-        success.setMessage("삭제 완료되었습니다.");
-
-        return ResponseEntity.ok(success);
-    }
-
-    public ResponseEntity<Message> rackDelete(Long rackId) {
-
-        int rackInfo = this.rackRepository.softDeleteRackByRackId(
-                rackId);
-
-        //areaName구하기
-        String rackNumber = this.rackRepository.findRackNumberByRackId(rackId);
-
-
-        Message success = new Message();
-        success.setAreaId(rackId);
-        success.setRackNumber(Long.valueOf(rackNumber));
-        success.setIsValid(0L);
-        success.setMessage("삭제 완료되었습니다.");
-
-        return ResponseEntity.ok(success);
-
-
-    }
-};
-
-  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
-
-    return null;
-  }
-
-  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId,
-      Long areaId, Long floorId) {
-
-    return null;
-  }
+//    public List<ProductResDto.Floor> floorList() {
+//
+//        List<ProductResDto.Floor> space = new ArrayList<>();
+//        List<FloorEntity> floorEntity = this.floorRepository.findAll();
+//
+////        List<ProductResDto.Floor> floorList = floorEntity.stream().map(f -> new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()));
+//
+//        for (FloorEntity value : floorEntity) {
+//            ProductResDto.Floor floor = new ProductResDto.Floor(value.getFloor_id(), value.getFloor_number(), value.getIsValid());
+//        }
+//        space.add(floor);
+//
+//    }
+//
+//    return space;
+//};
+//        new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
+//
+//        return floorList;
+//
+//    @Transactional
+//    public ResponseEntity<Message> addArea(AreaReqDto body) {
+//
+//        // 우선 이미 사용 중인 areaName인지 확인하고, 사용가능한 area만 Return하기
+//        Optional<AreaEntity> checkDuplicateArea = areaRepository.findAreaByAreaName(body.getAreaName());
+//
+//        if (checkDuplicateArea.isPresent()) {
+//
+//            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 area입니다."));
+//        }
+//
+//        AreaEntity addArea = new AreaEntity();
+//        addArea.setAreaName(body.getAreaName());
+//        addArea.setCreatedAt(LocalDateTime.now());
+//        addArea.setIsValid(true);
+//        this.areaRepository.save(addArea);
+//
+//        return ResponseEntity.ok(new Message("등록 완료"));
+//    }
+//
+//    // TODO Rack이 숫자형이 아니라, 문자형일 경우에 에러 띄우는 법
+//    // 현재 숫자로는 등록 가능
+//    public ResponseEntity<Message> addRack(RackReqDto body) {
+//        /**
+//         * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
+//         */
+//
+//        Optional<RackEntity> checkDuplicateRack = rackRepository.findRackByRackNumber(body.getRackNumber());
+//
+//        if (checkDuplicateRack.isPresent()) {
+//
+//            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 rackNumber 입니다."));
+//        }
+//
+//        RackEntity addRack = new RackEntity();
+//        addRack.setRackNumber(body.getRackNumber());
+//        addRack.setCreatedAt(LocalDateTime.now());
+//        addRack.setIsValid(true);
+//        this.rackRepository.save(addRack);
+//
+//        return ResponseEntity.ok(new Message("등록 완료"));
+//    }
+//
+//
+//    public ResponseEntity<Message> addFloor(FloorReqDto body) {
+//
+//
+//        Optional<FloorEntity> checkDuplicateFloor = floorRepository.findFloorByFloorNumber(body.getFloorNumber());
+//
+//        if (checkDuplicateFloor.isPresent()) {
+//
+//            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 floorNumber 입니다."));
+//        }
+//
+//        FloorEntity addFloor = new FloorEntity();
+//        addFloor.setFloor_number(body.getFloorNumber());
+//        addFloor.setCreated_at(LocalDateTime.now());
+//        addFloor.setIsValid(true);
+//        this.floorRepository.save(addFloor);
+//
+//        return ResponseEntity.ok(new Message("등록 완료"));
+//    }
+//
+//
+//    //사용자가 입력한 area인지? 아니면 리스트에서 보는건지 --> rackList에서 찾아서 해당 areaId를 삭제하는 걸로 이해.
+//    //만약에 이미 삭제된 area라면, "이미 삭제된 area입니다" 라는 메시지 필요
+//    public ResponseEntity<Message> areaDelete(Long areaId) {
+//
+//        //1. productId로 해당 product 검색
+//        //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
+//        //3. productId repo에 저장
+//        //4. ResponseEntity로 ok값 반환하기.
+//
+//        int areaInfo = this.areaRepository.softDeleteAreaByAreaId(
+//                areaId);
+//
+//        //areaName구하기
+//        String areaName = this.areaRepository.findAreaNameByAreaId(areaId);
+//
+//
+//        Message success = new Message();
+//        success.setAreaId(areaId);
+//        success.setAreaName(areaName);
+//        success.setIsValid(0L);
+//        success.setMessage("삭제 완료되었습니다.");
+//
+//        return ResponseEntity.ok(success);
+//    }
+//
+//    public ResponseEntity<Message> rackDelete(Long rackId) {
+//
+//        int rackInfo = this.rackRepository.softDeleteRackByRackId(
+//                rackId);
+//
+//        //areaName구하기
+//        String rackNumber = this.rackRepository.findRackNumberByRackId(rackId);
+//
+//
+//        Message success = new Message();
+//        success.setAreaId(rackId);
+//        success.setRackNumber(Long.valueOf(rackNumber));
+//        success.setIsValid(0L);
+//        success.setMessage("삭제 완료되었습니다.");
+//
+//        return ResponseEntity.ok(success);
+//
+//
+//    }
+//};
+//
+//  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
+//
+//    return null;
+//  }
+//
+//  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId,
+//      Long areaId, Long floorId) {
+//
+//    return null;
+//  }
 
 }
+
 ;
 
 
