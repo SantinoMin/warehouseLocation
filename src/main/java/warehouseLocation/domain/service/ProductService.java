@@ -371,26 +371,26 @@ public class ProductService {
         return rackList;
     }
 
-//    public List<ProductResDto.Floor> floorList() {
-//
-//        List<ProductResDto.Floor> space = new ArrayList<>();
-//        List<FloorEntity> floorEntity = this.floorRepository.findAll();
-//
-////        List<ProductResDto.Floor> floorList = floorEntity.stream().map(f -> new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()));
-//
-//        for (FloorEntity value : floorEntity) {
-//            ProductResDto.Floor floor = new ProductResDto.Floor(value.getFloor_id(), value.getFloor_number(), value.getIsValid());
-//        }
-//        space.add(floor);
-//
-//    }
-//
-//    return space;
-//};
-//        new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
-//
-//        return floorList;
-//
+    public List<ProductResDto.Floor> floorList() {
+
+        List<ProductResDto.Floor> space = new ArrayList<>();
+        List<FloorEntity> floorEntity = this.floorRepository.findAll();
+
+//        List<ProductResDto.Floor> floorList = floorEntity.stream().map(f -> new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()));
+
+        for (FloorEntity value : floorEntity) {
+            ProductResDto.Floor floor = new ProductResDto.Floor(value.getFloor_id(), value.getFloor_number(), value.getIsValid());
+        }
+        space.add(floor);
+
+    }
+
+    return space;
+};
+        new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
+
+        return floorList;
+
 //    @Transactional
 //    public ResponseEntity<Message> addArea(AreaReqDto body) {
 //
