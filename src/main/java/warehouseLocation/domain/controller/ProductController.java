@@ -1,16 +1,17 @@
 package warehouseLocation.domain.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import warehouseLocation.domain.dto.*;
-import warehouseLocation.domain.repository.ProductRepository;
-import warehouseLocation.domain.service.ProductService;
+
 
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 //@Slf4j // 응답을 기록하는 데 도움이 되며 주로 디버깅 목적
 @RequestMapping("/manage")
