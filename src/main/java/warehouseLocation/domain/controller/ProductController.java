@@ -1,7 +1,6 @@
 package warehouseLocation.domain.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,6 @@ import warehouseLocation.domain.dto.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
 //@Slf4j // 응답을 기록하는 데 도움이 되며 주로 디버깅 목적
 @RequestMapping("/manage")
@@ -19,11 +17,10 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @Autowired
-    ProductController(ProductService productService) {
-
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
+
 
     //2.1(GET) /manage/product : 상품 검색
     @GetMapping("/product")
@@ -127,16 +124,16 @@ public class ProductController {
     return this.productService.rackDelete(rackId);
   }
 
-//  //(DELETE) /manage/location/{floorId} : 창고 층 삭제 (완전 삭제 대신, 업데이트로 진행)
-//  @DeleteMapping("/location/{floorId}")
-//  public ResponseEntity<ProductResDto.Message> floorDelete(@PathVariable Long floorId) {
-//    return this.productService.floorDelete(floorId);
-//  }
-//
-//  //(PUT) /manage/product/{productId}/location : 상품의 위치 변경
-//  @PutMapping("/product/{productId}/location")
-//  public ResponseEntity<ProductResDto.Message> locationUpdate(@PathVariable Long productId,
-//      @RequestParam Long rackId, Long areaId, Long floorId) {
-//    return this.productService.locationUpdate(productId, rackId, areaId, floorId);
-//  }
+  //(DELETE) /manage/location/{floorId} : 창고 층 삭제 (완전 삭제 대신, 업데이트로 진행)
+  @DeleteMapping("/location/{floorId}")
+  public ResponseEntity<ProductResDto.Message> floorDelete(@PathVariable Long floorId) {
+    return this.productService.floorDelete(floorId);
+  }
+
+  //(PUT) /manage/product/{productId}/location : 상품의 위치 변경
+  @PutMapping("/product/{productId}/location")
+  public ResponseEntity<ProductResDto.Message> locationUpdate(@PathVariable Long productId,
+      @RequestParam Long rackId, Long areaId, Long floorId) {
+    return this.productService.locationUpdate(productId, rackId, areaId, floorId);
+  }
 };
