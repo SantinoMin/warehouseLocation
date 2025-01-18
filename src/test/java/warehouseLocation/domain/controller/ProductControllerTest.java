@@ -26,8 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest {
 
-    @MockBean
-    private ProductService productService;
+//    @MockBean
+//    private ProductService productService;
 
     @Autowired
     private MockMvc mockMvc;

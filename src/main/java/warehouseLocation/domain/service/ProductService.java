@@ -1,24 +1,39 @@
 package warehouseLocation.domain.service;
 
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import warehouseLocation.domain.dto.*;
-import warehouseLocation.domain.repository.*;
-import warehouseLocation.global.utills.response.error.CustomException;
-import warehouseLocation.global.utills.response.error.ErrorMessage;
-import warehouseLocation.models.*;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import warehouseLocation.domain.dto.AreaReqDto;
+import warehouseLocation.domain.dto.FloorReqDto;
+import warehouseLocation.domain.dto.LocationResDto;
+import warehouseLocation.domain.dto.Message;
+import warehouseLocation.domain.dto.ProductReqDto;
+import warehouseLocation.domain.dto.ProductResDto;
+import warehouseLocation.domain.dto.RackReqDto;
+import warehouseLocation.domain.repository.AreaRepository;
+import warehouseLocation.domain.repository.CategoryRepository;
+import warehouseLocation.domain.repository.FloorRepository;
+import warehouseLocation.domain.repository.ProductLocationRepository;
+import warehouseLocation.domain.repository.ProductRepository;
+import warehouseLocation.domain.repository.RackRepository;
+import warehouseLocation.global.utills.response.error.CustomException;
+import warehouseLocation.global.utills.response.error.ErrorMessage;
+import warehouseLocation.models.AreaEntity;
+import warehouseLocation.models.CategoryEntity;
+import warehouseLocation.models.FloorEntity;
+import warehouseLocation.models.ProductEntity;
+import warehouseLocation.models.ProductLocationEntity;
+import warehouseLocation.models.RackEntity;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -26,22 +41,8 @@ public class ProductService {
     private final RackRepository rackRepository;
     private final FloorRepository floorRepository;
     private final CategoryRepository categoryRepository;
-    private ProductLocationRepository productLocationRepository;
+    private final ProductLocationRepository productLocationRepository;
 
-
-    @Autowired
-    ProductService(ProductRepository productRepository, AreaRepository areaRepository,
-                   RackRepository rackRepository, FloorRepository floorRepository,
-                   CategoryRepository categoryRepository, UserRepository userRepository,
-                   ProductLocationRepository productLocationRepository) {
-        this.productRepository = productRepository;
-        this.areaRepository = areaRepository;
-        this.rackRepository = rackRepository;
-        this.floorRepository = floorRepository;
-        this.categoryRepository = categoryRepository;
-        this.productLocationRepository = productLocationRepository;
-
-    }
 
     //2.1(GET) /manage/product : 상품 검색
     public List<ProductResDto.ProductSearch> search(String productName) throws Exception {
@@ -172,17 +173,8 @@ public class ProductService {
 
         return productInfo;
     }
-
-
-    /**
-     * 하나 또는 여러개로 나눌 필요 없이, 값 있으면 값들 보여주는 걸로 진행해보기
-     * 상품 정보 !!해결 필요 1)(완료)dto의 Location클래스를 타입으로 가져오는 법? 2)imageUrl이 Postman response에서 리스트 형태로 보여지는
-     * 법(배열 형태로) -> 이거 , 콤마로 나누는 거 맞는지?
-     */
-
-
-    // todo location 정보 업데이트 필요
-    // todo Location의 정보 3개가 하나로 묶어져야 돼서, 하나씩 구하면 안됨, 테이블에서 변경하도록 해야함
+//    // todo location 정보 업데이트 필요
+//    // todo Location의 정보 3개가 하나로 묶어져야 돼서, 하나씩 구하면 안됨, 테이블에서 변경하도록 해야함
     public ProductResDto.Edit productEdit(@PathVariable Long productId, @RequestBody ProductReqDto.Edit body) {
 
 
@@ -195,25 +187,25 @@ public class ProductService {
         // db에서 productId로 변경할 상품 검색
         ProductEntity productInfo = this.productRepository.ProductInfoByProductId(productId);
 
-        //categoryName 구하기
-//        Optional<CategoryEntity> categoryNameOpt = this.categoryRepository.categoryNameByCategoryId(productInfo.getCategoryId());
-//        String categoryName = categoryNameOpt.map(CategoryEntity::getCategoryName).orElse(null);
-
-//        CategoryEntity categoryInfo = new CategoryEntity();
-//        categoryNameOpt.ifPresent(c -> {
-//            categoryInfo.setCategoryName(c.getCategoryName());
-//        });
-
+//        //categoryName 구하기
+////        Optional<CategoryEntity> categoryNameOpt = this.categoryRepository.categoryNameByCategoryId(productInfo.getCategoryId());
+////        String categoryName = categoryNameOpt.map(CategoryEntity::getCategoryName).orElse(null);
+//
+////        CategoryEntity categoryInfo = new CategoryEntity();
+////        categoryNameOpt.ifPresent(c -> {
+////            categoryInfo.setCategoryName(c.getCategoryName());
+////        });
+//
         String categoryName = body.getCategoryName();
-
-
-        // Location 정보 구하기
+//
+//
+//        // Location 정보 구하기
         Optional<ProductLocationEntity> productLocationOpt = this.productLocationRepository.productLocationIdByProductId(productId);
-
-        // todo ???
+//
+//        // todo ???
         ProductLocationEntity ple = productLocationOpt.orElse(new ProductLocationEntity());
-
-
+//
+//
         String areaName = this.areaRepository.findAreaNameByAreaId(ple.getAreaId());
         Long rackNumber = this.rackRepository.findRackNumByRackId(ple.getRackId());
         Long floorNumber = this.floorRepository.findFloorNumByFloorId(ple.getFloorId());
@@ -222,11 +214,11 @@ public class ProductService {
         locationRD.setAreaName(areaName);
         locationRD.setRackNumber(rackNumber);
         locationRD.setFloorNumber(floorNumber);
-
-        // todo !!
-        // 필드에 location을 넣었다면 해당 값으로 수정하고, 빈값으로 넣었다면 기존 값대로 유지.
-
-        // body에서 입력한 값으로 productInfo 업데이트
+//
+//        // todo !!
+//        // 필드에 location을 넣었다면 해당 값으로 수정하고, 빈값으로 넣었다면 기존 값대로 유지.
+//
+//        // body에서 입력한 값으로 productInfo 업데이트
         productInfo.setProductName(body.getProductName());
         productInfo.setCategoryName(categoryName);
         productInfo.setImageUrl(body.getImageUrl());
@@ -234,12 +226,12 @@ public class ProductService {
         productInfo.setPrice(body.getPrice());
         productInfo.setStatus(body.getStatus());
         productInfo.setUpdatedAt(updatedAt);
-
-        // db에 저장
+//
+//        // db에 저장
         this.productRepository.save(productInfo);
-
-
-        // 변경 값 저장할 객체 생성
+//
+//
+//        // 변경 값 저장할 객체 생성
         ProductResDto.Edit updateProduct = new ProductResDto.Edit();
         updateProduct.setProductName(body.getProductName());
 
@@ -260,6 +252,7 @@ public class ProductService {
 
         return updateProduct;
     }
+
 
     // 완료 : is_valid = false 변경됨.
     public ResponseEntity<ProductResDto.Message> softDeleteProduct(Long productId) {
@@ -337,6 +330,7 @@ public class ProductService {
     }
 
 
+
     public ProductResDto.CategoryList categoryList() {
 
 
@@ -361,6 +355,7 @@ public class ProductService {
     }
 
 
+
     public List<ProductResDto.Rack> rackList() {
 
 
@@ -371,149 +366,131 @@ public class ProductService {
         return rackList;
     }
 
-    public List<ProductResDto.Floor> floorList() {
+    @Transactional
+    public ResponseEntity<Message> addArea(AreaReqDto body) {
 
-        List<ProductResDto.Floor> space = new ArrayList<>();
-        List<FloorEntity> floorEntity = this.floorRepository.findAll();
+        // 우선 이미 사용 중인 areaName인지 확인하고, 사용가능한 area만 Return하기
+        Optional<AreaEntity> checkDuplicateArea = areaRepository.findAreaByAreaName(body.getAreaName());
 
-//        List<ProductResDto.Floor> floorList = floorEntity.stream().map(f -> new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()));
+        if (checkDuplicateArea.isPresent()) {
 
-        for (FloorEntity value : floorEntity) {
-            ProductResDto.Floor floor = new ProductResDto.Floor(value.getFloor_id(), value.getFloor_number(), value.getIsValid());
+            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 area입니다."));
         }
-        space.add(floor);
 
+        AreaEntity addArea = new AreaEntity();
+        addArea.setAreaName(body.getAreaName());
+        addArea.setCreatedAt(LocalDateTime.now());
+        addArea.setIsValid(true);
+        this.areaRepository.save(addArea);
+
+        return ResponseEntity.ok(new Message("등록 완료"));
     }
 
-    return space;
-};
-        new ProductResDto.Floor(f.getFloor_id(), f.getFloor_number(), f.getIsValid()
 
-        return floorList;
+    // TODO Rack이 숫자형이 아니라, 문자형일 경우에 에러 띄우는 법
+    // 현재 숫자로는 등록 가능
+    public ResponseEntity<Message> addRack(RackReqDto body) {
+        /**
+         * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
+         */
 
-//    @Transactional
-//    public ResponseEntity<Message> addArea(AreaReqDto body) {
-//
-//        // 우선 이미 사용 중인 areaName인지 확인하고, 사용가능한 area만 Return하기
-//        Optional<AreaEntity> checkDuplicateArea = areaRepository.findAreaByAreaName(body.getAreaName());
-//
-//        if (checkDuplicateArea.isPresent()) {
-//
-//            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 area입니다."));
-//        }
-//
-//        AreaEntity addArea = new AreaEntity();
-//        addArea.setAreaName(body.getAreaName());
-//        addArea.setCreatedAt(LocalDateTime.now());
-//        addArea.setIsValid(true);
-//        this.areaRepository.save(addArea);
-//
-//        return ResponseEntity.ok(new Message("등록 완료"));
-//    }
-//
-//    // TODO Rack이 숫자형이 아니라, 문자형일 경우에 에러 띄우는 법
-//    // 현재 숫자로는 등록 가능
-//    public ResponseEntity<Message> addRack(RackReqDto body) {
-//        /**
-//         * Rack 중복 확인 후, 중복 아니라면 repo에 저장하기
-//         */
-//
-//        Optional<RackEntity> checkDuplicateRack = rackRepository.findRackByRackNumber(body.getRackNumber());
-//
-//        if (checkDuplicateRack.isPresent()) {
-//
-//            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 rackNumber 입니다."));
-//        }
-//
-//        RackEntity addRack = new RackEntity();
-//        addRack.setRackNumber(body.getRackNumber());
-//        addRack.setCreatedAt(LocalDateTime.now());
-//        addRack.setIsValid(true);
-//        this.rackRepository.save(addRack);
-//
-//        return ResponseEntity.ok(new Message("등록 완료"));
-//    }
-//
-//
-//    public ResponseEntity<Message> addFloor(FloorReqDto body) {
-//
-//
-//        Optional<FloorEntity> checkDuplicateFloor = floorRepository.findFloorByFloorNumber(body.getFloorNumber());
-//
-//        if (checkDuplicateFloor.isPresent()) {
-//
-//            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 floorNumber 입니다."));
-//        }
-//
-//        FloorEntity addFloor = new FloorEntity();
-//        addFloor.setFloor_number(body.getFloorNumber());
-//        addFloor.setCreated_at(LocalDateTime.now());
-//        addFloor.setIsValid(true);
-//        this.floorRepository.save(addFloor);
-//
-//        return ResponseEntity.ok(new Message("등록 완료"));
-//    }
-//
-//
+        Optional<RackEntity> checkDuplicateRack = rackRepository.findRackByRackNumber(body.getRackNumber());
+
+        if (checkDuplicateRack.isPresent()) {
+
+            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 rackNumber 입니다."));
+        }
+
+        RackEntity addRack = new RackEntity();
+        addRack.setRackNumber(body.getRackNumber());
+        addRack.setCreatedAt(LocalDateTime.now());
+        addRack.setIsValid(true);
+        this.rackRepository.save(addRack);
+
+        return ResponseEntity.ok(new Message("등록 완료"));
+    }
+
+
+
+    public ResponseEntity<Message> addFloor(FloorReqDto body) {
+
+
+        Optional<FloorEntity> checkDuplicateFloor = floorRepository.findFloorByFloorNumber(body.getFloorNumber());
+
+        if (checkDuplicateFloor.isPresent()) {
+
+            return ResponseEntity.badRequest().body(new Message("이미 등록되어 있는 floorNumber 입니다."));
+        }
+
+        FloorEntity addFloor = new FloorEntity();
+        addFloor.setFloor_number(body.getFloorNumber());
+        addFloor.setCreated_at(LocalDateTime.now());
+        addFloor.setIsValid(true);
+        this.floorRepository.save(addFloor);
+
+        return ResponseEntity.ok(new Message("등록 완료"));
+    }
+
+
+
+
 //    //사용자가 입력한 area인지? 아니면 리스트에서 보는건지 --> rackList에서 찾아서 해당 areaId를 삭제하는 걸로 이해.
 //    //만약에 이미 삭제된 area라면, "이미 삭제된 area입니다" 라는 메시지 필요
-//    public ResponseEntity<Message> areaDelete(Long areaId) {
-//
+    public ResponseEntity<Message> areaDelete(Long areaId) {
+
 //        //1. productId로 해당 product 검색
 //        //2. 해당 productId를 repository에서 update로 해당 정보 비활성화(is_valid=false로 변경하기) 진행
 //        //3. productId repo에 저장
 //        //4. ResponseEntity로 ok값 반환하기.
 //
-//        int areaInfo = this.areaRepository.softDeleteAreaByAreaId(
-//                areaId);
+        int areaInfo = this.areaRepository.softDeleteAreaByAreaId(
+                areaId);
 //
 //        //areaName구하기
-//        String areaName = this.areaRepository.findAreaNameByAreaId(areaId);
+        String areaName = this.areaRepository.findAreaNameByAreaId(areaId);
 //
 //
-//        Message success = new Message();
-//        success.setAreaId(areaId);
-//        success.setAreaName(areaName);
-//        success.setIsValid(0L);
-//        success.setMessage("삭제 완료되었습니다.");
-//
-//        return ResponseEntity.ok(success);
-//    }
-//
-//    public ResponseEntity<Message> rackDelete(Long rackId) {
-//
-//        int rackInfo = this.rackRepository.softDeleteRackByRackId(
-//                rackId);
-//
-//        //areaName구하기
-//        String rackNumber = this.rackRepository.findRackNumberByRackId(rackId);
-//
-//
-//        Message success = new Message();
-//        success.setAreaId(rackId);
-//        success.setRackNumber(Long.valueOf(rackNumber));
-//        success.setIsValid(0L);
-//        success.setMessage("삭제 완료되었습니다.");
-//
-//        return ResponseEntity.ok(success);
-//
-//
-//    }
-//};
-//
-//  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
-//
-//    return null;
-//  }
-//
-//  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId,
-//      Long areaId, Long floorId) {
-//
-//    return null;
-//  }
+        Message success = new Message();
+        success.setAreaId(areaId);
+        success.setAreaName(areaName);
+        success.setIsValid(0L);
+        success.setMessage("삭제 완료되었습니다.");
+
+        return ResponseEntity.ok(success);
+    }
+
+
+    public ResponseEntity<Message> rackDelete(Long rackId) {
+
+        int rackInfo = this.rackRepository.softDeleteRackByRackId(
+                rackId);
+
+        //areaName구하기
+        String rackNumber = this.rackRepository.findRackNumberByRackId(rackId);
+
+
+        Message success = new Message();
+        success.setAreaId(rackId);
+        success.setRackNumber(Long.valueOf(rackNumber));
+        success.setIsValid(0L);
+        success.setMessage("삭제 완료되었습니다.");
+
+        return ResponseEntity.ok(success);
+
+
+    }
+
+  public ResponseEntity<ProductResDto.Message> floorDelete(Long floorId) {
+
+    return null;
+  }
+
+  public ResponseEntity<ProductResDto.Message> locationUpdate(Long productId, Long rackId,
+      Long areaId, Long floorId) {
+
+    return null;
+  }
 
 }
-
-;
 
 
