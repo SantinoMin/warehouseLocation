@@ -6,19 +6,19 @@ spring:
     driver-class-name: "com.mysql.cj.jdbc.Driver"
     url: "jdbc:mysql://127.0.0.1:3308/location"
     username: "root"
-    password: "1234"
-  jwt:
-    secret: "vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbala"
+    password: "tkdals2"
+#  jwt:
+#    secret: "vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbala"
 
 
   jpa:
     show-sql: true
     properties:
       hibernate:
+        ddl-auto: create
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
-        ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 

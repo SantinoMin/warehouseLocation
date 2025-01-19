@@ -102,24 +102,24 @@ public class ProductResDto {
 
     private LocalDateTime updatedAt;
 
-//    @Builder
-//    public void edit(Long productId, String productName, String imageUrl, String price,
-//        LocalDate expiredDate,
-//
-//        Category category, String status, String location
-//        , LocalDateTime updatedAt, LocalDateTime createdAt) {
-//      this.productId = productId;
-//      this.productName = productName;
+    @Builder
+    public void edit(Long productId, String productName, String imageUrl, String price,
+        LocalDate expiredDate,
+
+        Category category, String status, String location
+        , LocalDateTime updatedAt, LocalDateTime createdAt) {
+      this.productId = productId;
+      this.productName = productName;
 //      this.category = category;
-//      this.imageUrl = imageUrl;
-//      this.expiredDate = expiredDate;
-//      this.price = price;
-//      this.status = status;
+      this.imageUrl = imageUrl;
+      this.expiredDate = expiredDate;
+      this.price = price;
+      this.status = status;
 //      this.location = location;
-//      this.updatedAt = updatedAt;
+      this.updatedAt = updatedAt;
 //      this.createdAt = createdAt;
-//
-//    }
+
+    }
   }
 
   @Data
